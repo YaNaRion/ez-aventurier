@@ -1,0 +1,22 @@
+{
+	"name": "task_manager",
+	"version": "1.0.0",
+	"description": "TypeScript website with Go backend",
+	"scripts": {
+		"dev": "tsc --watch",
+		"build": "npm run clean && tsc",
+		"clean": "rimraf views/js",
+		"type-check": "tsc --noEmit",
+		"serve": "nodemon --exec 'go run main.go' --ext go"
+	},
+	"devDependencies": {
+		"nodemon": "^3.1.11",
+		"rimraf": "^5.0.10",
+		"typescript": "^5.9.3"
+	},
+	"main": "index.js",
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"type": "commonjs"
+}
