@@ -1,12 +1,12 @@
 # Ignore website trash
-server/node_modules/
-server/views/js/
+server/node_modules/*
+server/views/js/*
 server/package-lock.json
 
 # Ignore server trash
 server/go.sum
-tmp/
-server/tmp/
+tmp/*
+server/tmp/*
 
 # Ignore .env for security
 server/.env

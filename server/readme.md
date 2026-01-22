@@ -3,13 +3,33 @@
 - REST API
 ## Router
 - Handle routing for website
-- Gère le routing pour les page du site web
 
 ## Infrastructure
-- Couche de communication avec la DB
+- Handle DB connection
+- For this projet we are using a free MongoDB hosted connection
 
 ## Views
 - Website file
 
 # How to run this projet
-- App required
+## Prequisite
+- Required
+    - Golang
+    - NodeJs and npm
+- Nice to have
+    - Air (Golang hot reaload)
+
+## Install dependencies (under ./server directory)
+- Server
+    - go mod tidy (download dependencies for the go web server)
+- Website
+    - npm install
+
+## How to run the project on dev mode
+- Build website: It offer hot reloading for the website, recompile the .ts file when saving
+    - npm run dev
+- Build and run the server
+    - With hot reaload
+        - air (if you want the hot reaload for the go web server)
+    - Without hot reaload
+        - go run main.go (build and run the server)
