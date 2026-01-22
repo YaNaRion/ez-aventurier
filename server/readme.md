@@ -8,6 +8,9 @@
 - Handle DB connection
 - For this projet we are using a free MongoDB hosted connection
 
+## Gateway 
+- Websocket
+
 ## Views
 - Website file
 

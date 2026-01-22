@@ -13,3 +13,7 @@ func Setup() (*DB, error) {
 	log.Println("Fake DB")
 	return nil, nil
 }
+
+func (db *DB) HelloWorld() {
+	log.Println("hello from db")
+}
