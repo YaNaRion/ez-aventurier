@@ -1,7 +1,7 @@
 # Ignore website trash
-server/node_modules/*
+server/views/node_modules/
+server/views/node_modules/*
 server/views/js/*
-server/package-lock.json
 
 # Ignore server trash
 server/go.sum
