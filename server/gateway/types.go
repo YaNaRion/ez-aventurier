@@ -12,14 +12,9 @@ type EventType string
 
 const (
 	// Built-in events
-	EventTypeError   EventType = "error"
-	EventTypeMessage EventType = "message"
-	EventTypeJoin    EventType = "join"
-	EventTypeLeave   EventType = "leave"
+	EventTypeError EventType = "error"
 
 	// Add your custom events here
-	EventTypeChat          EventType = "chat"
-	EventTypeNotification  EventType = "notification"
 	EventTypeLoginRequest  EventType = "login.request"
 	EventTypeLoginResponse EventType = "login.response"
 
