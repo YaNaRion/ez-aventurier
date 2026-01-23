@@ -6,7 +6,6 @@ server/views/js/*
 # Ignore server trash
 server/go.sum
 tmp/
-
 server/tmp/main
 server/tmp/
 

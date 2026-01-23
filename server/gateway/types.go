@@ -2,10 +2,9 @@ package gateway
 
 import (
 	"encoding/json"
+	"github.com/gorilla/websocket"
 	"main/infra"
 	"sync"
-
-	"github.com/gorilla/websocket"
 )
 
 // EventType represents different types of WebSocket events
@@ -21,13 +20,18 @@ const (
 	// Add your custom events here
 	EventTypeChat         EventType = "chat"
 	EventTypeNotification EventType = "notification"
+	EventTypeLoginRequest EventType = "login.request"
+
+	// Template
 	EventTypeYourNewEvent EventType = "place_new_event_here"
 )
 
 // Event represents a WebSocket event
 type Event struct {
-	Type EventType   `json:"type"`
-	Data interface{} `json:"data"`
+	Type          EventType       `json:"type"`
+	Payload       json.RawMessage `json:"payload,omitempty"`
+	Timestamp     *int64          `json:"timestamp,omitempty"`
+	EventUniqueID *string         `json:"eventUniqueID,omitempty"`
 }
 
 // Client represents a WebSocket client

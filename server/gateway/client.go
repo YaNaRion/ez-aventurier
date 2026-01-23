@@ -94,7 +94,7 @@ func (c *Client) readPump(handlers EventHandlers) {
 		// Find and execute the event handler
 		if handler, exists := handlers.Handlers[event.Type]; exists {
 			// Convert data to JSON for handler
-			dataBytes, _ := json.Marshal(event.Data)
+			dataBytes, _ := json.Marshal(event.Payload)
 			if err := handler(c, dataBytes); err != nil {
 				sendError(c, fmt.Sprintf("Error processing event: %v", err))
 			}

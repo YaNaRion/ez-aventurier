@@ -1,6 +1,7 @@
 // Import modules
+import { time } from 'node:console';
 import { ControllerService } from './service/controller.js';
-import { WebSocketClient } from './service/websocket.js';
+import { EventType, WebSocketClient } from './service/websocket.js';
 
 interface GlobalState {
 	controllerService: ControllerService;
@@ -31,6 +32,10 @@ interface UserStatus {
 	online: boolean;
 }
 
+interface LoginRequest {
+	uniqueID: string;
+}
+
 function InitialiseWebsocketHandler() {
 	global_state.websocketClient.onConnect(() => {
 		console.log('Connected to server');
@@ -39,6 +44,16 @@ function InitialiseWebsocketHandler() {
 	global_state.websocketClient.onDisconnect(() => {
 		console.log('Disconnected from server');
 	});
+
+
+	const element = document.createElement("button");
+	element.onclick = () => {
+		global_state.websocketClient.send<LoginRequest>(EventType.LOGIN_REQUEST, {
+			uniqueID: "I Am unique",
+		});
+	}
+	element.textContent = "CLICK TO SEND A LOGIN REQUEST";
+	document.body.appendChild(element);
 
 	// Subscribe to specific message types
 	const unsubscribeChat = global_state.websocketClient.on<ChatMessage>('chat.message', (message) => {
@@ -59,8 +74,6 @@ function InitialiseWebsocketHandler() {
 function init() {
 	console.log('Application initializing...');
 	InitialiseWebsocketHandler();
-	console.log(global_state);
-	// Initialise top bar
 }
 
 // Initialize when DOM is ready

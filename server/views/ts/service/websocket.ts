@@ -19,7 +19,7 @@ export interface WebSocketMessage<T = any> {
 	type: string;
 	payload?: T;
 	timestamp?: number;
-	id?: string;
+	eventUniqueID?: string;
 }
 
 export type MessageHandler<T = any> = (message: T) => void;
@@ -27,6 +27,7 @@ export type ErrorHandler = (error: Event | Error) => void;
 export type ConnectionHandler = () => void;
 
 export const EventType = {
+	LOGIN_REQUEST: "login.request",
 	JOIN: "join",
 	MESSAGE: "message",
 };
@@ -146,10 +147,11 @@ export class WebSocketClient {
 			type,
 			payload,
 			timestamp: Date.now(),
-			id: this.generateId(),
+			eventUniqueID: this.generateId(),
 		};
 
 		try {
+			console.log(JSON.stringify(message));
 			this.socket!.send(JSON.stringify(message));
 			return true;
 		} catch (error) {
