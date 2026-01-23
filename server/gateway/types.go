@@ -14,14 +14,14 @@ type EventType string
 const (
 	// Built-in events
 	EventTypeError   EventType = "error"
-	EventTypeMessage           = "message"
-	EventTypeJoin              = "join"
-	EventTypeLeave             = "leave"
+	EventTypeMessage EventType = "message"
+	EventTypeJoin    EventType = "join"
+	EventTypeLeave   EventType = "leave"
 
 	// Add your custom events here
-	EventTypeChat         = "chat"
-	EventTypeNotification = "notification"
-	EventTypeYourNewEvent = "place_new_event_here"
+	EventTypeChat         EventType = "chat"
+	EventTypeNotification EventType = "notification"
+	EventTypeYourNewEvent EventType = "place_new_event_here"
 )
 
 // Event represents a WebSocket event
@@ -59,6 +59,7 @@ type EventHandlers struct {
 
 func NewEventHandlers(db *infra.DB) EventHandlers {
 	return EventHandlers{
-		DB: db,
+		DB:       db,
+		Handlers: make(map[EventType]EventHandler),
 	}
 }
