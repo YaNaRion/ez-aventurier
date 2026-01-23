@@ -18,9 +18,10 @@ const (
 	EventTypeLeave   EventType = "leave"
 
 	// Add your custom events here
-	EventTypeChat         EventType = "chat"
-	EventTypeNotification EventType = "notification"
-	EventTypeLoginRequest EventType = "login.request"
+	EventTypeChat          EventType = "chat"
+	EventTypeNotification  EventType = "notification"
+	EventTypeLoginRequest  EventType = "login.request"
+	EventTypeLoginResponse EventType = "login.response"
 
 	// Template
 	EventTypeYourNewEvent EventType = "place_new_event_here"

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"main/infra"
+	"time"
 )
 
 // NewRegisterEventHandlers returns all registered event handlers
@@ -28,22 +29,43 @@ func (eh *EventHandlers) handleLoginRequest(client *Client, data json.RawMessage
 
 	log.Printf("Login Payload: UniqueID=%s\n", loginRequestPayload.UniqueID)
 
-	// Process login...
+	loginRequestPayload.UniqueID = "Reponse du server"
+	payloadJson, err := json.Marshal(loginRequestPayload)
+	if err != nil {
+		log.Println("Failed to marchar payload response: %v", err)
+	}
+
+	response := Event{
+		Type:    EventTypeLoginResponse,
+		Payload: payloadJson,
+	}
+
+	client.Send <- response
 	return nil
 }
 
-// TODO: Make it work with the new Event type
 // Helper function to send error to client
 func sendError(client *Client, errorMessage string) {
-	log.Println("An error has occured")
-	// errorEvent := Event{
-	// 	Type: EventTypeError,
-	// 	Payload: map[string]string{
-	// 		"message": errorMessage,
-	// 	},
-	// }
-	//
-	// client.Send <- errorEvent
+	payloadMessage := map[string]string{
+		"message": errorMessage,
+	}
+
+	payloadJSON, err := json.Marshal(payloadMessage)
+
+	if err != nil {
+		log.Println("Error while marshal error message")
+	}
+
+	timeStamp := time.Now().UnixMilli()
+	errorID := "ERROR ID"
+	errorEvent := Event{
+		Type:          EventTypeError,
+		Payload:       payloadJSON,
+		Timestamp:     &timeStamp,
+		EventUniqueID: &errorID,
+	}
+
+	client.Send <- errorEvent
 }
 
 // func (eh *EventHandlers)handleYourNewEvent(client *Client, data json.RawMessage) error {

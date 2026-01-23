@@ -56,7 +56,7 @@ function InitialiseWebsocketHandler() {
 	document.body.appendChild(element);
 
 	// Subscribe to specific message types
-	const unsubscribeChat = global_state.websocketClient.on<ChatMessage>('chat.message', (message) => {
+	const loginRespoinse = global_state.websocketClient.on<LoginRequest>('login.response', (message) => {
 		console.log('New chat message:', message);
 	});
 
