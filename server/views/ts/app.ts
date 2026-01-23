@@ -34,14 +34,10 @@ interface UserStatus {
 function InitialiseWebsocketHandler() {
 	global_state.websocketClient.onConnect(() => {
 		console.log('Connected to server');
-		document.getElementById('connection-status')!.textContent = 'Connected';
-		document.getElementById('connection-status')!.className = 'status-connected';
 	});
 
 	global_state.websocketClient.onDisconnect(() => {
 		console.log('Disconnected from server');
-		document.getElementById('connection-status')!.textContent = 'Disconnected';
-		document.getElementById('connection-status')!.className = 'status-disconnected';
 	});
 
 	// Subscribe to specific message types
@@ -57,7 +53,6 @@ function InitialiseWebsocketHandler() {
 	global_state.websocketClient.onError((error) => {
 		console.error('WebSocket error:', error);
 	});
-
 }
 
 // Initialize application
