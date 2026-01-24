@@ -21,31 +21,29 @@ export const ConnectionView: any = {
             <!-- Banner -->
             <div class="knight-banner">
                 <div class="banner-content">
-                    <div class="banner-title">Knight's Realm</div>
-                    <div class="banner-subtitle">Secure Citadel Access</div>
+                    <div class="banner-title">Registre des ordres</div>
                 </div>
             </div>
-            
+
             <!-- Main Connection Container -->
             <div class="connection-container">
                 <div class="connection-card">
                     <div class="connection-header">
-                        <h1 class="connection-title">⚔️ Citadel Gate</h1>
-                        <p class="connection-subtitle">Present your sigil to enter the realm</p>
+                        <h1 class="connection-title">Code secrêt</h1>
+                        <p class="connection-subtitle">Veillez entrer le code secrêt</p>
                     </div>
-                    
                     <div class="connection-body">
                         <form id="connectionForm" class="connection-form">
                             <div class="form-group">
                                 <label for="connectionId" class="form-label">
-                                    <i class="icon-user"></i> Sigil of Passage
+                                    <!-- <i class="icon-user"></i> Sigil of Passage -->
                                 </label>
                                 <div class="input-wrapper">
                                     <input 
                                         type="text" 
                                         id="connectionId" 
                                         class="form-input"
-                                        placeholder="Enter your unique sigil (e.g., KNGHT-123, SIR-LANCELOT)"
+                                        placeholder="Entrer votre code personnalisé"
                                         required
                                         autocomplete="off"
                                         autofocus
@@ -57,16 +55,16 @@ export const ConnectionView: any = {
                                         </svg>
                                     </div>
                                 </div>
-                                <div class="input-hint">
-                                    <i class="icon-info"></i> Your sigil must be unique to your station
-                                </div>
+                                <!-- <div class="input-hint"> -->
+                                <!--     <i class="icon-info"></i> Your sigil must be unique to your station -->
+                                <!-- </div> -->
                             </div>
                             
                             <div class="form-options">
                                 <label class="checkbox-label">
                                     <input type="checkbox" id="rememberMe">
                                     <span class="checkbox-custom"></span>
-                                    <span class="checkbox-text">Keep this gateway open for 10 minutes</span>
+                                    <span class="checkbox-text">Garder votre sessinon enregistrer pour 10 minutes</span>
                                 </label>
                             </div>
                             
@@ -83,29 +81,30 @@ export const ConnectionView: any = {
                         <div class="connection-info">
                             <div class="info-item">
                                 <i class="icon-shield"></i>
-                                <span>The gateway will seal in 10 minutes for security</span>
+                                <span>Les portes se fermeront dans 10 minutes</span>
                             </div>
-                            <div class="info-item">
-                                <i class="icon-clock"></i>
-                                <span>Ancient runes (cookies) maintain your passage</span>
-                            </div>
+                            <!-- <div class="info-item"> -->
+                            <!--     <i class="icon-clock"></i> -->
+                            <!--     <span>Ancient runes (cookies) maintain your passage</span> -->
+                            <!-- </div> -->
                         </div>
                     </div>
                     
                     <div class="connection-footer">
                         <p class="footer-text">
-                            Seek the scribe at 
-                            <a href="mailto:scribe@knightsrealm.com" class="footer-link">scribe@knightsrealm.com</a>
-                            for guidance
+			    Pour toutes questions, veillez les poser au ...
+                            <!-- Seek the scribe at  -->
+                            <!-- <a href="mailto:scribe@knightsrealm.com" class="footer-link">scribe@knightsrealm.com</a> -->
+                            <!-- for guidance -->
                         </p>
                     </div>
                 </div>
                 
                 <div class="session-timer" id="sessionTimer" style="display: none;">
-                    <div class="timer-text">Gateway seals in: <span id="timerCountdown">10:00</span></div>
+                    <div class="timer-text">La porte se ferme dans: <span id="timerCountdown">10:00</span></div>
                     <div class="timer-progress">
                         <div class="timer-bar" id="timerBar"></div>
-                    </div>
+                    </div>hyphen
                 </div>
             </div>
         `;
@@ -117,22 +116,26 @@ export const ConnectionView: any = {
 		this.checkExistingSession();
 	},
 
+	// Trouver le type
+	handleSubmitConnection: function(event: any): void {
+		event.preventDefault();
+		this.handleConnection();
+	},
+
 	initializeConnection: function(): void {
 		const form = document.getElementById('connectionForm') as HTMLFormElement;
 		const connectBtn = document.getElementById('connectBtn') as HTMLButtonElement;
-		const buttonLoader = document.getElementById('buttonLoader') as HTMLDivElement;
-		const buttonText = connectBtn.querySelector('.button-text') as HTMLSpanElement;
-		const connectionStatus = document.getElementById('connectionStatus') as HTMLDivElement;
+		// const buttonLoader = document.getElementById('buttonLoader') as HTMLDivElement;
+		// const buttonText = connectBtn.querySelector('.button-text') as HTMLSpanElement;
+		// const connectionStatus = document.getElementById('connectionStatus') as HTMLDivElement;
 
 		form.addEventListener('submit', (e) => {
-			e.preventDefault();
-			this.handleConnection();
+			this.handleSubmitConnection(e);
 		});
 
 		// Also handle button click for safety
 		connectBtn.addEventListener('click', (e) => {
-			e.preventDefault();
-			this.handleConnection();
+			this.handleSubmitConnection(e);
 		});
 	},
 
@@ -150,12 +153,12 @@ export const ConnectionView: any = {
 			this.showStatus('The sigil field cannot be empty', 'error');
 			connectionIdInput.focus();
 			return;
-		}
+		} hyphen
 
 		// Validate connection ID format (alphanumeric and hyphens)
 		const idRegex = /^[a-zA-Z0-9\-_]+$/;
 		if (!idRegex.test(connectionId)) {
-			this.showStatus('Sigil may only contain letters, numbers, hyphens, and underscores', 'error');
+			this.showStatus("Votre identifiant contient uniquement des letters, nombres, trait d'uniton et trait du bas", 'error');
 			return;
 		}
 
@@ -183,7 +186,7 @@ export const ConnectionView: any = {
 		const expirationDate = new Date();
 		expirationDate.setTime(expirationDate.getTime() + (expiresInMinutes * 60 * 1000));
 
-		// Set cookie with connection ID
+		// Set cookie with connection IDhyphen
 		document.cookie = `connectionId=${encodeURIComponent(connectionId)}; expires=${expirationDate.toUTCString()}; path=/; SameSite=Strict`;
 
 		// Set session expiration time
@@ -247,7 +250,7 @@ export const ConnectionView: any = {
 		if (!sessionExpiry) return;
 
 		const expiryTime = parseInt(sessionExpiry);
-		const totalDuration = 10 * 60 * 1000; // 10 minutes in milliseconds
+		const totalDuration = 10 * 60 * 1000; // 10 minutes in milliseconhyphends
 
 		const timerElement = document.getElementById('sessionTimer') as HTMLDivElement;
 		const countdownElement = document.getElementById('timerCountdown') as HTMLSpanElement;
