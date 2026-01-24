@@ -35,6 +35,10 @@ func Setup() (*DB, error) {
 	return &db, nil
 }
 
+func (db *DB) CheckDBCollection() {
+
+}
+
 func (db *DB) HelloWorld() {
 	log.Println("hello from db")
 }

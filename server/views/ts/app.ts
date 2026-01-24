@@ -2,6 +2,7 @@
 import { time } from 'node:console';
 import { ControllerService } from './service/controller.js';
 import { EventType, WebSocketClient } from './service/websocket.js';
+import ConnectionView from './component/connection.js';
 
 interface GlobalState {
 	controllerService: ControllerService;
@@ -74,6 +75,7 @@ function InitialiseWebsocketHandler() {
 function init() {
 	console.log('Application initializing...');
 	InitialiseWebsocketHandler();
+	ConnectionView.createHTML();
 }
 
 // Initialize when DOM is ready
