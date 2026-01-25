@@ -1,6 +1,8 @@
 // src/components/ConnectionForm.tsx
 import React, { useState, useEffect } from 'react';
-import StatusMessage from '../status-message/StatusMessage';
+// import StatusMessage from '../status-message/StatusMessage';
+import { EventType, type WebSocketClient } from '../../services/websocket';
+import type { LoginRequestPayload } from '../../services/websocket_event';
 
 
 const SessionInformation: React.FC = () => (
@@ -13,15 +15,15 @@ const SessionInformation: React.FC = () => (
 );
 
 interface ConnectionFormProps {
-	onLogin?: (connectionId: string, rememberMe: boolean) => void;
 	initialConnectionId?: string;
 	isLoading?: boolean;
+	websocket: WebSocketClient;
 }
 
 const ConnectionForm: React.FC<ConnectionFormProps> = ({
-	onLogin,
 	initialConnectionId = '',
-	isLoading = false
+	isLoading = false,
+	websocket
 }) => {
 	const [connectionId, setConnectionId] = useState(initialConnectionId);
 	const [rememberMe, setRememberMe] = useState(!!initialConnectionId);
@@ -32,30 +34,12 @@ const ConnectionForm: React.FC<ConnectionFormProps> = ({
 		// setRememberMe(!!initialConnectionId);
 	}, [initialConnectionId]);
 
-	const validateConnectionId = (id: string): boolean => {
-		if (!id.trim()) {
-			setError('The sigil field cannot be empty');
-			return false;
-		}
-
-		const idRegex = /^[a-zA-Z0-9\-_]+$/;
-		if (!idRegex.test(id)) {
-			setError("Votre identifiant contient uniquement des letters, nombres, trait d'union et trait du bas");
-			return false;
-		}
-
-		setError('');
-		return true;
-	};
-
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 
-		if (validateConnectionId(connectionId)) {
-			if (onLogin) {
-				onLogin(connectionId.trim(), rememberMe);
-			}
-		}
+		websocket.send<LoginRequestPayload>(EventType.LOGIN_REQUEST, {
+			uniqueID: connectionId
+		});
 	};
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -134,14 +118,6 @@ const ConnectionForm: React.FC<ConnectionFormProps> = ({
 						)}
 					</button>
 				</form>
-				{ /*
-				<StatusMessage
-					message={"DEFAULT MESSAGE"}
-					type={"success"}
-					// onDismiss={() => setStatus({ message: '', type: null })}
-					onDismiss={() => console.log("Dismiss")}
-				/>
-				*/}
 				<SessionInformation />
 
 				<div className="connection-footer">

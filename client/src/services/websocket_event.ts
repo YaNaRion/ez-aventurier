@@ -1,8 +1,13 @@
-export interface UserStatus {
+export interface UserStatusPayload {
 	userId: string;
 	online: boolean;
 }
 
-export interface LoginRequest {
+export interface LoginRequestPayload {
 	uniqueID: string;
+}
+
+export interface LoginRequestPayload {
+	uniqueID: string;
+	isConnection: boolean;
 }

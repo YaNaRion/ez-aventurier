@@ -1,5 +1,25 @@
-export const ConnectionView: any = {
-	createHTML: function(): void {
+import { EventType, WebSocketClient } from "../service/websocket.js";
+
+interface LoginRequest {
+	uniqueID: string;
+}
+
+export class ConnectionView {
+	private websocket: WebSocketClient
+	constructor(websocket: WebSocketClient) {
+		// Add websocketCLientInstance
+		this.websocket = websocket;
+
+		this.initHTML();
+
+		// Initialize the connection functionality
+		this.initializeConnection();
+
+		// Check for existing session
+		this.checkExistingSession();
+	}
+
+	private initHTML(): void {
 		// Add Google Fonts for knight theme
 		const fontLink = document.createElement('link');
 		fontLink.href = 'https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@700&display=swap';
@@ -7,17 +27,17 @@ export const ConnectionView: any = {
 		document.head.appendChild(fontLink);
 
 		// Add knight theme CSS
-		const styleLink = document.createElement('link');
-		styleLink.href = 'connection-styles.css'; // Make sure this path is correct
-		styleLink.rel = 'stylesheet';
-		document.head.appendChild(styleLink);
+		// const styleLink = document.createElement('link');
+		// styleLink.href = 'connection-styles.css'; // Make sure this path is correct
+		// styleLink.rel = 'stylesheet';
+		// document.head.appendChild(styleLink);
 
 		// Replace entire body with connection page
 		document.body.innerHTML = `
             <!-- Knight decorative elements -->
             <div class="knight-decor knight-left">♞</div>
             <div class="knight-decor knight-right">♘</div>
-            
+
             <!-- Banner -->
             <div class="knight-banner">
                 <div class="banner-content">
@@ -108,21 +128,15 @@ export const ConnectionView: any = {
                 </div>
             </div>
         `;
-
-		// Initialize the connection functionality
-		this.initializeConnection();
-
-		// Check for existing session
-		this.checkExistingSession();
-	},
+	}
 
 	// Trouver le type
-	handleSubmitConnection: function(event: any): void {
+	private handleSubmitConnection(event: any): void {
 		event.preventDefault();
 		this.handleConnection();
-	},
+	}
 
-	initializeConnection: function(): void {
+	private initializeConnection(): void {
 		const form = document.getElementById('connectionForm') as HTMLFormElement;
 		const connectBtn = document.getElementById('connectBtn') as HTMLButtonElement;
 		// const buttonLoader = document.getElementById('buttonLoader') as HTMLDivElement;
@@ -137,9 +151,9 @@ export const ConnectionView: any = {
 		connectBtn.addEventListener('click', (e) => {
 			this.handleSubmitConnection(e);
 		});
-	},
+	}
 
-	handleConnection: function(): void {
+	handleConnection(): void {
 		const connectionIdInput = document.getElementById('connectionId') as HTMLInputElement;
 		const rememberMeCheckbox = document.getElementById('rememberMe') as HTMLInputElement;
 		const connectBtn = document.getElementById('connectBtn') as HTMLButtonElement;
@@ -148,12 +162,14 @@ export const ConnectionView: any = {
 		const connectionStatus = document.getElementById('connectionStatus') as HTMLDivElement;
 
 		const connectionId = connectionIdInput.value.trim();
+		console.log(connectionId);
+
 
 		if (!connectionId) {
 			this.showStatus('The sigil field cannot be empty', 'error');
 			connectionIdInput.focus();
 			return;
-		} hyphen
+		}
 
 		// Validate connection ID format (alphanumeric and hyphens)
 		const idRegex = /^[a-zA-Z0-9\-_]+$/;
@@ -167,6 +183,10 @@ export const ConnectionView: any = {
 		buttonText.style.opacity = '0';
 		buttonLoader.style.display = 'block';
 
+		this.websocket.send<LoginRequest>(EventType.LOGIN_REQUEST, {
+			uniqueID: connectionId,
+		});
+
 		// Simulate API call
 		setTimeout(() => {
 			this.setCookie(connectionId, rememberMeCheckbox.checked);
@@ -179,9 +199,9 @@ export const ConnectionView: any = {
 			}, 1000);
 
 		}, 1500);
-	},
+	}
 
-	setCookie: function(connectionId: string, remember: boolean): void {
+	setCookie(connectionId: string, remember: boolean): void {
 		const expiresInMinutes = 10; // Session duration in minutes
 		const expirationDate = new Date();
 		expirationDate.setTime(expirationDate.getTime() + (expiresInMinutes * 60 * 1000));
@@ -199,9 +219,9 @@ export const ConnectionView: any = {
 		} else {
 			localStorage.removeItem('lastConnectionId');
 		}
-	},
+	}
 
-	getCookie: function(name: string): string | null {
+	private getCookie(name: string): string | null {
 		const nameEQ = name + "=";
 		const ca = document.cookie.split(';');
 		for (let i = 0; i < ca.length; i++) {
@@ -210,13 +230,13 @@ export const ConnectionView: any = {
 			if (c.indexOf(nameEQ) === 0) return decodeURIComponent(c.substring(nameEQ.length, c.length));
 		}
 		return null;
-	},
+	}
 
-	deleteCookie: function(name: string): void {
+	private deleteCookie(name: string): void {
 		document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-	},
+	}
 
-	checkExistingSession: function(): void {
+	private checkExistingSession(): void {
 		const connectionId = this.getCookie('connectionId');
 		const sessionExpiry = this.getCookie('sessionExpiry');
 
@@ -243,9 +263,9 @@ export const ConnectionView: any = {
 			connectionIdInput.value = lastConnectionId;
 			rememberMeCheckbox.checked = true;
 		}
-	},
+	}
 
-	startSessionTimer: function(): void {
+	private startSessionTimer(): void {
 		const sessionExpiry = this.getCookie('sessionExpiry');
 		if (!sessionExpiry) return;
 
@@ -287,9 +307,9 @@ export const ConnectionView: any = {
 		// Update immediately and then every second
 		updateTimer();
 		const timerInterval = setInterval(updateTimer, 1000);
-	},
+	}
 
-	showConnectedUI: function(connectionId: string): void {
+	private showConnectedUI(connectionId: string): void {
 		const connectionCard = document.querySelector('.connection-card') as HTMLDivElement;
 
 		connectionCard.innerHTML = `
@@ -311,7 +331,7 @@ export const ConnectionView: any = {
                     
                     <div class="info-card">
                         <div class="info-icon">🕯️</div>
-                        <div class="info-content">
+                        <div class="info-content">j
                             <h3>Torch Burns For</h3>
                             <p id="sessionExpiryDisplay">10:00</p>
                         </div>
@@ -342,17 +362,17 @@ export const ConnectionView: any = {
 		document.getElementById('disconnectBtn')?.addEventListener('click', () => {
 			this.disconnectUser();
 		});
-	},
+	}
 
-	refreshSession: function(): void {
+	private refreshSession(): void {
 		const connectionId = this.getCookie('connectionId');
 		if (connectionId) {
 			this.setCookie(connectionId, true);
 			this.showStatus('Torch rekindled! Your passage extends.', 'success');
 		}
-	},
+	}
 
-	disconnectUser: function(): void {
+	private disconnectUser(): void {
 		// Clear cookies
 		this.deleteCookie('connectionId');
 		this.deleteCookie('sessionExpiry');
@@ -377,10 +397,9 @@ export const ConnectionView: any = {
                 </button>
             </div>
         `;
-
 		// Add reconnect event listener
 		document.getElementById('reconnectBtn')?.addEventListener('click', () => {
-			this.createHTML(); // Restart the connection screen
+			this.initHTML(); // Restart the connection screen
 		});
 
 		// Hide timer
@@ -388,9 +407,9 @@ export const ConnectionView: any = {
 		if (timerElement) {
 			timerElement.style.display = 'none';
 		}
-	},
+	}
 
-	showStatus: function(message: string, type: 'success' | 'error'): void {
+	private showStatus(message: string, type: 'success' | 'error'): void {
 		const connectionStatus = document.getElementById('connectionStatus') as HTMLDivElement;
 		connectionStatus.textContent = message;
 		connectionStatus.className = 'connection-status ' + type;
@@ -406,3 +425,4 @@ export const ConnectionView: any = {
 
 // Export for use in other files
 export default ConnectionView;
+

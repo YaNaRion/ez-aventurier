@@ -28,6 +28,7 @@ export type ConnectionHandler = () => void;
 
 export const EventType = {
 	LOGIN_REQUEST: "login.request",
+	LOGIN_RESPONSE: "login.response",
 	JOIN: "join",
 	MESSAGE: "message",
 };

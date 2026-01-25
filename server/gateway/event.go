@@ -17,30 +17,42 @@ func NewRegisterEventHandlers(db *infra.DB) EventHandlers {
 	return eventHandlers
 }
 
+func (eh *EventHandlers) SendResponse(client *Client, eventResponse Event) {
+	client.Send <- eventResponse
+}
+
 func (eh *EventHandlers) handleLoginRequest(client *Client, data json.RawMessage) error {
-	var loginRequestPayload struct {
-		UniqueID string `json:"uniqueID"`
-	}
+	var loginRequestPayload EventLoginRequest
 
 	if err := json.Unmarshal(data, &loginRequestPayload); err != nil {
 		log.Printf("Failed to unmarshal payload: %v\n", err)
 		return err
 	}
 
-	log.Printf("Login Payload: UniqueID=%s\n", loginRequestPayload.UniqueID)
+	user, err := eh.DB.FindUser(loginRequestPayload.UniqueID)
+	if err != nil {
+		log.Printf("An error has occured while login Request: %v \n", err)
+		return nil
+	}
 
-	loginRequestPayload.UniqueID = "Reponse du server"
+	// TODO envoyer une reponse au client que le serveur na pas trouvé d'utilisateur
+	if user == nil {
+		log.Printf("No user found with this ID: %s\n", loginRequestPayload.UniqueID)
+		return nil
+	}
+
+	log.Printf("Login Payload: UniqueID=%s\n", loginRequestPayload.UniqueID)
+	loginRequestPayload.UniqueID = user.Name
 	payloadJson, err := json.Marshal(loginRequestPayload)
 	if err != nil {
-		log.Println("Failed to marchar payload response: %v", err)
+		log.Printf("Failed to marchar payload response: %v\n", err)
 	}
 
-	response := Event{
+	eh.SendResponse(client, Event{
 		Type:    EventTypeLoginResponse,
 		Payload: payloadJson,
-	}
+	})
 
-	client.Send <- response
 	return nil
 }
 
