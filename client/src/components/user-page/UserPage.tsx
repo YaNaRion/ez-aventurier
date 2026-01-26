@@ -100,13 +100,12 @@ export const UserPageComponent: React.FC<UserPageComponentProps> = ({ websocket,
 				</div>
 				*/}
 
-				{/* Back to Connection Button */}
-				<div className="profile-actions">
+				<div className="info-card">
 					<button
 						className="action-btn secondary-btn"
 					// onClick={onBack}
 					>
-						<i className="icon-info"></i> Return to Connection
+						Return to Connection
 					</button>
 				</div>
 

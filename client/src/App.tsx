@@ -67,6 +67,7 @@ function App() {
         <ConnectionContainer websocket={websocket} />
       )}
     </div>
+
   );
 }
 
