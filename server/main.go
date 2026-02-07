@@ -1,13 +1,13 @@
 package main
 
 import (
-	"github.com/rs/cors"
 	"log"
 	"main/controller"
-	"main/gateway"
 	"main/infra"
 	"main/router"
 	"net/http"
+
+	"github.com/rs/cors"
 )
 
 const (
@@ -15,19 +15,17 @@ const (
 )
 
 type Config struct {
-	Router     *router.Router
 	DB         *infra.DB
 	Controller *controller.Controller
-	Gateway    *gateway.WebSocketHandler
+	Router     *router.Router
 }
 
 func NewConf(
 	db *infra.DB,
-	router *router.Router,
 	controller *controller.Controller,
-	gateway *gateway.WebSocketHandler,
+	router *router.Router,
 ) *Config {
-	return &Config{DB: db, Router: router}
+	return &Config{DB: db, Controller: controller, Router: router}
 }
 
 type Server struct {
@@ -67,31 +65,17 @@ func Setup() *Server {
 	mux := http.NewServeMux()
 	control := controller.SetUpController(mux, db)
 
-	// Setup Websocket
-	wsHandler := gateway.NewWebSocketHandler(db)
-	mux.Handle("/ws", wsHandler)
-
-	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
-		_, err := w.Write(
-			[]byte(`{"status":"ok","clients":` + string(wsHandler.GetClientCount()) + `}`),
-		)
-		if err != nil {
-			log.Println("health check bug")
-		}
-	})
-
 	// Setup HTTP request
 	log.Println("Setup Web router")
 	router := router.Setup(mux)
 
-	configServer := NewConf(db, router, control, wsHandler)
+	configServer := NewConf(db, control, router)
 	corsHandler := cors.New(cors.Options{
-		AllowedOrigins:   []string{"http://localhost:3000"},
+		AllowedOrigins:   []string{"http://localhost:3000", "http://localhost:8080"},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowedHeaders:   []string{"*"},
 		AllowCredentials: true,
-		Debug:            false,
+		Debug:            true,
 	})
 
 	// Start server

@@ -27,3 +27,37 @@ func (db *DB) FindUser(username string) (*models.User, error) {
 
 	return &user, nil
 }
+
+func (db *DB) AddSession(userID string) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	collection := db.Client.Database("dev1").Collection("session")
+
+	newSession := models.NewSession(userID)
+
+	_, err := collection.InsertOne(ctx, newSession)
+
+	if err != nil {
+		return fmt.Errorf("failed to insert the session in db: %w", err)
+	}
+
+	return nil
+}
+
+func (db *DB) FindSession(sessionID string) (*models.Session, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	collection := db.Client.Database("dev1").Collection("session")
+
+	var session models.Session
+	err := collection.FindOne(ctx, bson.M{"sessionID": sessionID}).Decode(&session)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return nil, fmt.Errorf("session '%s' not found", sessionID)
+		}
+		return nil, fmt.Errorf("failed to find session: %w", err)
+	}
+
+	return &session, nil
+}

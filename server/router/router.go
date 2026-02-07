@@ -24,7 +24,7 @@ type Templates struct {
 var ErrorFrom string = "MAUVAIS NOM D'UTILISATEUR OU MDP"
 
 func newTemplate() *Templates {
-	return &Templates{templates: template.Must(template.ParseGlob("views/*.html"))}
+	return &Templates{templates: template.Must(template.ParseGlob("public/*.html"))}
 }
 
 func (t *Templates) Render(w io.Writer, name string, data any) error {
@@ -40,29 +40,8 @@ func Setup(mux *http.ServeMux) *Router {
 	// Serve static file
 	router.Mux.Handle(
 		"/assets/",
-		http.StripPrefix("/assets/", http.FileServer(http.Dir("./views/assets/"))),
+		http.StripPrefix("/assets/", http.FileServer(http.Dir("./public/assets/"))),
 	)
-
-	router.Mux.Handle(
-		"/js/service",
-		http.StripPrefix("/js/service", http.FileServer(http.Dir("./views/js/component"))),
-	)
-
-	router.Mux.Handle(
-		"/js/component",
-		http.StripPrefix("/js/component", http.FileServer(http.Dir("./views/js/component"))),
-	)
-
-	router.Mux.Handle(
-		"/js/class",
-		http.StripPrefix("/js/class", http.FileServer(http.Dir("./views/js/class"))),
-	)
-
-	router.Mux.Handle(
-		"/js/",
-		http.StripPrefix("/js/", http.FileServer(http.Dir("./views/js/"))),
-	)
-
 	// Route pour test
 	router.Mux.HandleFunc("/test", router.routeTest)
 

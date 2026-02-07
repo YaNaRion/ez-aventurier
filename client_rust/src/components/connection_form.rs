@@ -1,8 +1,12 @@
-use dioxus::prelude::*;
+use std::rc::Rc;
 
-fn handler_submit(event: Event<FormData>) {
-    event.prevent_default();
-    web_sys::console::log_1(&"Hello from Dioxus!".into());
+use dioxus::prelude::*;
+use reqwest::Client;
+
+#[derive(serde::Deserialize)]
+struct ConnectionAPI {
+    session_id: String,
+    user_id: String,
 }
 
 #[component]
@@ -12,61 +16,67 @@ pub fn ConnectionForm() -> Element {
     let mut remember_me = use_signal(|| false);
     let mut is_loading = use_signal(|| false);
 
+    // Optional: store the result if you want to show something after success
+    let mut result_message = use_signal(|| String::new());
+
     let handle_input_change = move |e: FormEvent| {
         connection_id.set(e.value());
-        // Clear error when user starts typing
         if !error().is_empty() {
             error.set(String::new());
         }
     };
 
-    let handle_remember_me_change = move |_| {
-        remember_me.toggle();
-    };
+    let handle_submit = move |evt: FormEvent| async move {
+        evt.prevent_default(); // ← very important in web!
 
-    let handle_submit = move |_| {
-        // Handle form submission logic here
-        // You'll need to implement your actual submit logic
         is_loading.set(true);
-        // Simulate async operation
-        spawn(async move {
-            // Your async logic here
-            // is_loading.set(false);
-        });
+        error.set(String::new());
+        result_message.set(String::new());
+
+        let client = use_context::<Client>();
+        match client.get("http://localhost:3000/api/login").send().await {
+            Ok(resp) if resp.status().is_success() => {
+                // If JSON:
+                // let data: ConnectionAPI = resp.json().await.unwrap();
+                // result_message.set(data.message);
+
+                // Or just text:
+                let text = resp.text().await.unwrap_or_default();
+                result_message.set(format!("Success! {}", text));
+
+                // Optional: do navigation, set cookie, etc.
+                dioxus_router::router().push("/user");
+            }
+
+            Ok(resp) => {
+                let status = resp.status();
+                let text = resp.text().await.unwrap_or_default();
+                error.set(format!("Server error ({}): {}", status, text));
+            }
+            Err(e) => {
+                error.set(format!("Network error: {}", e));
+            }
+        }
+
+        is_loading.set(false);
     };
 
     rsx! {
-        div {
-            class: "connection-card",
-            div {
-                class: "connection-header",
-                h1 {
-                    class: "connection-title",
-                    "Code secret"
-                }
-                p {
-                    class: "connection-subtitle",
-                    "Veuillez entrer le code secret"
-                }
+        div { class: "connection-card",
+            div { class: "connection-header",
+                h1 { class: "connection-title", "Code secret" }
+                p { class: "connection-subtitle", "Veuillez entrer le code secret" }
             }
-
-            div {
-                class: "connection-body",
+            div { class: "connection-body",
                 form {
                     id: "connectionForm",
                     class: "connection-form",
                     onsubmit: handle_submit,
                     prevent_default: "onsubmit",
 
-                    div {
-                        class: "form-group",
-                        label {
-                            r#for: "connectionId",
-                            class: "form-label",
-                            "Identifiant"
-                        }
-                        div {
-                            class: "input-wrapper",
+                    div { class: "form-group",
+                        label { r#for: "connectionId", class: "form-label", "Identifiant" }
+                        div { class: "input-wrapper",
                             input {
                                 r#type: "text",
                                 id: "connectionId",
@@ -79,54 +89,16 @@ pub fn ConnectionForm() -> Element {
                                 autofocus: true,
                                 disabled: is_loading(),
                             }
-                            div {
-                                class: "input-icon",
-                                svg {
-                                    xmlns: "http://www.w3.org/2000/svg",
-                                    width: "22",
-                                    height: "22",
-                                    view_box: "0 0 24 24",
-                                    fill: "none",
-                                    stroke: "currentColor",
-                                    stroke_width: "2",
-                                    path {
-                                        d: "M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"
-                                    }
-                                    circle {
-                                        cx: "12",
-                                        cy: "7",
-                                        r: "4"
-                                    }
-                                }
-                            }
+                            // your svg icon...
                         }
                         if !error().is_empty() {
-                            div {
-                                class: "error-message",
-                                "{error}"
-                            }
+                            div { class: "error-message", "{error}" }
                         }
                     }
 
-                    div {
-                        class: "form-options",
-                        label {
-                            class: "checkbox-label",
-                            input {
-                                r#type: "checkbox",
-                                id: "rememberMe",
-                                checked: remember_me(),
-                                onchange: handle_remember_me_change,
-                                disabled: is_loading(),
-                            }
-                            span {
-                                class: "checkbox-custom"
-                            }
-                            span {
-                                class: "checkbox-text",
-                                "Garder votre session enregistrée pour 10 minutes"
-                            }
-                        }
+                    // Optional: show success/result
+                    if !result_message().is_empty() {
+                        div { class: "success-message", "{result_message}" }
                     }
 
                     button {
@@ -134,27 +106,15 @@ pub fn ConnectionForm() -> Element {
                         class: "connect-button",
                         disabled: is_loading() || connection_id().trim().is_empty(),
                         if is_loading() {
-                            span {
-                                class: "button-loader",
-                                div {
-                                    class: "spinner"
-                                }
-                            }
+                            span { class: "button-loader", div { class: "spinner" } }
                         } else {
-                            span {
-                                class: "button-text",
-                                "⏎ Enter the Citadel"
-                            }
+                            span { class: "button-text", "⏎ Enter the Citadel" }
                         }
                     }
                 }
 
-                div {
-                    class: "connection-footer",
-                    p {
-                        class: "footer-text",
-                        "Pour toutes questions, veuillez les poser au ..."
-                    }
+                div { class: "connection-footer",
+                    p { class: "footer-text", "Pour toutes questions, veuillez les poser au ..." }
                 }
             }
         }

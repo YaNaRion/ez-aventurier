@@ -1,6 +1,7 @@
 use dioxus::prelude::*;
 
-const HEADER_SVG: Asset = asset!("/assets/header.svg");
+// const HEADER_SVG: Asset = asset!("/assets/header.svg");
+
 use crate::components::ConnectionForm;
 
 #[component]

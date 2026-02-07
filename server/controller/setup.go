@@ -23,12 +23,20 @@ func newController(db *infra.DB, mux *http.ServeMux) *Controller {
 
 func SetUpController(mux *http.ServeMux, db *infra.DB) *Controller {
 	controller := newController(db, mux)
+	// Test et template
 	mux.HandleFunc("GET /tasks/", controller.getTasks)
+	mux.HandleFunc("GET /api/test", controller.getTest)
+
+	// Verification de la connection
+	mux.HandleFunc("GET /api/isSessionValid", controller.isSessionValid)
+
+	// Demande de connection
+	mux.HandleFunc("GET /api/login", controller.connection)
 
 	return controller
 }
 
-func writeResponse(w http.ResponseWriter, data []byte) {
+func writeResponseJson(w http.ResponseWriter, data []byte) {
 	w.Header().Set("Contend-Type", ContentTypeJSON)
 	_, err := w.Write(data)
 	if err != nil {

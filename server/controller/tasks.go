@@ -16,5 +16,10 @@ func (c *Controller) getTasks(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
-	writeResponse(w, tasksJson)
+	writeResponseJson(w, tasksJson)
+}
+
+func (c *Controller) getTest(w http.ResponseWriter, r *http.Request) {
+	log.Println("RECEIVE TASKS REQUEST FROM RUST CLIENT")
+	writeResponseJson(w, []byte("OUI"))
 }
