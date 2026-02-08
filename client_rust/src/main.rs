@@ -1,14 +1,12 @@
+use std::{cell::RefCell, rc::Rc};
+
 use dioxus::prelude::*;
 use reqwest::Client;
 use views::{Home, Navbar, User};
 
 mod components;
+mod service;
 mod views;
-
-struct GlobalSharedState {
-    session_id: Option<String>,
-    user_id: Option<String>,
-}
 
 #[derive(Debug, Clone, Routable, PartialEq)]
 #[rustfmt::skip]
@@ -16,14 +14,21 @@ enum Route {
     #[layout(Navbar)]
         #[route("/")]
             Home {},
-        #[route("/user?:user_id")]
+        #[route("/user?:user_id&:session_id")]
             User {
                 user_id: String,
+                session_id: String,
             },
 }
 
 const FAVICON: Asset = asset!("/assets/favicon.ico");
 const MAIN_CSS: Asset = asset!("/assets/styling/main.css");
+
+// fn use_shared_state() -> Rc<RefCell<AppContext>> {
+//     let client = Client::new();
+//     use_context_provider(|| Rc::new(RefCell::new(AppContext::new(client))));
+//     use_context::<Rc<RefCell<AppContext>>>()
+// }
 
 fn main() {
     // Launch the app
@@ -33,15 +38,11 @@ fn main() {
 /// App is the main component of our app
 #[component]
 fn App() -> Element {
-    // Create a single Client instance for the entire app
+    // Provide the combined context once
+    // use_shared_state();
+
     let client = Client::new();
     use_context_provider(|| client);
-
-    let isConnedted = false;
-    use_context_provider(|| isConnedted);
-
-    let session_id = "";
-    use_context_provider(|| session_id);
 
     rsx! {
         document::Link { rel: "icon", href: FAVICON }

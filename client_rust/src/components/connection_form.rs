@@ -59,7 +59,10 @@ pub fn ConnectionForm() -> Element {
                 // result_message.set(format!("Success! {}", text));
 
                 // Optional: do navigation, set cookie, etc.
-                // dioxus_router::router().push("/user");
+                dioxus_router::router().push(format!(
+                    "/user?user_id={}&session_id={}",
+                    data.user_id, data.session_id
+                ));
             }
 
             Ok(resp) => {

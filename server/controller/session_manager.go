@@ -5,39 +5,58 @@ import (
 	"log"
 	"main/infra/models"
 	"net/http"
-	"time"
+	// "time"
 )
 
 func IsSessionExpired(session *models.Session) bool {
-	return time.Since(session.CreatedON) > 10*time.Minute
+	// return time.Since(session.CreatedON) > 10*time.Minute
+	return false
+}
+
+type IsSessionValidResponse struct {
+	Session models.Session `json:"session"`
+	IsValid bool           `json:"isValid"`
 }
 
 func (c *Controller) isSessionValid(w http.ResponseWriter, r *http.Request) {
-	sessionID := r.URL.Query().Get("sessionID")
-	if sessionID == "" {
-		http.Error(w, "Missing SessionID", http.StatusBadRequest)
+	log.Printf("Incomming session validation from: %s", r.Host)
+	log.Printf("Incomming session validation from: %s", r.URL)
+
+	session_id := r.URL.Query().Get("session_id")
+	user_id := r.URL.Query().Get("user_id")
+
+	log.Println(user_id)
+	log.Println(session_id)
+	if session_id == "" || user_id == "" {
+		http.Error(w, "Missing SessionID or UserID", http.StatusBadRequest)
 		return
 	}
 
-	session, err := c.db.FindSession(sessionID)
-
+	session, err := c.db.FindSession(session_id)
 	if err != nil {
 		http.Error(w, "Session not found", http.StatusNotFound)
 		return
 	}
 
-	if !IsSessionExpired(session) {
+	if IsSessionExpired(session) {
 		http.Error(w, "Session not valid", http.StatusForbidden)
 		return
 	}
+	log.Println("APRES SESSION EXPIRE")
 
-	sessionJson, err := json.Marshal(*session)
+	response := IsSessionValidResponse{
+		Session: *session,
+		IsValid: true,
+	}
+
+	sessionJson, err := json.Marshal(response)
 	if err != nil {
 		http.Error(w, "Could not marshal the response", http.StatusForbidden)
 		return
 	}
+
+	log.Println("APRES JSON MARSHAL")
 	writeResponseJson(w, sessionJson)
-	log.Printf("Connection from %s", r.Host)
 	// response := "true"
 	// w.Write([]byte(response))
 	// http.Error(w, "", http.StatusBadRequest)
@@ -69,6 +88,11 @@ func (c *Controller) connection(w http.ResponseWriter, r *http.Request) {
 
 	session, err := c.db.AddSession(user.UserID)
 
+	if err != nil {
+		log.Println("Error while creating session")
+		http.Error(w, "Server Error", http.StatusInternalServerError)
+	}
+
 	// le login est bon, je fais les cookies
 	// token := "Voici le session ID"
 	// http.SetCookie(w, &http.Cookie{
@@ -83,7 +107,7 @@ func (c *Controller) connection(w http.ResponseWriter, r *http.Request) {
 
 	user_json, err := json.Marshal(session)
 	if err != nil {
-		log.Printf("Error while marchaling the user account", r.Host)
+		log.Println("Error while marchaling the user account")
 		http.Error(w, "Ce code secret correspond a personne", http.StatusInternalServerError)
 	}
 	writeResponseJson(w, user_json)

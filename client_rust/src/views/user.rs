@@ -1,31 +1,38 @@
 use dioxus::prelude::*;
 use reqwest::Client;
+use web_sys::console;
+
+use crate::service::IsSessionValidAPI;
 
 // const HEADER_SVG: Asset = asset!("/assets/header.svg");
 
 #[component]
-pub fn User(user_id: String) -> Element {
+pub fn User(user_id: String, session_id: String) -> Element {
     let mut is_loading = use_signal(|| true);
     let mut is_valid_session = use_signal(|| false);
     let mut error = use_signal(|| String::new());
 
-    let value = user_id.clone();
-    let client = use_context::<Client>();
+    let mut client = use_context::<Client>();
+
+    let session_data = use_signal(|| IsSessionValidAPI::default);
 
     use_future(move || {
         // Move the cloned values into the async block
         let client_for_async = client.clone(); // Assuming Client implements Clone
-        let user_id_for_async = value.clone();
+                                               //
+        let user_id_clone = user_id.clone();
+        let session_id_clone = session_id.clone();
 
         async move {
             let req_string = format!(
                 "http://localhost:3000/api/isSessionValid?user_id={}&session_id={}",
-                user_id_for_async, user_id_for_async
+                user_id_clone, session_id_clone
             );
 
             match client_for_async.get(&req_string).send().await {
                 Ok(resp) if resp.status().is_success() => {
                     is_valid_session.set(true);
+                    let data: IsSessionValidAPI = resp.json().await.unwrap();
                 }
                 Ok(_resp) => {
                     error.set("NOT CONNECTED".to_string());
