@@ -71,7 +71,11 @@ func Setup() *Server {
 
 	configServer := NewConf(db, control, router)
 	corsHandler := cors.New(cors.Options{
-		AllowedOrigins:   []string{"http://localhost:3000", "http://localhost:8080"},
+		AllowedOrigins: []string{
+			"http://localhost:3000",
+			"http://localhost:8080",
+			"http://192.168.2.49:3000",
+		},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowedHeaders:   []string{"*"},
 		AllowCredentials: true,

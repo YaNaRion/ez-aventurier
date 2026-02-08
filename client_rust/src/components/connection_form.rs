@@ -5,15 +5,19 @@ use reqwest::Client;
 
 #[derive(serde::Deserialize)]
 struct ConnectionAPI {
+    #[serde(rename = "sessionID")]
     session_id: String,
+    #[serde(rename = "userID")]
     user_id: String,
+    #[serde(rename = "createdOn")]
+    created_on: String, // or use chrono::DateTime
 }
 
 #[component]
 pub fn ConnectionForm() -> Element {
     let mut connection_id = use_signal(|| String::new());
     let mut error = use_signal(|| String::new());
-    let mut remember_me = use_signal(|| false);
+    // let mut remember_me = use_signal(|| false);
     let mut is_loading = use_signal(|| false);
 
     // Optional: store the result if you want to show something after success
@@ -34,24 +38,33 @@ pub fn ConnectionForm() -> Element {
         result_message.set(String::new());
 
         let client = use_context::<Client>();
-        match client.get("http://localhost:3000/api/login").send().await {
+        match client
+            .get(format!(
+                "http://localhost:3000/api/login?user_id={}",
+                connection_id
+            ))
+            .send()
+            .await
+        {
             Ok(resp) if resp.status().is_success() => {
                 // If JSON:
-                // let data: ConnectionAPI = resp.json().await.unwrap();
-                // result_message.set(data.message);
+                let data: ConnectionAPI = resp.json().await.unwrap();
+                result_message.set(format!(
+                    "UserID: {}, SessionID: {}",
+                    data.user_id, data.session_id
+                ));
 
                 // Or just text:
-                let text = resp.text().await.unwrap_or_default();
-                result_message.set(format!("Success! {}", text));
+                // let text = resp.text().await.unwrap_or_default();
+                // result_message.set(format!("Success! {}", text));
 
                 // Optional: do navigation, set cookie, etc.
-                dioxus_router::router().push("/user");
+                // dioxus_router::router().push("/user");
             }
 
             Ok(resp) => {
-                let status = resp.status();
                 let text = resp.text().await.unwrap_or_default();
-                error.set(format!("Server error ({}): {}", status, text));
+                error.set(format!("{}", text));
             }
             Err(e) => {
                 error.set(format!("Network error: {}", e));

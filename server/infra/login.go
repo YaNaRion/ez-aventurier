@@ -28,7 +28,7 @@ func (db *DB) FindUser(username string) (*models.User, error) {
 	return &user, nil
 }
 
-func (db *DB) AddSession(userID string) error {
+func (db *DB) AddSession(userID string) (*models.Session, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -39,10 +39,10 @@ func (db *DB) AddSession(userID string) error {
 	_, err := collection.InsertOne(ctx, newSession)
 
 	if err != nil {
-		return fmt.Errorf("failed to insert the session in db: %w", err)
+		return nil, fmt.Errorf("failed to insert the session in db: %w", err)
 	}
 
-	return nil
+	return &newSession, nil
 }
 
 func (db *DB) FindSession(sessionID string) (*models.Session, error) {

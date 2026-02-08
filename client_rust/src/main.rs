@@ -5,6 +5,11 @@ use views::{Home, Navbar, User};
 mod components;
 mod views;
 
+struct GlobalSharedState {
+    session_id: Option<String>,
+    user_id: Option<String>,
+}
+
 #[derive(Debug, Clone, Routable, PartialEq)]
 #[rustfmt::skip]
 enum Route {
@@ -34,6 +39,9 @@ fn App() -> Element {
 
     let isConnedted = false;
     use_context_provider(|| isConnedted);
+
+    let session_id = "";
+    use_context_provider(|| session_id);
 
     rsx! {
         document::Link { rel: "icon", href: FAVICON }

@@ -37,6 +37,7 @@ func (c *Controller) isSessionValid(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	writeResponseJson(w, sessionJson)
+	log.Printf("Connection from %s", r.Host)
 	// response := "true"
 	// w.Write([]byte(response))
 	// http.Error(w, "", http.StatusBadRequest)
@@ -44,18 +45,46 @@ func (c *Controller) isSessionValid(w http.ResponseWriter, r *http.Request) {
 
 // Si la connection est bonne, il faut retourner au client sa sessionID
 func (c *Controller) connection(w http.ResponseWriter, r *http.Request) {
-	log.Println("DANS CONNECTION REQUEST")
+	user_id := r.URL.Query().Get("user_id")
+	log.Println(user_id)
+
+	if user_id == "" {
+		log.Printf("Connection try from: %s, but was mission user_id in request", r.Host)
+		http.Error(w, "missing user_id", http.StatusBadRequest)
+		return
+	}
+
+	user, err := c.db.FindUser(user_id)
+	if err != nil {
+		log.Printf("Connection try from: %s, but was mission user_id in request", r.Host)
+		http.Error(w, "Ce code secret correspond a personne", http.StatusBadRequest)
+		return
+	}
+	// FACILITE LA CONNECTION POUR TEST
+	// log.Println("Un client a réussi a se connecter")
+	// response := "true"
+	// w.Write([]byte(response))
+	// return
 	// vérification des informations de connection dans le server
 
+	session, err := c.db.AddSession(user.UserID)
+
 	// le login est bon, je fais les cookies
-	token := "Voici le session ID"
-	http.SetCookie(w, &http.Cookie{
-		Name:     "auth_token",
-		Value:    token,
-		Path:     "/",
-		HttpOnly: true,
-		// Secure:   true, // Use with HTTPS a rajouter quand le https sera
-		SameSite: http.SameSiteStrictMode,
-		MaxAge:   10 * 60, // 10 minutes
-	})
+	// token := "Voici le session ID"
+	// http.SetCookie(w, &http.Cookie{
+	// 	Name:     "auth_token",
+	// 	Value:    session.SessionID,
+	// 	Path:     "/",
+	// 	HttpOnly: true,
+	// 	// Secure:   true, // Use with HTTPS a rajouter quand le https sera
+	// 	SameSite: http.SameSiteStrictMode,
+	// 	MaxAge:   10 * 60, // 10 minutes
+	// })
+
+	user_json, err := json.Marshal(session)
+	if err != nil {
+		log.Printf("Error while marchaling the user account", r.Host)
+		http.Error(w, "Ce code secret correspond a personne", http.StatusInternalServerError)
+	}
+	writeResponseJson(w, user_json)
 }
