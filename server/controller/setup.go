@@ -33,6 +33,8 @@ func SetUpController(mux *http.ServeMux, db *infra.DB) *Controller {
 	// Demande de connection
 	mux.HandleFunc("GET /api/login", controller.connection)
 
+	mux.HandleFunc("GET /api/user", controller.getUser)
+
 	return controller
 }
 

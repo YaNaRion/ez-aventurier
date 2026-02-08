@@ -7,3 +7,6 @@ pub use hero::Hero;
 
 mod connection_form;
 pub use connection_form::ConnectionForm;
+
+mod connected_user;
+pub use connected_user::ConnectedUser;

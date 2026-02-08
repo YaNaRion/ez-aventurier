@@ -3,15 +3,7 @@ use std::rc::Rc;
 use dioxus::prelude::*;
 use reqwest::Client;
 
-#[derive(serde::Deserialize)]
-struct ConnectionAPI {
-    #[serde(rename = "sessionID")]
-    session_id: String,
-    #[serde(rename = "userID")]
-    user_id: String,
-    #[serde(rename = "createdOn")]
-    created_on: String, // or use chrono::DateTime
-}
+use crate::service::ConnectionAPI;
 
 #[component]
 pub fn ConnectionForm() -> Element {

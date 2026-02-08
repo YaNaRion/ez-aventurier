@@ -2,6 +2,7 @@ package controller
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"main/infra/models"
 	"net/http"
@@ -18,31 +19,34 @@ type IsSessionValidResponse struct {
 	IsValid bool           `json:"isValid"`
 }
 
+func (c *Controller) chechSession(session_id string) (*models.Session, error) {
+	session, err := c.db.FindSession(session_id)
+	if err != nil {
+		return nil, fmt.Errorf("failed to find session: %w", err)
+	}
+
+	if IsSessionExpired(session) {
+		return nil, fmt.Errorf("failed to find session: %w", err)
+	}
+	return session, nil
+}
+
 func (c *Controller) isSessionValid(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Incomming session validation from: %s", r.Host)
-	log.Printf("Incomming session validation from: %s", r.URL)
 
 	session_id := r.URL.Query().Get("session_id")
 	user_id := r.URL.Query().Get("user_id")
-
-	log.Println(user_id)
-	log.Println(session_id)
 	if session_id == "" || user_id == "" {
 		http.Error(w, "Missing SessionID or UserID", http.StatusBadRequest)
 		return
 	}
 
-	session, err := c.db.FindSession(session_id)
-	if err != nil {
-		http.Error(w, "Session not found", http.StatusNotFound)
-		return
-	}
+	session, err := c.chechSession(session_id)
 
-	if IsSessionExpired(session) {
-		http.Error(w, "Session not valid", http.StatusForbidden)
+	if err != nil {
+		http.Error(w, "Missing SessionID or UserID", http.StatusBadRequest)
 		return
 	}
-	log.Println("APRES SESSION EXPIRE")
 
 	response := IsSessionValidResponse{
 		Session: *session,
@@ -55,7 +59,6 @@ func (c *Controller) isSessionValid(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Println("APRES JSON MARSHAL")
 	writeResponseJson(w, sessionJson)
 	// response := "true"
 	// w.Write([]byte(response))
@@ -87,7 +90,6 @@ func (c *Controller) connection(w http.ResponseWriter, r *http.Request) {
 	// vérification des informations de connection dans le server
 
 	session, err := c.db.AddSession(user.UserID)
-
 	if err != nil {
 		log.Println("Error while creating session")
 		http.Error(w, "Server Error", http.StatusInternalServerError)
@@ -105,7 +107,28 @@ func (c *Controller) connection(w http.ResponseWriter, r *http.Request) {
 	// 	MaxAge:   10 * 60, // 10 minutes
 	// })
 
-	user_json, err := json.Marshal(session)
+	session_json, err := json.Marshal(session)
+	if err != nil {
+		log.Println("Error while marchaling the session account")
+		http.Error(w, "Ce code secret correspond a personne", http.StatusInternalServerError)
+	}
+	writeResponseJson(w, session_json)
+}
+
+func (c *Controller) getUser(w http.ResponseWriter, r *http.Request) {
+	session_id := r.URL.Query().Get("session_id")
+	user_id := r.URL.Query().Get("user_id")
+
+	_, err := c.chechSession(session_id)
+
+	if err != nil {
+		http.Error(w, "Missing SessionID or UserID", http.StatusBadRequest)
+		return
+	}
+
+	user, err := c.db.FindUser(user_id)
+
+	user_json, err := json.Marshal(user)
 	if err != nil {
 		log.Println("Error while marchaling the user account")
 		http.Error(w, "Ce code secret correspond a personne", http.StatusInternalServerError)
