@@ -116,6 +116,7 @@ func (c *Controller) connection(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *Controller) getUser(w http.ResponseWriter, r *http.Request) {
+	log.Println("GET USER")
 	session_id := r.URL.Query().Get("session_id")
 	user_id := r.URL.Query().Get("user_id")
 

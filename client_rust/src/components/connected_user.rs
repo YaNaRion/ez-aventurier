@@ -1,20 +1,25 @@
 use dioxus::prelude::*;
 use reqwest::Client;
 
-use crate::service::ConnectionAPI;
+use crate::service::{ConnectionAPI, User};
 
 #[component]
 pub fn ConnectedUser(user_id: String, session_id: String) -> Element {
     let mut is_loading = use_signal(|| false);
     let mut error = use_signal(|| String::new());
 
+    let mut user_data = use_signal(|| User {
+        ..Default::default()
+    });
+
     let mut client = use_context::<Client>();
     // Refresh session handler
-
     let user_id_clone = user_id.clone();
     let session_id_clone = session_id.clone();
 
-    async move {
+    // Get Client
+
+    use_future(move || {
         let client_for_async = client.clone(); // Assuming Client implements Clone
         let req_string = format!(
             "http://localhost:3000/api/user?user_id={}&session_id={}",
@@ -22,23 +27,28 @@ pub fn ConnectedUser(user_id: String, session_id: String) -> Element {
             session_id_clone.clone()
         );
 
-        match client_for_async.get(&req_string).send().await {
-            Ok(resp) if resp.status().is_success() => {
-                let data: IsSessionValidAPI = resp.json().await.unwrap();
+        async move {
+            match client_for_async.get(&req_string).send().await {
+                Ok(resp) if resp.status().is_success() => {
+                    let data: User = resp.json().await.unwrap();
+                    user_data.set(data);
+                }
+
+                Ok(_resp) => {
+                    error.set("NOT CONNECTED".to_string());
+                    dioxus_router::router().push("/");
+                }
+
+                Err(e) => {
+                    error.set(format!("Network error: {}", e));
+                }
             }
 
-            Ok(_resp) => {
-                error.set("NOT CONNECTED".to_string());
-                dioxus_router::router().push("/");
-            }
-
-            Err(e) => {
-                error.set(format!("Network error: {}", e));
-            }
+            is_loading.set(false);
         }
+    });
 
-        is_loading.set(false);
-    };
+    // let user_data_clone = user_data.read().unity;
 
     rsx! {
         div { class: "connected-ui",
@@ -57,7 +67,7 @@ pub fn ConnectedUser(user_id: String, session_id: String) -> Element {
                 p {
                     class: "connection-subtitle",
                     "Soyer le bienvenue: "
-                    strong { "{user_id}" }
+                    strong { "{user_data.read().player_name}" }
                 }
             }
 
@@ -69,7 +79,7 @@ pub fn ConnectedUser(user_id: String, session_id: String) -> Element {
                         div { class: "info-icon", "⚔️" }
                         div { class: "info-content",
                             h3 { "Votre code secrêt" }
-                            p { "{user_id}" }
+                            p { "{user_data.read().user_id}" }
                         }
                     }
 
@@ -77,25 +87,19 @@ pub fn ConnectedUser(user_id: String, session_id: String) -> Element {
                     div { class: "info-card",
                         div { class: "info-icon", "🕯️" }
                         div { class: "info-content",
-                            h3 { "Session ID" }
-                            p { "{session_id}" }
+                            h3 { "Unity" }
+                            p { "{user_data.read().unity}" }
                         }
                     }
 
-                    // Conversations Card (clickable)
-                    div {
-                        class: "info-card clickable",
-                        onclick: move |_| {
-                            dioxus_router::router().push(format!(
-                                "/conversations?user_id={}&session_id={}",
-                                user_id, session_id
-                            ));
-                        },
-                        div { class: "info-icon", "💬" }
+                    div { class: "info-card",
+                        div { class: "info-icon", "🕯️" }
                         div { class: "info-content",
-                            h3 { "Voir vos conversations" }
+                            h3 { "Ordre" }
+                            p { "{user_data.read().order}" }
                         }
                     }
+
                 }
 
                 // Error display
