@@ -34,7 +34,7 @@ pub fn User(user_id: String, session_id: String) -> Element {
             match client_for_async.get(&req_string).send().await {
                 Ok(resp) if resp.status().is_success() => {
                     is_valid_session.set(true);
-                    let data: IsSessionValidAPI = resp.json().await.unwrap();
+                    // let data: IsSessionValidAPI = resp.json().await.unwrap();
                 }
 
                 Ok(_resp) => {
@@ -57,10 +57,12 @@ pub fn User(user_id: String, session_id: String) -> Element {
             } else if !error.read().is_empty() {
                 "Error: {error}"
             } else if *is_valid_session.read() {
-                ConnectedUser {
-                    user_id: user_id.to_string(),
-                    session_id: session_id.to_string(),
-            }
+                div { class: "scrollable-container",
+                            ConnectedUser {
+                                user_id: user_id.to_string(),
+                                session_id: session_id.to_string(),
+                        }
+                }
             } else {
                 "NOT CONNECTED"
             }
