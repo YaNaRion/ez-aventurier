@@ -91,7 +91,10 @@ func Setup() *Server {
 	return NewServer(configServer, mux, corsHandler, server)
 }
 
+// To reset db
+// infra.Add_jeune_to_DB(server.Conf.DB)
 func main() {
+
 	// Setup DB connection
 	server := Setup()
 

@@ -80,7 +80,7 @@ pub fn ConnectionForm() -> Element {
                     id: "connectionForm",
                     class: "connection-form",
                     onsubmit: handle_submit,
-                    prevent_default: "onsubmit",
+                    // prevent_default: "onsubmit",
 
                     div { class: "form-group",
                         label { r#for: "connectionId", class: "form-label", "Identifiant" }

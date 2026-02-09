@@ -1,7 +1,15 @@
 use dioxus::prelude::*;
 use reqwest::Client;
 
-use crate::service::{ConnectionAPI, User};
+use crate::service::User;
+
+fn check_if_women(user: &User) -> bool {
+    let is_pionne_or_eclaireuses = user.unity == "Pionnières" || user.unity == "Éclaireuses";
+    let is_special_case =
+        user.player_name != "Alex Labelle" || user.player_name != "Hugo Palardy-Beaud";
+
+    is_pionne_or_eclaireuses && !is_special_case
+}
 
 #[component]
 pub fn ConnectedUser(user_id: String, session_id: String) -> Element {
@@ -12,7 +20,7 @@ pub fn ConnectedUser(user_id: String, session_id: String) -> Element {
         ..Default::default()
     });
 
-    let mut client = use_context::<Client>();
+    let client = use_context::<Client>();
     // Refresh session handler
     let user_id_clone = user_id.clone();
     let session_id_clone = session_id.clone();
@@ -61,12 +69,20 @@ pub fn ConnectedUser(user_id: String, session_id: String) -> Element {
 
                 h1 {
                     class: "connection-title",
-                    "Bien le Bonjour Noble Chevalier"
+                    if check_if_women(&user_data.read())  {
+                        "Bien le Bonjour Noble Chevalière"
+                    } else {
+                        "Bien le Bonjour Noble Chevalier"
+                    }
                 }
 
                 p {
                     class: "connection-subtitle",
-                    "Soyer le bienvenue: "
+                    if check_if_women(&user_data.read())  {
+                        "Soyez la bienvenue: "
+                    } else {
+                        "Soyez le bienvenu: "
+                    }
                     strong { "{user_data.read().player_name}" }
                 }
             }
@@ -87,7 +103,7 @@ pub fn ConnectedUser(user_id: String, session_id: String) -> Element {
                     div { class: "info-card",
                         div { class: "info-icon", "🕯️" }
                         div { class: "info-content",
-                            h3 { "Unity" }
+                            h3 { "Unité scout" }
                             p { "{user_data.read().unity}" }
                         }
                     }
@@ -99,7 +115,29 @@ pub fn ConnectedUser(user_id: String, session_id: String) -> Element {
                             p { "{user_data.read().order}" }
                         }
                     }
-
+                    // Message Card with Send Button on the right
+                    // Message Card with aligned Send Button
+                    div { class: "message-card-aligned",
+                        div { class: "message-card-content",
+                            div { class: "message-icon", "📜" }
+                            div { class: "message-input-wrapper",
+                                h3 { "Entrer le code secret pour confirmer votre quête" }
+                                div { class: "input-button-group",
+                                    input {
+                                        class: "message-input-aligned",
+                                        placeholder: "Écrivez votre code...",
+                                        r#type: "text",
+                                        // Add your bind:value logic here when implementing
+                                    }
+                                    button {
+                                        class: "send-button-aligned",
+                                        r#type: "button",
+                                        "Confirmer"
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
 
                 // Error display

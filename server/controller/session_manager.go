@@ -78,7 +78,7 @@ func (c *Controller) connection(w http.ResponseWriter, r *http.Request) {
 
 	user, err := c.db.FindUser(user_id)
 	if err != nil {
-		log.Printf("Connection try from: %s, but was mission user_id in request", r.Host)
+		log.Printf("Error while request user to db: %s", err)
 		http.Error(w, "Ce code secret correspond a personne", http.StatusBadRequest)
 		return
 	}
