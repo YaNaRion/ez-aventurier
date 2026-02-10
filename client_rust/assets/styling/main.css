@@ -6,13 +6,6 @@
 }
 
 body {
-    /* Remove or comment out these lines: */
-    /* min-height: 100vh; */
-    /* display: flex; */
-    /* align-items: center; */
-    /* justify-content: center; */
-
-    /* Keep these: */
     font-family: 'Cinzel', 'Georgia', serif;
     background:
         radial-gradient(ellipse at center, #0a0e17 0%, #050811 100%),
@@ -20,35 +13,41 @@ body {
     padding: 20px;
     color: #e8e6e3;
     position: relative;
-    overflow: hidden;
-    /* Change this to auto for scrolling */
     overflow-y: auto;
-    /* Add this */
     min-height: 100vh;
-    /* Keep this but remove flex properties */
+    /* Add container to center everything */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-/* Create a main container wrapper */
-.scrollable-container {
-    min-height: 100vh;
+/* Main centered container */
+.main-container {
     width: 100%;
     max-width: 1200px;
+    /* Limit the maximum width */
     margin: 0 auto;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     padding: 20px;
 }
 
-/* Animated Banner */
+/* Animated Banner - now contained within main-container */
 .knight-banner {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
+    width: 100%;
+    max-width: 800px;
+    /* Match card width */
     height: 200px;
     background: linear-gradient(180deg, rgba(139, 69, 19, 0.2) 0%, transparent 100%);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 1;
+    margin-bottom: 40px;
+    position: relative;
 }
 
 .banner-content {
@@ -70,6 +69,7 @@ body {
     letter-spacing: 2px;
 }
 
+/* Connection container - centered within main-container */
 .connection-container {
     width: 100%;
     max-width: 480px;
@@ -90,6 +90,7 @@ body {
     padding: 40px 35px;
     border: 1px solid rgba(139, 69, 19, 0.3);
     position: relative;
+    width: 100%;
 }
 
 .connection-card::before {
@@ -656,61 +657,28 @@ body {
     box-shadow: 0 8px 25px rgba(212, 175, 55, 0.5);
 }
 
-/* Knight decorative elements */
+/* Knight decorative elements - positioned within main container */
 .knight-decor {
     position: absolute;
     opacity: 0.05;
     font-size: 120px;
     z-index: 0;
+    /* Position relative to main container */
+    width: 100%;
+    max-width: 1200px;
+    pointer-events: none;
 }
 
 .knight-left {
     top: 20%;
-    left: 10%;
+    left: 5%;
     transform: rotate(-15deg);
 }
 
 .knight-right {
     bottom: 20%;
-    right: 10%;
+    right: 5%;
     transform: rotate(15deg);
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    body {
-        padding: 10px;
-    }
-
-    .connection-card {
-        padding: 30px 20px;
-    }
-
-    .banner-title {
-        font-size: 2rem;
-    }
-
-    .connection-title {
-        font-size: 26px;
-    }
-
-    .action-buttons {
-        flex-direction: column;
-    }
-}
-
-@media (max-width: 480px) {
-    .connection-card {
-        padding: 25px 15px;
-    }
-
-    .connection-title {
-        font-size: 22px;
-    }
-
-    .form-input {
-        padding: 14px 16px 14px 44px;
-    }
 }
 
 /* User Profile Styles for React */
@@ -903,47 +871,12 @@ body {
     letter-spacing: 1px;
 }
 
-/* .action-btn.secondary-btn:hover { */
-/* 	transform: translateY(-2px); */
-/* 	border-color: #d4af37; */
-/* 	box-shadow: 0 8px 25px rgba(212, 175, 55, 0.2); */
-/* 	background: linear-gradient(135deg, */
-/* 			rgba(30, 30, 40, 0.9) 0%, */
-/* 			rgba(20, 24, 33, 1) 100%); */
-/* } */
-
 #lastUpdated {
     display: block;
     margin-top: 10px;
     font-size: 11px;
     color: #8b8b8b;
     font-style: italic;
-}
-
-/* Responsive adjustments */
-@media (max-width: 480px) {
-    .user-profile-container {
-        max-width: 100%;
-    }
-
-    .info-card {
-        padding: 15px;
-    }
-
-    .info-icon {
-        font-size: 24px;
-        min-width: 50px;
-        margin-right: 15px;
-    }
-
-    .info-content p {
-        font-size: 16px;
-    }
-
-    .status-card,
-    .heraldry-card {
-        padding: 15px;
-    }
 }
 
 /* Message Card with Aligned Button */
@@ -1136,6 +1069,31 @@ body {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    .main-container {
+        padding: 10px;
+        max-width: 100%;
+    }
+
+    .connection-card {
+        padding: 30px 20px;
+    }
+
+    .banner-title {
+        font-size: 2rem;
+    }
+
+    .connection-title {
+        font-size: 26px;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+    }
+
     .message-card-content {
         flex-direction: column;
         align-items: stretch;
@@ -1163,9 +1121,25 @@ body {
         min-width: auto;
         width: 100%;
     }
+
+    .knight-decor {
+        font-size: 80px;
+    }
 }
 
 @media (max-width: 480px) {
+    .connection-card {
+        padding: 25px 15px;
+    }
+
+    .connection-title {
+        font-size: 22px;
+    }
+
+    .form-input {
+        padding: 14px 16px 14px 44px;
+    }
+
     .message-card-aligned {
         padding: 15px;
     }
@@ -1187,5 +1161,51 @@ body {
     .send-button-aligned {
         padding: 0 20px;
         font-size: 13px;
+    }
+
+    .user-profile-container {
+        max-width: 100%;
+    }
+
+    .info-card {
+        padding: 15px;
+    }
+
+    .info-icon {
+        font-size: 24px;
+        min-width: 50px;
+        margin-right: 15px;
+    }
+
+    .info-content p {
+        font-size: 16px;
+    }
+
+    .status-card,
+    .heraldry-card {
+        padding: 15px;
+    }
+
+    .knight-decor {
+        font-size: 60px;
+    }
+}
+
+/* Additional responsive adjustments for extra small screens */
+@media (max-width: 360px) {
+    .banner-title {
+        font-size: 1.5rem;
+    }
+
+    .banner-subtitle {
+        font-size: 0.9rem;
+    }
+
+    .connection-title {
+        font-size: 20px;
+    }
+
+    .connection-subtitle {
+        font-size: 14px;
     }
 }

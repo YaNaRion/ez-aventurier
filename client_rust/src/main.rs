@@ -1,6 +1,6 @@
 use dioxus::prelude::*;
 use reqwest::Client;
-use views::{Home, User};
+use views::{AdminView, Home, User};
 
 mod components;
 mod service;
@@ -16,16 +16,12 @@ enum Route {
             user_id: String,
             session_id: String,
         },
+    #[route("/admin")]
+        AdminView{},
 }
 
 const FAVICON: Asset = asset!("/assets/favicon.ico");
 const MAIN_CSS: Asset = asset!("/assets/styling/main.css");
-
-// fn use_shared_state() -> Rc<RefCell<AppContext>> {
-//     let client = Client::new();
-//     use_context_provider(|| Rc::new(RefCell::new(AppContext::new(client))));
-//     use_context::<Rc<RefCell<AppContext>>>()
-// }
 
 fn main() {
     // Launch the app

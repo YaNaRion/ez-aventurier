@@ -25,8 +25,6 @@ pub fn ConnectedUser(user_id: String, session_id: String) -> Element {
     let user_id_clone = user_id.clone();
     let session_id_clone = session_id.clone();
 
-    // Get Client
-
     use_future(move || {
         let client_for_async = client.clone(); // Assuming Client implements Clone
         let req_string = format!(
@@ -55,8 +53,6 @@ pub fn ConnectedUser(user_id: String, session_id: String) -> Element {
             is_loading.set(false);
         }
     });
-
-    // let user_data_clone = user_data.read().unity;
 
     rsx! {
         div { class: "connected-ui",
