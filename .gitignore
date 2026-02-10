@@ -10,4 +10,5 @@ server/tmp/main
 server/tmp/
 
 # Ignore .env for security
-server/.env
+server/.env.prod
+server/.env.dev

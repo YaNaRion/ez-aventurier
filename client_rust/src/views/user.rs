@@ -1,8 +1,8 @@
 use dioxus::prelude::*;
 use reqwest::Client;
-use web_sys::console;
+// use web_sys::console;
 
-use crate::{components::ConnectedUser, service::IsSessionValidAPI};
+use crate::components::ConnectedUser;
 
 // const HEADER_SVG: Asset = asset!("/assets/header.svg");
 
@@ -12,7 +12,7 @@ pub fn User(user_id: String, session_id: String) -> Element {
     let mut is_valid_session = use_signal(|| false);
     let mut error = use_signal(|| String::new());
 
-    let mut client = use_context::<Client>();
+    let client = use_context::<Client>();
 
     let user_id_clone = user_id.clone();
     let session_id_clone = session_id.clone();
@@ -34,7 +34,6 @@ pub fn User(user_id: String, session_id: String) -> Element {
             match client_for_async.get(&req_string).send().await {
                 Ok(resp) if resp.status().is_success() => {
                     is_valid_session.set(true);
-                    // let data: IsSessionValidAPI = resp.json().await.unwrap();
                 }
 
                 Ok(_resp) => {

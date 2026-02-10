@@ -1,18 +1,23 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"main/controller"
 	"main/infra"
 	"main/router"
 	"net/http"
+	"os"
+	"strconv"
 
+	"github.com/joho/godotenv"
 	"github.com/rs/cors"
 )
 
-const (
-	httpPort = ":3000"
-)
+type AppConfig struct {
+	Port        int
+	DatabaseURL string
+}
 
 type Config struct {
 	DB         *infra.DB
@@ -49,11 +54,37 @@ func NewServer(
 	}
 }
 
+func getEnv(key, defaultValue string) string {
+	if value, exists := os.LookupEnv(key); exists {
+		return value
+	}
+	return defaultValue
+}
+func getEnvAsInt(key string, defaultValue int) int {
+	strValue := getEnv(key, "")
+	if value, err := strconv.Atoi(strValue); err == nil {
+		return value
+	}
+	return defaultValue
+}
+
+func LoadEnvVariable() AppConfig {
+	if err := godotenv.Load(); err != nil {
+		log.Println("No .env file found, using system environment variables")
+	}
+	return AppConfig{
+		DatabaseURL: getEnv("DB_CONNECTION_STRING", "None"),
+		Port:        getEnvAsInt("PORT", 3000),
+	}
+}
+
 func Setup() *Server {
 	log.Println("Setup DB connection")
 	var db *infra.DB
 
-	db, _ = infra.Setup()
+	appConfig := LoadEnvVariable()
+	log.Println(appConfig)
+	db, _ = infra.Setup(appConfig.DatabaseURL)
 	if db == nil {
 		log.Println("DB NOT CONNECTED")
 	} else {
@@ -77,14 +108,14 @@ func Setup() *Server {
 			"http://192.168.2.49:3000",
 		},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowedHeaders:   []string{"*"},
+		AllowedHeaders:   []string{"Content-Type", "Authorization", "X-Requested-With"},
 		AllowCredentials: true,
 		Debug:            true,
 	})
 
 	// Start server
 	server := &http.Server{
-		Addr:    httpPort,
+		Addr:    fmt.Sprintf(":%d", appConfig.Port),
 		Handler: corsHandler.Handler(mux),
 	}
 

@@ -1,8 +1,6 @@
-use std::{cell::RefCell, rc::Rc};
-
 use dioxus::prelude::*;
 use reqwest::Client;
-use views::{Home, Navbar, User};
+use views::{Home, User};
 
 mod components;
 mod service;
@@ -11,14 +9,13 @@ mod views;
 #[derive(Debug, Clone, Routable, PartialEq)]
 #[rustfmt::skip]
 enum Route {
-    #[layout(Navbar)]
-        #[route("/")]
-            Home {},
-        #[route("/user?:user_id&:session_id")]
-            User {
-                user_id: String,
-                session_id: String,
-            },
+    #[route("/")]
+        Home {},
+    #[route("/user?:user_id&:session_id")]
+        User {
+            user_id: String,
+            session_id: String,
+        },
 }
 
 const FAVICON: Asset = asset!("/assets/favicon.ico");

@@ -10,13 +10,13 @@ pub struct ConnectionAPI {
     pub jcreated_on: String, // or use chrono::DateTime
 }
 
-#[derive(serde::Deserialize, serde::Serialize, Default)]
-pub struct IsSessionValidAPI {
-    #[serde(rename = "session")]
-    pub session: ConnectionAPI,
-    #[serde(rename = "isValid")]
-    pub is_valid: bool,
-}
+// #[derive(serde::Deserialize, serde::Serialize, Default)]
+// pub struct IsSessionValidAPI {
+//     #[serde(rename = "session")]
+//     pub session: ConnectionAPI,
+//     #[serde(rename = "isValid")]
+//     pub is_valid: bool,
+// }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq)]
 #[serde(rename_all = "UPPERCASE")]
@@ -56,9 +56,6 @@ pub enum Order {
     #[serde(rename = "SECULAR")]
     Secular,
 }
-
-// CacheID as a type alias for String
-pub type CacheID = String;
 
 // User struct
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
