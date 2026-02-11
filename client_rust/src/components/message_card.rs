@@ -2,7 +2,8 @@ use dioxus::prelude::*;
 
 // Il faut ajouter la callback pour le submit
 #[component]
-pub fn MessageCard(input_name: String) -> Element {
+pub fn MessageCard(input_name: String, callback: Callback<String>) -> Element {
+    let mut text = use_signal(String::new);
     rsx! {
         div { class: "message-card-aligned",
             div { class: "message-card-content",
@@ -14,11 +15,15 @@ pub fn MessageCard(input_name: String) -> Element {
                             class: "message-input-aligned",
                             placeholder: "Écrivez...",
                             r#type: "text",
-                            // Add your bind:value logic here when implementing
+                            oninput: move |evt| text.set(evt.value()),
                         }
                         button {
                             class: "send-button-aligned",
                             r#type: "button",
+                            onclick: move |_| {
+                                callback.call(text());
+                                text.set(String::new()); // Clear input after sending
+                            },
                             "Confirmer"
                         }
                     }

@@ -6,12 +6,12 @@ import (
 	"log"
 	"main/infra/models"
 	"net/http"
+	"time"
 	// "time"
 )
 
 func IsSessionExpired(session *models.Session) bool {
-	// return time.Since(session.CreatedON) > 10*time.Minute
-	return false
+	return time.Since(session.CreatedON) > 10*time.Minute
 }
 
 type IsSessionValidResponse struct {
@@ -19,16 +19,14 @@ type IsSessionValidResponse struct {
 	IsValid bool           `json:"isValid"`
 }
 
-func (c *Controller) chechSession(session_id string) (*models.Session, error) {
-	session, err := c.db.FindSession(session_id)
-	if err != nil {
-		return nil, fmt.Errorf("failed to find session: %w", err)
+func (c *Controller) chechSession(
+	session *models.Session,
+	urlHost string,
+) (bool, error) {
+	if session.Host != urlHost {
+		return false, fmt.Errorf("failed to connect session")
 	}
-
-	if IsSessionExpired(session) {
-		return nil, fmt.Errorf("failed to find session: %w", err)
-	}
-	return session, nil
+	return IsSessionExpired(session), nil
 }
 
 func (c *Controller) isSessionValid(w http.ResponseWriter, r *http.Request) {
@@ -40,7 +38,13 @@ func (c *Controller) isSessionValid(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	session, err := c.chechSession(session_id)
+	session, err := c.db.FindSession(session_id)
+	if err != nil {
+		http.Error(w, "Failed to find session", http.StatusBadRequest)
+		return
+	}
+
+	isSessionExpired, err := c.chechSession(session, r.URL.Host)
 
 	if err != nil {
 		http.Error(w, "Missing SessionID or UserID", http.StatusBadRequest)
@@ -49,7 +53,7 @@ func (c *Controller) isSessionValid(w http.ResponseWriter, r *http.Request) {
 
 	response := IsSessionValidResponse{
 		Session: *session,
-		IsValid: true,
+		IsValid: !isSessionExpired,
 	}
 
 	sessionJson, err := json.Marshal(response)
@@ -67,7 +71,6 @@ func (c *Controller) isSessionValid(w http.ResponseWriter, r *http.Request) {
 // Si la connection est bonne, il faut retourner au client sa sessionID
 func (c *Controller) connection(w http.ResponseWriter, r *http.Request) {
 	user_id := r.URL.Query().Get("user_id")
-	log.Println(user_id)
 
 	if user_id == "" {
 		log.Printf("Connection try from: %s, but was mission user_id in request", r.Host)
@@ -88,23 +91,11 @@ func (c *Controller) connection(w http.ResponseWriter, r *http.Request) {
 	// return
 	// vérification des informations de connection dans le server
 
-	session, err := c.db.AddSession(user.UserID)
+	session, err := c.db.AddSession(user.UserID, r.URL.Host)
 	if err != nil {
 		log.Println("Error while creating session")
 		http.Error(w, "Server Error", http.StatusInternalServerError)
 	}
-
-	// le login est bon, je fais les cookies
-	// token := "Voici le session ID"
-	// http.SetCookie(w, &http.Cookie{
-	// 	Name:     "auth_token",
-	// 	Value:    session.SessionID,
-	// 	Path:     "/",
-	// 	HttpOnly: true,
-	// 	// Secure:   true, // Use with HTTPS a rajouter quand le https sera
-	// 	SameSite: http.SameSiteStrictMode,
-	// 	MaxAge:   10 * 60, // 10 minutes
-	// })
 
 	session_json, err := json.Marshal(session)
 	if err != nil {
@@ -126,15 +117,19 @@ func (c *Controller) getUser(w http.ResponseWriter, r *http.Request) {
 	session_id := r.URL.Query().Get("session_id")
 	user_id := r.URL.Query().Get("user_id")
 
-	_, err := c.chechSession(session_id)
-
+	session, err := c.db.FindSession(session_id)
 	if err != nil {
+		http.Error(w, "Failed to find session", http.StatusBadRequest)
+		return
+	}
+
+	isSessionExpired, err := c.chechSession(session, r.URL.Host)
+	if err != nil && isSessionExpired {
 		http.Error(w, "Missing SessionID or UserID", http.StatusBadRequest)
 		return
 	}
 
 	user, err := c.db.FindUser(user_id)
-
 	response_user := UserResponse{
 		UserID: user_id,
 		Name:   user.Name,

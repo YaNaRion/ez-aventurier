@@ -35,6 +35,8 @@ func SetUpController(mux *http.ServeMux, db *infra.DB) *Controller {
 
 	mux.HandleFunc("GET /api/user", controller.getUser)
 
+	mux.HandleFunc("POST /api/cache", controller.getUser)
+
 	return controller
 }
 

@@ -28,13 +28,13 @@ func (db *DB) FindUser(username string) (*models.User, error) {
 	return &user, nil
 }
 
-func (db *DB) AddSession(userID string) (*models.Session, error) {
+func (db *DB) AddSession(userID string, urlHost string) (*models.Session, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
 	collection := db.Client.Database("dev1").Collection("session")
 
-	newSession := models.NewSession(userID)
+	newSession := models.NewSession(userID, urlHost)
 
 	_, err := collection.InsertOne(ctx, newSession)
 

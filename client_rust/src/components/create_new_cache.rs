@@ -1,15 +1,53 @@
 use dioxus::prelude::*;
-
-use crate::{
-    components::{InfoCard, MessageCard},
-    service::User,
+use dioxus_primitives::alert_dialog::{
+    AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogRoot,
+    AlertDialogTitle,
 };
+use reqwest::Client;
+
+use crate::components::MessageCard;
 
 #[component]
 pub fn CreateNewCache() -> Element {
+    let mut open = use_signal(|| false);
+
+    let handle_submit = Callback::new(move |text: String| async move {
+        open.set(true);
+        // let client = use_context::<Client>();
+        // match client
+        //     .post(format!(
+        //         "http://localhost:3000/api/cache?cache_txt={}&session_id={}",
+        //         text, "SessionID",
+        //     ))
+        //     .send()
+        //     .await
+        // {
+        //     Ok(resp) if resp.status().is_success() => {
+        //         open.set(true);
+        //     }
+        //
+        //     Ok(resp) => {
+        //         let text = resp.text().await.unwrap_or_default();
+        //         // error.set(format!("{}", text));
+        //     }
+        //     Err(e) => {
+        //         // error.set(format!("Network error: {}", e));
+        //     }
+        // }
+    });
     rsx! {
-        MessageCard {
-            input_name: "Entrez le nom de la nouvelle enigme",
-        }
+            MessageCard {
+                input_name: "Entrez le nom de la nouvelle enigme",
+                 callback: handle_submit,
+            }
+
+            AlertDialogRoot { open: *open.read(), on_open_change: move |v| open.set(v),
+                    AlertDialogContent {
+                        // You may pass class/style for custom appearance
+                        AlertDialogTitle { "Title" }
+                        AlertDialogDescription { "Description" }
+                        AlertDialogAction { "Confirm" }
+                    }
+                }
     }
 }

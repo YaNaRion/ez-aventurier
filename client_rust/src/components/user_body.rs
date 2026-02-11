@@ -7,6 +7,12 @@ use crate::{
 
 #[component]
 pub fn UserBody(user: User) -> Element {
+    let handle_submit = Callback::new(|text: String| {
+
+        // Your logic here - e.g., create new cache with the input value
+        // println!("Form submitted: {:?}", text);
+        // Add your actual logic (API call, state update, etc.)
+    });
     rsx! {
             div { class: "connection-body",
                 div { class: "user-info",
@@ -30,6 +36,7 @@ pub fn UserBody(user: User) -> Element {
 
                     MessageCard {
                         input_name: "Entrer le code secret pour confirmer votre quête".to_string(),
+                        callback: handle_submit,
                     }
 
                 }
