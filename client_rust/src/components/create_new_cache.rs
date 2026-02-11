@@ -11,6 +11,7 @@ use crate::components::MessageCard;
 pub fn CreateNewCache(session_id: String) -> Element {
     let mut open = use_signal(|| false);
 
+    let mut error = use_signal(|| String::new());
     let session_id_value = session_id.clone();
 
     let handle_submit = Callback::new(move |text: String| {
@@ -34,11 +35,12 @@ pub fn CreateNewCache(session_id: String) -> Element {
                 }
 
                 Ok(resp) => {
-                    // let text = resp.text().await.unwrap_or_default();
-                    // error.set(format!("{}", text));
+                    let text = resp.text().await.unwrap_or_default();
+                    error.set(format!("{}", text));
                 }
+
                 Err(e) => {
-                    // error.set(format!("Network error: {}", e));
+                    error.set(format!("{}", e));
                 }
             }
         }
@@ -53,7 +55,11 @@ pub fn CreateNewCache(session_id: String) -> Element {
                     AlertDialogContent {
                         // You may pass class/style for custom appearance
                         AlertDialogTitle { "Title" }
-                        AlertDialogDescription { "Description" }
+                        if error.read().is_empty() {
+                            AlertDialogDescription { "La cache a été ajoutée avec succès" }
+                        } else {
+                            AlertDialogDescription { "Error: {error}" }
+                        }
                         AlertDialogAction { "Confirm" }
                     }
                 }

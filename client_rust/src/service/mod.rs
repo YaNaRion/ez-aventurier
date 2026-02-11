@@ -32,3 +32,15 @@ pub struct User {
     #[serde(rename = "order")]
     pub order: String,
 }
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
+pub struct Cache {
+    #[serde(rename = "cacheNumber")]
+    pub cache_number: i32,
+
+    #[serde(rename = "text")]
+    pub text: String,
+
+    #[serde(rename = "createdAt")]
+    pub jcreated_on: String, // or use chrono::DateTime
+}

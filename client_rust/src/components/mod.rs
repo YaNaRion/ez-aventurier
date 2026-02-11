@@ -25,4 +25,8 @@ pub use message_card::MessageCard;
 
 mod create_new_cache;
 pub use create_new_cache::CreateNewCache;
+
+mod cache_list;
+pub use cache_list::CacheListButton;
+
 pub mod alert_dialog;

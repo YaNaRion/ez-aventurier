@@ -7,7 +7,7 @@ import (
 )
 
 type Cache struct {
-	ID          primitive.ObjectID `bson:"_id,omitempty" json:"id,omitempty"`
+	ID          primitive.ObjectID `bson:"_id,omitempty" json:"-"`
 	Text        string             `bson:"text"          json:"text"`
 	CacheNumber int                `bson:"cacheNumber"   json:"cacheNumber"`
 	CreatedAt   time.Time          `bson:"createdAt"     json:"createdAt"`
