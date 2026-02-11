@@ -19,17 +19,17 @@ type IsSessionValidResponse struct {
 	IsValid bool           `json:"isValid"`
 }
 
-func (c *Controller) chechSession(
+func (c *Controller) isSessionValid(
 	session *models.Session,
 	urlHost string,
 ) (bool, error) {
 	if session.Host != urlHost {
 		return false, fmt.Errorf("failed to connect session")
 	}
-	return IsSessionExpired(session), nil
+	return !IsSessionExpired(session), nil
 }
 
-func (c *Controller) isSessionValid(w http.ResponseWriter, r *http.Request) {
+func (c *Controller) isSessionValidMiddle(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Incomming session validation from: %s", r.Host)
 
 	session_id := r.URL.Query().Get("session_id")
@@ -44,7 +44,7 @@ func (c *Controller) isSessionValid(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	isSessionExpired, err := c.chechSession(session, r.URL.Host)
+	isSessionValid, err := c.isSessionValid(session, r.URL.Host)
 
 	if err != nil {
 		http.Error(w, "Missing SessionID or UserID", http.StatusBadRequest)
@@ -53,7 +53,7 @@ func (c *Controller) isSessionValid(w http.ResponseWriter, r *http.Request) {
 
 	response := IsSessionValidResponse{
 		Session: *session,
-		IsValid: !isSessionExpired,
+		IsValid: isSessionValid,
 	}
 
 	sessionJson, err := json.Marshal(response)
@@ -123,9 +123,9 @@ func (c *Controller) getUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	isSessionExpired, err := c.chechSession(session, r.URL.Host)
-	if err != nil && isSessionExpired {
-		http.Error(w, "Missing SessionID or UserID", http.StatusBadRequest)
+	isSessionValid, err := c.isSessionValid(session, r.URL.Host)
+	if err != nil && !isSessionValid {
+		http.Error(w, "Session not valid", http.StatusBadRequest)
 		return
 	}
 

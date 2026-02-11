@@ -21,16 +21,11 @@ const FAVICON: Asset = asset!("/assets/favicon.ico");
 const MAIN_CSS: Asset = asset!("/assets/styling/main.css");
 
 fn main() {
-    // Launch the app
     dioxus::launch(App);
 }
 
-/// App is the main component of our app
 #[component]
 fn App() -> Element {
-    // Provide the combined context once
-    // use_shared_state();
-
     let client = Client::new();
     use_context_provider(|| client);
 

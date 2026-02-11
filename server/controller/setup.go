@@ -23,19 +23,20 @@ func newController(db *infra.DB, mux *http.ServeMux) *Controller {
 
 func SetUpController(mux *http.ServeMux, db *infra.DB) *Controller {
 	controller := newController(db, mux)
+
 	// Test et template
 	mux.HandleFunc("GET /tasks/", controller.getTasks)
 	mux.HandleFunc("GET /api/test", controller.getTest)
 
 	// Verification de la connection
-	mux.HandleFunc("GET /api/isSessionValid", controller.isSessionValid)
+	mux.HandleFunc("GET /api/isSessionValid", controller.isSessionValidMiddle)
 
 	// Demande de connection
 	mux.HandleFunc("GET /api/login", controller.connection)
 
 	mux.HandleFunc("GET /api/user", controller.getUser)
 
-	mux.HandleFunc("POST /api/cache", controller.getUser)
+	mux.HandleFunc("POST /api/cache", controller.postCache)
 
 	return controller
 }

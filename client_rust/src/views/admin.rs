@@ -22,6 +22,7 @@ pub fn Admin(user_id: String, session_id: String) -> Element {
                 }
                 AdminBody {
                     user: user.clone(),
+                    session_id: session_id.clone(),
                 }
             }
         }

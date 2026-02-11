@@ -6,7 +6,7 @@ use crate::{
 };
 
 #[component]
-pub fn AdminBody(user: User) -> Element {
+pub fn AdminBody(user: User, session_id: String) -> Element {
     rsx! {
             div { class: "connection-body",
                 div { class: "user-info",
@@ -16,7 +16,9 @@ pub fn AdminBody(user: User) -> Element {
                         icon: "⚔️".to_string(),
                     }
 
-                    CreateNewCache{}
+                    CreateNewCache{
+                        session_id: session_id.clone(),
+                    }
                 }
             }
     }
