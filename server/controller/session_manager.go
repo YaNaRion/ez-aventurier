@@ -35,8 +35,7 @@ func (c *Controller) isSessionValid(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Incomming session validation from: %s", r.Host)
 
 	session_id := r.URL.Query().Get("session_id")
-	user_id := r.URL.Query().Get("user_id")
-	if session_id == "" || user_id == "" {
+	if session_id == "" {
 		http.Error(w, "Missing SessionID or UserID", http.StatusBadRequest)
 		return
 	}
@@ -115,6 +114,13 @@ func (c *Controller) connection(w http.ResponseWriter, r *http.Request) {
 	writeResponseJson(w, session_json)
 }
 
+type UserResponse struct {
+	Name   string `bson:"name"   json:"name"   validate:"required"`
+	UserID string `bson:"userId" json:"userId" validate:"required,min=8,max=8"`
+	Ordre  string `bson:"order"  json:"order"  validate:"required"`
+	Unity  string `bson:"unity"  json:"unity"  validate:"required"`
+}
+
 func (c *Controller) getUser(w http.ResponseWriter, r *http.Request) {
 	log.Println("GET USER")
 	session_id := r.URL.Query().Get("session_id")
@@ -129,7 +135,14 @@ func (c *Controller) getUser(w http.ResponseWriter, r *http.Request) {
 
 	user, err := c.db.FindUser(user_id)
 
-	user_json, err := json.Marshal(user)
+	response_user := UserResponse{
+		UserID: user_id,
+		Name:   user.Name,
+		Unity:  user.Unity,
+		Ordre:  user.Ordre,
+	}
+
+	user_json, err := json.Marshal(response_user)
 	if err != nil {
 		log.Println("Error while marchaling the user account")
 		http.Error(w, "Ce code secret correspond a personne", http.StatusInternalServerError)

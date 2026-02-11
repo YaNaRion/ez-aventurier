@@ -1,7 +1,7 @@
 use dioxus::prelude::*;
 use reqwest::Client;
 
-use crate::service::ConnectionAPI;
+use crate::service::Session;
 
 #[component]
 pub fn ConnectionForm() -> Element {
@@ -9,9 +9,6 @@ pub fn ConnectionForm() -> Element {
     let mut error = use_signal(|| String::new());
     // let mut remember_me = use_signal(|| false);
     let mut is_loading = use_signal(|| false);
-
-    // Optional: store the result if you want to show something after success
-    let mut result_message = use_signal(|| String::new());
 
     let handle_input_change = move |e: FormEvent| {
         connection_id.set(e.value());
@@ -25,7 +22,6 @@ pub fn ConnectionForm() -> Element {
 
         is_loading.set(true);
         error.set(String::new());
-        result_message.set(String::new());
 
         let client = use_context::<Client>();
         match client
@@ -38,21 +34,9 @@ pub fn ConnectionForm() -> Element {
         {
             Ok(resp) if resp.status().is_success() => {
                 // If JSON:
-                let data: ConnectionAPI = resp.json().await.unwrap();
-                result_message.set(format!(
-                    "UserID: {}, SessionID: {}",
-                    data.user_id, data.session_id
-                ));
+                let data: Session = resp.json().await.unwrap();
 
-                // Or just text:
-                // let text = resp.text().await.unwrap_or_default();
-                // result_message.set(format!("Success! {}", text));
-
-                // Optional: do navigation, set cookie, etc.
-                dioxus_router::router().push(format!(
-                    "/user?user_id={}&session_id={}",
-                    data.user_id, data.session_id
-                ));
+                dioxus_router::router().push(format!("/user?session_id={}", data.session_id));
             }
 
             Ok(resp) => {
@@ -100,11 +84,6 @@ pub fn ConnectionForm() -> Element {
                         if !error().is_empty() {
                             div { class: "error-message", "{error}" }
                         }
-                    }
-
-                    // Optional: show success/result
-                    if !result_message().is_empty() {
-                        div { class: "success-message", "{result_message}" }
                     }
 
                     button {

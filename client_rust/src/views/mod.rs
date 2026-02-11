@@ -15,4 +15,4 @@ mod user;
 pub use user::User;
 
 mod admin;
-pub use admin::AdminView;
+pub use admin::Admin;

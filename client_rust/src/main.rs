@@ -1,6 +1,6 @@
 use dioxus::prelude::*;
 use reqwest::Client;
-use views::{AdminView, Home, User};
+use views::{Admin, Home, User};
 
 mod components;
 mod service;
@@ -11,13 +11,10 @@ mod views;
 enum Route {
     #[route("/")]
         Home {},
-    #[route("/user?:user_id&:session_id")]
+    #[route("/user?:session_id")]
         User {
-            user_id: String,
             session_id: String,
         },
-    #[route("/admin")]
-        AdminView{},
 }
 
 const FAVICON: Asset = asset!("/assets/favicon.ico");

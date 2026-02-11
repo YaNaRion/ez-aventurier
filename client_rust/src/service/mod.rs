@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(serde::Deserialize, serde::Serialize, Default)]
-pub struct ConnectionAPI {
+pub struct Session {
     #[serde(rename = "sessionID")]
     pub session_id: String,
     #[serde(rename = "userID")]
@@ -10,55 +10,15 @@ pub struct ConnectionAPI {
     pub jcreated_on: String, // or use chrono::DateTime
 }
 
-// #[derive(serde::Deserialize, serde::Serialize, Default)]
-// pub struct IsSessionValidAPI {
-//     #[serde(rename = "session")]
-//     pub session: ConnectionAPI,
-//     #[serde(rename = "isValid")]
-//     pub is_valid: bool,
-// }
-
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq)]
-#[serde(rename_all = "UPPERCASE")]
-pub enum Unity {
-    #[serde(rename = "ECLAIREUR")]
-    Eclaireur,
-
-    #[serde(rename = "ECLAIREUSE")]
-    Eclaireuse,
-
-    #[serde(rename = "PION")]
-    Pion,
-
-    #[serde(rename = "PIONNE")]
-    Pionne,
-
-    #[serde(rename = "ANIM")]
-    Anim,
+#[derive(serde::Deserialize, serde::Serialize, Default)]
+pub struct CheckSessionValid {
+    #[serde(rename = "session")]
+    pub session: Session,
+    #[serde(rename = "isValid")]
+    pub is_valid: bool,
 }
 
-// Order enum
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq)]
-#[serde(rename_all = "UPPERCASE")]
-pub enum Order {
-    #[serde(rename = "TEMPLAR")]
-    Templar,
-
-    #[serde(rename = "TEUTONIC")]
-    Teutonic,
-
-    #[serde(rename = "HOSPITAL")]
-    Hospital,
-
-    #[serde(rename = "LAZARITE")]
-    Lazarite,
-
-    #[serde(rename = "SECULAR")]
-    Secular,
-}
-
-// User struct
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+#[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
 pub struct User {
     #[serde(rename = "userId")]
     pub user_id: String,
