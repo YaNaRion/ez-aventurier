@@ -2,7 +2,11 @@ use dioxus::prelude::*;
 use reqwest::Client;
 // use web_sys::console;
 
-use crate::{components::ConnectedUser, service::CheckSessionValid, views::Admin};
+use crate::{
+    components::ConnectedUser,
+    service::{CheckSessionValid, API_BASE_URL},
+    views::Admin,
+};
 
 // const HEADER_SVG: Asset = asset!("/assets/header.svg");
 
@@ -25,7 +29,8 @@ pub fn User(session_id: String) -> Element {
 
         async move {
             let req_string = format!(
-                "http://localhost:3000/api/isSessionValid?session_id={}",
+                "{}api/isSessionValid?session_id={}",
+                API_BASE_URL,
                 session_id_clone_2.clone()
             );
 

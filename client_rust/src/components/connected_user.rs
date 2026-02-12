@@ -3,7 +3,7 @@ use reqwest::Client;
 
 use crate::{
     components::{UserBody, UserHeader},
-    service::User,
+    service::{User, API_BASE_URL},
 };
 
 #[component]
@@ -25,7 +25,8 @@ pub fn ConnectedUser(user_id: String, session_id: String) -> Element {
     use_future(move || {
         let client_for_async = client.clone(); // Assuming Client implements Clone
         let req_string = format!(
-            "http://localhost:3000/api/user?user_id={}&session_id={}",
+            "{}api/user?user_id={}&session_id={}",
+            API_BASE_URL,
             user_id_clone.clone(),
             session_id_clone.clone()
         );

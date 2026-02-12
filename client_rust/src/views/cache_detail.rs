@@ -1,7 +1,7 @@
 use dioxus::prelude::*;
 use reqwest::Client;
 
-use crate::service::Cache;
+use crate::service::{Cache, API_BASE_URL};
 
 #[component]
 pub fn CacheDetail(cache_number: String) -> Element {
@@ -17,7 +17,8 @@ pub fn CacheDetail(cache_number: String) -> Element {
         let cache_number_clone = cache_number.clone();
         async move {
             let req_string = format!(
-                "http://localhost:3000/api/cache?cache_number={}",
+                "{}api/cache?cache_number={}",
+                API_BASE_URL,
                 cache_number_clone.clone()
             );
 

@@ -1,5 +1,7 @@
 use serde::{Deserialize, Serialize};
 
+pub const API_BASE_URL: &str = "http://localhost:3000/";
+
 #[derive(serde::Deserialize, serde::Serialize, Default)]
 pub struct Session {
     #[serde(rename = "sessionID")]

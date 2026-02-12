@@ -1,7 +1,7 @@
 use dioxus::prelude::*;
 use reqwest::Client;
 
-use crate::service::Session;
+use crate::service::{Session, API_BASE_URL};
 
 #[component]
 pub fn ConnectionForm() -> Element {
@@ -26,8 +26,8 @@ pub fn ConnectionForm() -> Element {
         let client = use_context::<Client>();
         match client
             .get(format!(
-                "http://localhost:3000/api/login?user_id={}",
-                connection_id
+                "{}/api/login?user_id={}",
+                API_BASE_URL, connection_id
             ))
             .send()
             .await
