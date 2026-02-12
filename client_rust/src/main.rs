@@ -1,6 +1,6 @@
 use dioxus::prelude::*;
 use reqwest::Client;
-use views::{CacheList, Home, User};
+use views::{CacheDetail, CacheList, Home, User};
 
 mod components;
 mod service;
@@ -16,8 +16,14 @@ enum Route {
             session_id: String,
         },
 
+    #[route("/cache?:cache_number")]
+        CacheDetail {
+            cache_number: String,
+        },
+
     #[route("/cache_list")]
         CacheList{},
+
 }
 
 const FAVICON: Asset = asset!("/assets/favicon.ico");

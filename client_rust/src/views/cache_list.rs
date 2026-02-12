@@ -37,30 +37,42 @@ pub fn CacheList() -> Element {
     });
 
     rsx! {
-        div { class: "connection-header",
-            div {
-                class: "success-icon",
-                style: "font-size: 48px; margin-bottom: 20px;",
-                "📜"
-            }
+        div { class: "scrollable-container",
+            div { class: "connection-header",
+                div {
+                    class: "success-icon",
+                    style: "font-size: 48px; margin-bottom: 20px;",
+                    "📜"
+                }
 
-            h1 {
-                class: "connection-title",
-                "LISTE DES CACHES DISPONIBLES",
-            }
-        },
-        div { class: "user-info",
-            if *is_loading.read() {
-                    "Loading..."
-            } else {
-              for cache in caches.read().iter() {
-                    InfoCard {
-                        title: format!("Cache numéro: {}", cache.cache_number),
-                        data: cache.text.clone(),
-                        icon: "📜".to_string(),
-                    }
+                h1 {
+                    class: "connection-title",
+                    "LISTE DES CACHES DISPONIBLES",
                 }
             },
+            div { class: "user-info",
+                if *is_loading.read() {
+                        "Loading..."
+                } else {
+                  for cache in caches.read().iter() {
+                    {
+                    let cache_number = cache.cache_number.clone();
+                    rsx! {
+                        div {
+                                onclick: move |_| {
+                                        dioxus_router::router().push(format!("/cache?cache_number={}", cache_number));
+                                },
+                                InfoCard {
+                                    title: format!("Cache numéro: {}", cache.cache_number),
+                                    data: cache.text.clone(),
+                                    icon: "📜".to_string(),
+                                }
+                            },
+                        }
+                    }
+                    }
+                },
+            }
         }
     }
 }

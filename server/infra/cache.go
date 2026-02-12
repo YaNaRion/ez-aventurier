@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 func (db *DB) AddCache(cache_text string) error {
@@ -27,6 +28,24 @@ func (db *DB) AddCache(cache_text string) error {
 		return fmt.Errorf("failed to insert the session in db: %w", err)
 	}
 	return nil
+}
+
+func (db *DB) GetCache(cacheNumber int) (*models.Cache, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	collection := db.Client.Database("dev1").Collection("caches")
+
+	var cache models.Cache
+	err := collection.FindOne(ctx, bson.M{"cacheNumber": cacheNumber}).Decode(&cache)
+
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return nil, fmt.Errorf("cache '%d' not found", cacheNumber)
+		}
+		return nil, fmt.Errorf("failed to find user: %w", err)
+	}
+	return &cache, nil
 }
 
 func (db *DB) GetCaches() ([]models.Cache, error) {

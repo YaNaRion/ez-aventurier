@@ -17,5 +17,8 @@ pub use user::User;
 mod admin;
 pub use admin::Admin;
 
+mod cache_detail;
+pub use cache_detail::CacheDetail;
+
 mod cache_list;
 pub use cache_list::CacheList;

@@ -23,10 +23,10 @@ pub fn CreateNewCache(session_id: String) -> Element {
 
             match client
                 .post(format!(
-                    "http://localhost:3000/api/cache?cache_txt={}&session_id={}",
-                    text,
+                    "http://localhost:3000/api/cache?&session_id={}",
                     session_id_value_copy.clone(),
                 ))
+                .body(text)
                 .send()
                 .await
             {

@@ -14,6 +14,7 @@ pub fn MessageCard(input_name: String, callback: Callback<String>) -> Element {
                         input {
                             class: "message-input-aligned",
                             placeholder: "Écrivez...",
+                            value: "{text.read()}",
                             r#type: "text",
                             oninput: move |evt| text.set(evt.value()),
                         }

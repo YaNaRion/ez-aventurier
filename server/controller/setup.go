@@ -41,6 +41,8 @@ func (C *Controller) setUpRouter(mux *http.ServeMux) {
 
 	mux.HandleFunc("GET /api/caches", C.getCaches)
 
+	mux.HandleFunc("GET /api/cache", C.getCache)
+
 	mux.HandleFunc("POST /api/cache", C.postCache)
 }
 
