@@ -1,38 +1,61 @@
-
 services:
-  frontend:
-    build:
-      context: ./client
-    expose:
-      - "80"
-    networks:
-      - app_network
-  
+  # === BACKEND (Common) ===
   backend:
-    build:
-      context: ./server
+    build: ./server
+    environment:
+      - PORT=3000
+      - DB_CONNECTION_STRING=${DB_CONNECTION_STRING}
+      - APP_ENV=${APP_ENV}
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env.${ENVIRONMENT} # Load correct env file
+    expose:
+      - "3000"
     networks:
-      - app_network
-  
-  nginx:
-    image: nginx:alpine
-    container_name: nginx_proxy
+      - app-network
+    restart: unless-stopped
+
+  # === DEVELOPMENT Profile ===
+  caddy-dev:
+    image: caddy:alpine
+    profiles: ["dev"] # Use for dev and staging
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./nginx/mime.types.conf:/etc/nginx/mime.types.conf:ro
-      - /etc/letsencrypt/live/ezconnecty.cc-0001/fullchain.pem:/etc/ssl/certs/fullchain.pem:ro
-      - /etc/letsencrypt/live/ezconnecty.cc-0001/privkey.pem:/etc/ssl/private/privkey.pem:ro
+      - ./Caddyfile.dev:/etc/caddy/Caddyfile:ro
+      - ./client_rust/target/dx/client_rust/release/web/public:/usr/share/caddy/html:ro
+      - caddy_data:/data
+      - caddy_config:/config
     ports:
       - "80:80"
       - "443:443"
     depends_on:
-      - frontend
       - backend
     networks:
-      - app_network
+      - app-network
+    restart: unless-stopped
 
+  # === PRODUCTION Profile ===
+  caddy-prod:
+    image: caddy:alpine
+    profiles: ["prod"]
+    volumes:
+      - ./Caddyfile.prod:/etc/caddy/Caddyfile:ro
+      - ./client_rust/target/dx/client_rust/release/web/public:/usr/share/caddy/html:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+    restart: unless-stopped
 
+volumes:
+  caddy_data:
+  caddy_config:
 
 networks:
-  app_network:
+  app-network:
     driver: bridge

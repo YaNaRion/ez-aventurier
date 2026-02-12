@@ -5,12 +5,10 @@ import (
 	"log"
 	"main/controller"
 	"main/infra"
-	"main/router"
 	"net/http"
 	"os"
 	"strconv"
 
-	"github.com/joho/godotenv"
 	"github.com/rs/cors"
 )
 
@@ -22,15 +20,13 @@ type AppConfig struct {
 type Config struct {
 	DB         *infra.DB
 	Controller *controller.Controller
-	Router     *router.Router
 }
 
 func NewConf(
 	db *infra.DB,
 	controller *controller.Controller,
-	router *router.Router,
 ) *Config {
-	return &Config{DB: db, Controller: controller, Router: router}
+	return &Config{DB: db, Controller: controller}
 }
 
 type Server struct {
@@ -69,9 +65,6 @@ func getEnvAsInt(key string, defaultValue int) int {
 }
 
 func LoadEnvVariable() AppConfig {
-	if err := godotenv.Load(); err != nil {
-		log.Println("No .env file found, using system environment variables")
-	}
 	return AppConfig{
 		DatabaseURL: getEnv("DB_CONNECTION_STRING", "None"),
 		Port:        getEnvAsInt("PORT", 3000),
@@ -96,20 +89,14 @@ func Setup() *Server {
 	mux := http.NewServeMux()
 	control := controller.SetUpController(mux, db)
 
-	// Setup HTTP request
-	log.Println("Setup Web router")
-	router := router.Setup(mux)
-
-	configServer := NewConf(db, control, router)
+	configServer := NewConf(db, control)
 	corsHandler := cors.New(cors.Options{
 		AllowedOrigins: []string{
-			"http://localhost:3000",
-			"http://localhost:8080",
-			"http://192.168.2.49:3000",
+			"*",
 		},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowedHeaders:   []string{"Content-Type", "Authorization", "X-Requested-With"},
-		AllowCredentials: true,
+		AllowCredentials: false,
 		Debug:            true,
 	})
 

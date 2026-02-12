@@ -23,7 +23,6 @@ enum Route {
 
     #[route("/cache_list")]
         CacheList{},
-
 }
 
 const FAVICON: Asset = asset!("/assets/favicon.ico");

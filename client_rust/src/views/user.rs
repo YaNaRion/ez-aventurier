@@ -4,7 +4,7 @@ use reqwest::Client;
 
 use crate::{
     components::ConnectedUser,
-    service::{CheckSessionValid, API_BASE_URL},
+    service::{get_base_url, CheckSessionValid},
     views::Admin,
 };
 
@@ -28,9 +28,10 @@ pub fn User(session_id: String) -> Element {
         let session_id_clone_2 = session_id_clone.clone();
 
         async move {
+            let origin = get_base_url();
             let req_string = format!(
-                "{}api/isSessionValid?session_id={}",
-                API_BASE_URL,
+                "{}/isSessionValid?session_id={}",
+                origin,
                 session_id_clone_2.clone()
             );
 

@@ -12,3 +12,33 @@ server/tmp/
 # Ignore .env for security
 server/.env.prod
 server/.env.dev
+
+# Environment files
+.env
+.env.*.local
+!.env.dev
+!.env.staging
+!.env.prod
+
+# Frontend build
+client_rust/target/
+client_rust/dist/
+
+# Docker volumes
+caddy_data/
+caddy_config/
+mongodb_data/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# SSL certs
+*.crt
+*.key
+*.pem
+
+# Binaries
+server/server

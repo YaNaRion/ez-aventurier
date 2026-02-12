@@ -1,4 +1,4 @@
-use crate::service::{Cache, API_BASE_URL};
+use crate::service::{get_base_url, Cache, API_BASE_URL};
 use dioxus::prelude::*;
 use reqwest::Client;
 
@@ -16,7 +16,8 @@ pub fn CacheList() -> Element {
         let client_for_async = client.clone(); // Assuming Client implements Clone
 
         async move {
-            let req_string = format!("{}api/caches", API_BASE_URL);
+            let origin = get_base_url();
+            let req_string = format!("{}/caches", origin);
 
             match client_for_async.get(&req_string).send().await {
                 Ok(resp) if resp.status().is_success() => {
