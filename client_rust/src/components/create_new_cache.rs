@@ -5,7 +5,10 @@ use dioxus_primitives::alert_dialog::{
 };
 use reqwest::Client;
 
-use crate::{components::MessageCard, service::API_BASE_URL};
+use crate::{
+    components::MessageCard,
+    service::{get_base_url, API_BASE_URL},
+};
 
 #[component]
 pub fn CreateNewCache(session_id: String) -> Element {
@@ -21,16 +24,10 @@ pub fn CreateNewCache(session_id: String) -> Element {
 
             let client = use_context::<Client>();
 
-            match client
-                .post(format!(
-                    "{}api/cache?&session_id={}",
-                    API_BASE_URL,
-                    session_id_value_copy.clone(),
-                ))
-                .body(text)
-                .send()
-                .await
-            {
+            let origin = get_base_url();
+            let req_string = format!("{}/cache?&session_id={}", origin, session_id_value_copy);
+
+            match client.post(req_string).body(text).send().await {
                 Ok(resp) if resp.status().is_success() => {
                     open.set(true);
                 }

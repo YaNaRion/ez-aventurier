@@ -1,7 +1,7 @@
 use dioxus::prelude::*;
 use reqwest::Client;
 
-use crate::service::{Session, API_BASE_URL};
+use crate::service::{get_base_url, Session};
 
 #[component]
 pub fn ConnectionForm() -> Element {
@@ -22,16 +22,13 @@ pub fn ConnectionForm() -> Element {
 
         is_loading.set(true);
         error.set(String::new());
+        // Get the current origin from the browser
+        // let origin = get_base_url();
+        let origin = get_base_url();
+        let req_string = format!("{}/login?user_id={}", origin, connection_id);
 
         let client = use_context::<Client>();
-        match client
-            .get(format!(
-                "{}/api/login?user_id={}",
-                API_BASE_URL, connection_id
-            ))
-            .send()
-            .await
-        {
+        match client.get(req_string).send().await {
             Ok(resp) if resp.status().is_success() => {
                 // If JSON:
                 let data: Session = resp.json().await.unwrap();

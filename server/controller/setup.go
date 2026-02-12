@@ -30,20 +30,20 @@ func SetUpController(mux *http.ServeMux, db *infra.DB) *Controller {
 func (C *Controller) setUpRouter(mux *http.ServeMux) {
 	// Test et template
 	mux.HandleFunc("GET /tasks/", C.getTasks)
-	mux.HandleFunc("GET /api/test", C.getTest)
+	mux.HandleFunc("GET /test", C.getTest)
 
 	// Verification de la connection
-	mux.HandleFunc("GET /api/isSessionValid", C.isSessionValidMiddle)
+	mux.HandleFunc("GET /isSessionValid", C.isSessionValidMiddle)
 
 	// Demande de connection
-	mux.HandleFunc("GET /api/login", C.connection)
-	mux.HandleFunc("GET /api/user", C.getUser)
+	mux.HandleFunc("GET /login", C.connection)
+	mux.HandleFunc("GET /user", C.getUser)
 
-	mux.HandleFunc("GET /api/caches", C.getCaches)
+	mux.HandleFunc("GET /caches", C.getCaches)
 
-	mux.HandleFunc("GET /api/cache", C.getCache)
+	mux.HandleFunc("GET /cache", C.getCache)
 
-	mux.HandleFunc("POST /api/cache", C.postCache)
+	mux.HandleFunc("POST /cache", C.postCache)
 }
 
 func writeResponseJson(w http.ResponseWriter, data []byte) {

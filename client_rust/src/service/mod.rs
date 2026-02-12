@@ -1,6 +1,29 @@
 use serde::{Deserialize, Serialize};
 
-pub const API_BASE_URL: &str = "http://3.17.71.138:3000/";
+// OR if you want direct backend access (bypass Caddy):
+pub const API_BASE_URL: &str = if cfg!(debug_assertions) {
+    ":3000" // Development: direct to backend
+} else {
+    "/api" // Production: through Caddy
+};
+
+pub fn get_base_url() -> String {
+    format!(
+        "{}{}",
+        web_sys::window()
+            .and_then(|w| w.location().origin().ok())
+            .map(|origin| {
+                // Remove port number
+                origin
+                    .split(':')
+                    .take(2) // Take protocol and hostname
+                    .collect::<Vec<&str>>()
+                    .join(":")
+            })
+            .unwrap_or_else(|| "https://yourdomain.com".to_string()),
+        API_BASE_URL
+    )
+}
 
 #[derive(serde::Deserialize, serde::Serialize, Default)]
 pub struct Session {
