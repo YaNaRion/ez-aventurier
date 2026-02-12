@@ -2,12 +2,8 @@ package main
 
 import (
 	"log"
-	"main/controller"
-	"main/infra"
 	"main/router"
 	"net/http"
-	"os"
-	"strconv"
 )
 
 type AppConfig struct {
@@ -16,9 +12,7 @@ type AppConfig struct {
 }
 
 type Config struct {
-	DB         *infra.DB
-	Controller *controller.Controller
-	Router     *router.Router
+	Router *router.Router
 }
 
 func NewConf(
@@ -45,20 +39,6 @@ func NewServer(
 	}
 }
 
-func getEnv(key, defaultValue string) string {
-	if value, exists := os.LookupEnv(key); exists {
-		return value
-	}
-	return defaultValue
-}
-func getEnvAsInt(key string, defaultValue int) int {
-	strValue := getEnv(key, "")
-	if value, err := strconv.Atoi(strValue); err == nil {
-		return value
-	}
-	return defaultValue
-}
-
 func Setup() *Server {
 	mux := http.NewServeMux()
 	// Setup HTTP request
@@ -68,7 +48,8 @@ func Setup() *Server {
 	configServer := NewConf(router)
 	// Start server
 	server := &http.Server{
-		Addr: ":3000",
+		Addr:    ":6969",
+		Handler: mux, // Add this line!
 	}
 
 	return NewServer(configServer, mux, server)
@@ -77,7 +58,6 @@ func Setup() *Server {
 func main() {
 	// Setup DB connection
 	server := Setup()
-	log.Println("Listen on localhost:3000")
 	err := server.httpServer.ListenAndServe()
 	if err != nil {
 		log.Fatal(err)

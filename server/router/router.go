@@ -38,15 +38,15 @@ func Setup(mux *http.ServeMux) *Router {
 	router := newRouter(mux)
 
 	// Serve static file
-	// router.Mux.Handle(
-	// 	"/assets/",
-	// 	http.StripPrefix("/assets/", http.FileServer(http.Dir("./public/assets/"))),
-	// )
-	// // Route pour test
-	// router.Mux.HandleFunc("/test", router.routeTest)
-	//
-	// // Route par defaut
-	// router.Mux.HandleFunc("/", router.routeHome)
+	router.Mux.Handle(
+		"/assets/",
+		http.StripPrefix("/assets/", http.FileServer(http.Dir("./public/assets/"))),
+	)
+	// Route pour test
+	router.Mux.HandleFunc("/test", router.routeTest)
+
+	// Route par defaut
+	router.Mux.HandleFunc("/", router.routeHome)
 
 	return router
 }

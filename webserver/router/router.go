@@ -38,16 +38,20 @@ func Setup(mux *http.ServeMux) *Router {
 	router := newRouter(mux)
 
 	// Serve static file
-	// router.Mux.Handle(
-	// 	"/assets/",
-	// 	http.StripPrefix("/assets/", http.FileServer(http.Dir("./public/assets/"))),
-	// )
-	// // Route pour test
-	// router.Mux.HandleFunc("/test", router.routeTest)
-	//
-	// // Route par defaut
-	// router.Mux.HandleFunc("/", router.routeHome)
+	router.Mux.Handle(
+		"/assets/",
+		http.StripPrefix("/assets/", http.FileServer(http.Dir("./public/assets/"))),
+	)
 
+	// Serve wasm files from public/wasm/
+	log.Println("Serving wasm files from: ./public/wasm/")
+	router.Mux.Handle(
+		"/wasm/",
+		http.StripPrefix("/wasm/", http.FileServer(http.Dir("./public/wasm/"))),
+	)
+
+	// Route par defaut
+	router.Mux.HandleFunc("/", router.routeHome)
 	return router
 }
 
@@ -61,13 +65,6 @@ func newRouter(mux *http.ServeMux) *Router {
 func (rt *Router) routeHome(w http.ResponseWriter, r *http.Request) {
 	log.Println("ROUTE HOME")
 	err := rt.templates.Render(w, "index.html", nil)
-	if err != nil {
-		log.Printf("An error occurred while sending HTML file: %s \n", err)
-	}
-}
-func (rt *Router) routeTest(w http.ResponseWriter, r *http.Request) {
-	log.Println("ROUTE Test")
-	err := rt.templates.Render(w, "test.html", nil)
 	if err != nil {
 		log.Printf("An error occurred while sending HTML file: %s \n", err)
 	}
