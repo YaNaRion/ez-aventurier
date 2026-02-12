@@ -1,0 +1,17 @@
+localhost:443 {
+    tls internal
+    root * /usr/share/caddy/html
+    
+    handle_path /api/* {
+        reverse_proxy backend:3000
+    }
+    
+    handle {
+        file_server
+        try_files {path} /index.html
+    }
+}
+
+localhost:80 {
+    redir https://localhost\{uri\} permanent
+}

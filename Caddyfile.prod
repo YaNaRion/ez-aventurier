@@ -1,0 +1,29 @@
+{
+    email admin@yourdomain.com
+    acme_dns cloudflare  # Optional: for wildcard certs
+}
+
+yourdomain.com:443 {
+    tls admin@yourdomain.com
+    root * /usr/share/caddy/html
+    
+    handle_path /api/* {
+        reverse_proxy backend:3000
+    }
+    
+    handle {
+        file_server
+        try_files {path} /index.html
+    }
+    
+    header {
+        Strict-Transport-Security "max-age=31536000;"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "DENY"
+        X-XSS-Protection "1; mode=block"
+    }
+}
+
+yourdomain.com:80 {
+    redir https://{host}{uri} permanent
+}
