@@ -34,38 +34,6 @@ func (c *Controller) isSessionValid(
 	return !IsSessionExpired(session), session, nil
 }
 
-func (c *Controller) isSessionValidMiddle(w http.ResponseWriter, r *http.Request) {
-	log.Printf("Incomming session validation from: %s", r.Host)
-
-	session_id := r.URL.Query().Get("session_id")
-	if session_id == "" {
-		http.Error(w, "Missing SessionID or UserID", http.StatusBadRequest)
-		return
-	}
-
-	isSessionValid, session, err := c.isSessionValid(session_id, r.URL.Host)
-	if err != nil {
-		http.Error(w, "Missing SessionID or UserID", http.StatusBadRequest)
-		return
-	}
-
-	response := IsSessionValidResponse{
-		Session: *session,
-		IsValid: isSessionValid,
-	}
-
-	sessionJson, err := json.Marshal(response)
-	if err != nil {
-		http.Error(w, "Could not marshal the response", http.StatusForbidden)
-		return
-	}
-
-	writeResponseJson(w, sessionJson)
-	// response := "true"
-	// w.Write([]byte(response))
-	// http.Error(w, "", http.StatusBadRequest)
-}
-
 // Si la connection est bonne, il faut retourner au client sa sessionID
 func (c *Controller) connection(w http.ResponseWriter, r *http.Request) {
 	user_id := r.URL.Query().Get("user_id")

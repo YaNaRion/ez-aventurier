@@ -30,3 +30,6 @@ mod button;
 pub use button::Button;
 
 pub mod alert_dialog;
+
+mod admin;
+pub use admin::Admin;

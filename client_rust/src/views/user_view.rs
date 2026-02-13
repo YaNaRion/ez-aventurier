@@ -3,9 +3,8 @@ use reqwest::Client;
 // use web_sys::console;
 
 use crate::{
-    components::UserProfile,
+    components::{Admin, UserProfile},
     service::{get_base_url, User},
-    views::Admin,
 };
 
 // const HEADER_SVG: Asset = asset!("/assets/header.svg");

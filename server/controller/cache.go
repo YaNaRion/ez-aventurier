@@ -11,8 +11,8 @@ import (
 func (c *Controller) postCache(w http.ResponseWriter, r *http.Request) {
 	sessionID := r.URL.Query().Get("session_id")
 
-	isSessionValid, _, err := c.isSessionValid(sessionID, r.URL.Host)
-	if err != nil && !isSessionValid {
+	_, _, err := c.isSessionValid(sessionID, r.URL.Host)
+	if err != nil {
 		log.Println("Session not valid")
 		http.Error(w, "Session not valid", http.StatusBadRequest)
 		return
