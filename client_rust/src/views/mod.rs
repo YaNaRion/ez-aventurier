@@ -11,8 +11,8 @@
 mod home;
 pub use home::Home;
 
-mod user;
-pub use user::User;
+mod user_view;
+pub use user_view::UserView;
 
 mod admin;
 pub use admin::Admin;

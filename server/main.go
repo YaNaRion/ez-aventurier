@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"main/controller"
@@ -9,6 +10,7 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/joho/godotenv"
 	"github.com/rs/cors"
 )
 
@@ -65,6 +67,14 @@ func getEnvAsInt(key string, defaultValue int) int {
 }
 
 func LoadEnvVariable() AppConfig {
+	env := flag.String("env", "prod", "environment to run in")
+
+	flag.Parse()
+
+	if *env == "dev" {
+		godotenv.Load()
+	}
+
 	return AppConfig{
 		DatabaseURL: getEnv("DB_CONNECTION_STRING", "None"),
 		Port:        getEnvAsInt("PORT", 3000),

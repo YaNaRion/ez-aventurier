@@ -33,7 +33,10 @@ pub fn ConnectionForm() -> Element {
                 // If JSON:
                 let data: Session = resp.json().await.unwrap();
 
-                dioxus_router::router().push(format!("/user?session_id={}", data.session_id));
+                dioxus_router::router().push(format!(
+                    "/user?session_id={}&user_id={}",
+                    data.session_id, data.user_id
+                ));
             }
 
             Ok(resp) => {

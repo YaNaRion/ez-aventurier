@@ -27,7 +27,7 @@ pub fn CreateNewCache(session_id: String) -> Element {
             let origin = get_base_url();
             let req_string = format!("{}/cache?&session_id={}", origin, session_id_value_copy);
 
-            match client.post(req_string).body(text).send().await {
+            match client.put(req_string).body(text).send().await {
                 Ok(resp) if resp.status().is_success() => {
                     open.set(true);
                 }

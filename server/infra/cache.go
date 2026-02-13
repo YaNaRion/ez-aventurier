@@ -16,6 +16,10 @@ func (db *DB) AddCache(cache_text string) error {
 	defer cancel()
 
 	collection := db.Client.Database("dev1").Collection("caches")
+
+	if collection == nil {
+		return fmt.Errorf("failed to get collection")
+	}
 	cache_number, err := collection.CountDocuments(ctx, bson.D{})
 	if err != nil {
 		log.Println("Error while counting the number of cache in DB")
@@ -36,6 +40,10 @@ func (db *DB) GetCache(cacheNumber int) (*models.Cache, error) {
 
 	collection := db.Client.Database("dev1").Collection("caches")
 
+	if collection == nil {
+		return nil, fmt.Errorf("failed to get collection")
+	}
+
 	var cache models.Cache
 	err := collection.FindOne(ctx, bson.M{"cacheNumber": cacheNumber}).Decode(&cache)
 
@@ -53,6 +61,9 @@ func (db *DB) GetCaches() ([]models.Cache, error) {
 	defer cancel()
 
 	collection := db.Client.Database("dev1").Collection("caches")
+	if collection == nil {
+		return nil, fmt.Errorf("failed to get collection")
+	}
 
 	cursor, err := collection.Find(ctx, bson.D{})
 	if err != nil {

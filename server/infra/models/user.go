@@ -14,6 +14,7 @@ type User struct {
 	Unity     string             `bson:"unity"         json:"unity"        validate:"required"`             // Unité scout
 	CreatedAt time.Time          `bson:"createdAt"     json:"createdAt"`
 	UpdatedAt time.Time          `bson:"updatedAt"     json:"updatedAt"`
+	Score     int                `bson:"score"         json:"score"`
 }
 
 // CollectionName returns the MongoDB collection name

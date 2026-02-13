@@ -1,6 +1,6 @@
 use dioxus::prelude::*;
 use reqwest::Client;
-use views::{CacheDetail, CacheList, Home, User};
+use views::{CacheDetail, CacheList, Home, UserView};
 
 mod components;
 mod service;
@@ -11,9 +11,10 @@ mod views;
 enum Route {
     #[route("/")]
         Home {},
-    #[route("/user?:session_id")]
-        User {
+    #[route("/user?:session_id&:user_id")]
+        UserView {
             session_id: String,
+            user_id: String,
         },
 
     #[route("/cache?:cache_number")]

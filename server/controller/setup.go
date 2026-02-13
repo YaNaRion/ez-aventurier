@@ -44,6 +44,8 @@ func (C *Controller) setUpRouter(mux *http.ServeMux) {
 	mux.HandleFunc("GET /cache", C.getCache)
 
 	mux.HandleFunc("POST /cache", C.postCache)
+
+	mux.HandleFunc("PUT /claimCache", C.claimCache)
 }
 
 func writeResponseJson(w http.ResponseWriter, data []byte) {

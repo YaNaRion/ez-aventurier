@@ -56,6 +56,9 @@ pub struct User {
 
     #[serde(rename = "order")]
     pub order: String,
+
+    #[serde(rename = "score")]
+    pub score: i32,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
