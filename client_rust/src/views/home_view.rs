@@ -19,7 +19,7 @@ pub fn HomeView() -> Element {
         }
         Button {
             path: "/leaderboard".to_string(),
-            title: "Voir le leaderboard".to_string(),
+            title: "Voir le classement".to_string(),
             data: "".to_string(),
             icon: "🏆".to_string(),
         }

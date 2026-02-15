@@ -45,7 +45,7 @@ pub fn LeaderBoardView() -> Element {
                     div {
                         class: "success-icon",
                         style: "font-size: 48px; margin-bottom: 20px;",
-                        "📜"
+                        "🏆"
                     }
 
                     h1 {
