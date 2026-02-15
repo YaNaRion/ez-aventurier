@@ -6,8 +6,6 @@ use dioxus_primitives::alert_dialog::{
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
 
-const STYLE: Asset = asset!("./message.css");
-
 use crate::service::get_base_url;
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
@@ -83,7 +81,6 @@ pub fn CreateNewCache(session_id: String) -> Element {
     });
 
     rsx! {
-        document::Link { rel: "stylesheet", href: STYLE }
         FormCard {
             name: name,
             description: description,
