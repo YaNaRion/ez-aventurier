@@ -67,12 +67,12 @@ pub fn UserView(session_id: String, user_id: String) -> Element {
                 div { class: "scrollable-container",
                     if *is_admin.read() {
                         Admin {
-                            user: user.read().clone(),
+                            user: user,
                             session_id: session_id.clone(),
                         }
                     } else {
                         UserProfile {
-                            user: user.read().clone(),
+                            user: user,
                             session_id: session_id.clone(),
                         }
                     }

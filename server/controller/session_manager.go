@@ -79,8 +79,6 @@ type UserResponse struct {
 }
 
 func (c *Controller) getUser(w http.ResponseWriter, r *http.Request) {
-	log.Println("GET USER")
-	log.Println(r.URL)
 	sessionID := r.URL.Query().Get("session_id")
 	if sessionID == "" {
 		http.Error(w, "Failed to find session in query param", http.StatusBadRequest)
@@ -113,7 +111,6 @@ func (c *Controller) getUser(w http.ResponseWriter, r *http.Request) {
 		Ordre:  user.Ordre,
 		Score:  user.Score,
 	}
-	log.Println(response_user)
 
 	user_json, err := json.Marshal(response_user)
 	if err != nil {

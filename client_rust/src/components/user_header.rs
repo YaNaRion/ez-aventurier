@@ -5,13 +5,13 @@ use crate::service::User;
 fn check_if_women(user: &User) -> bool {
     let is_pionne_or_eclaireuses = user.unity == "Pionnières" || user.unity == "Éclaireuses";
     let is_special_case =
-        user.player_name != "Alex Labelle" || user.player_name != "Hugo Palardy-Beaud";
+        user.player_name == "Alex Labelle" || user.player_name == "Hugo Palardy-Beaud";
 
     is_pionne_or_eclaireuses && !is_special_case
 }
 
 #[component]
-pub fn UserHeader(user: User) -> Element {
+pub fn UserHeader(user: Signal<User>) -> Element {
     rsx! {
             div { class: "connection-header",
                 div {
@@ -22,7 +22,7 @@ pub fn UserHeader(user: User) -> Element {
 
                 h1 {
                     class: "connection-title",
-                    if check_if_women(&user)  {
+                    if check_if_women(&user.read())  {
                         "Bien le Bonjour Noble Chevalière"
                     } else {
                         "Bien le Bonjour Noble Chevalier"
@@ -31,12 +31,12 @@ pub fn UserHeader(user: User) -> Element {
 
                 p {
                     class: "connection-subtitle",
-                    if check_if_women(&user)  {
+                    if check_if_women(&user.read())  {
                         "Soyez la bienvenue: "
                     } else {
                         "Soyez le bienvenu: "
                     }
-                    strong { "{user.player_name}" }
+                    strong { "{user.read().player_name}" }
                 }
             }
     }

@@ -6,14 +6,14 @@ use crate::{
 };
 
 #[component]
-pub fn Admin(user: User, session_id: String) -> Element {
+pub fn Admin(user: Signal<User>, session_id: String) -> Element {
     rsx! {
         div { class: "connected-ui",
             UserHeader {
-                user: user.clone(),
+                user: user,
             }
             AdminBody {
-                user: user.clone(),
+                user: user,
                 session_id: session_id.clone(),
             }
         }

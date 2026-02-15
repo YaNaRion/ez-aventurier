@@ -12,8 +12,9 @@ import (
 )
 
 type DB struct {
-	Ctx    context.Context
-	Client *mongo.Client
+	Ctx         context.Context
+	Client      *mongo.Client
+	IsConnected bool
 }
 
 func Setup(dbConnectionString string) (*DB, error) {

@@ -8,15 +8,27 @@ use dioxus_primitives::alert_dialog::{
 #[component]
 pub fn AlertDialogRoot(props: AlertDialogRootProps) -> Element {
     rsx! {
-        document::Link { rel: "stylesheet", href: asset!("./style.css") }
-        alert_dialog::AlertDialogRoot {
-            class: "alert-dialog-backdrop",
-            id: props.id,
-            default_open: props.default_open,
-            open: props.open,
-            on_open_change: props.on_open_change,
-            attributes: props.attributes,
-            {props.children}
+        // The backdrop should be rendered HERE, not as a class on the root
+        if props.open.read().unwrap_or(false) {
+            div {
+                class: "alert-dialog-backdrop",
+                // onclick: move |_| {
+                //     // Optional: close on backdrop click
+                //     if let Some(on_change) = props.on_open_change {
+                //         on_change(false);
+                //     }
+                // },
+                // The actual dialog content
+                alert_dialog::AlertDialogRoot {
+                    class: "",  // Remove the backdrop class from here
+                    id: props.id,
+                    default_open: props.default_open,
+                    open: props.open,
+                    on_open_change: props.on_open_change,
+                    attributes: props.attributes,
+                    {props.children}
+                }
+            }
         }
     }
 }
@@ -32,6 +44,8 @@ pub fn AlertDialogContent(props: AlertDialogContentProps) -> Element {
         }
     }
 }
+
+// ... rest of your components remain the same
 
 #[component]
 pub fn AlertDialogTitle(props: AlertDialogTitleProps) -> Element {

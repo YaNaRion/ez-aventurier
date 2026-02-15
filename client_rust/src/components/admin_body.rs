@@ -6,7 +6,7 @@ use crate::{
 };
 
 #[component]
-pub fn AdminBody(user: User, session_id: String) -> Element {
+pub fn AdminBody(user: Signal<User>, session_id: String) -> Element {
     rsx! {
             div { class: "connection-body",
                 div { class: "user-info",

@@ -1086,9 +1086,11 @@ body {
         font-size: 2rem;
     }
 
-    .connection-title {
+    .connection-title,
+    .cache-detail-view-header {
         font-size: 26px;
     }
+
 
     .action-buttons {
         flex-direction: column;
@@ -1379,7 +1381,7 @@ body {
     padding: 8px 0;
 }
 
-alert-dialog-action {
+.alert-dialog-action {
     display: flex;
     flex-direction: column-reverse;
     gap: 12px;

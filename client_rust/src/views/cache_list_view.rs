@@ -63,9 +63,10 @@ pub fn CacheListView() -> Element {
                                 onclick: move |_| {
                                         dioxus_router::router().push(format!("/cache?cache_number={}", cache_number));
                                 },
+
                                 InfoCard {
                                     title: format!("Cache numéro: {}", cache.cache_number),
-                                    data: cache.text.clone(),
+                                    data: cache.name.clone(),
                                     icon: "📜".to_string(),
                                 }
                             },

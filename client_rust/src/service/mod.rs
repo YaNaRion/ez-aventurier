@@ -66,8 +66,11 @@ pub struct Cache {
     #[serde(rename = "cacheNumber")]
     pub cache_number: i32,
 
-    #[serde(rename = "text")]
-    pub text: String,
+    #[serde(rename = "name")]
+    pub name: String,
+
+    #[serde(rename = "description")]
+    pub description: String,
 
     #[serde(rename = "createdAt")]
     pub jcreated_on: String, // or use chrono::DateTime

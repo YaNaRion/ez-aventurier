@@ -11,7 +11,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func (db *DB) FindUser(username string) (*models.User, error) {
+func (db *DB) FindUser(userID string) (*models.User, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -21,15 +21,14 @@ func (db *DB) FindUser(username string) (*models.User, error) {
 	}
 
 	var user models.User
-	err := collection.FindOne(ctx, bson.M{"userId": username}).Decode(&user)
+	err := collection.FindOne(ctx, bson.M{"userId": userID}).Decode(&user)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
-			return nil, fmt.Errorf("user '%s' not found", username)
+			return nil, fmt.Errorf("user '%s' not found", userID)
 		}
 		return nil, fmt.Errorf("failed to find user: %w", err)
 	}
 
-	user.Score = 10
 	return &user, nil
 }
 
@@ -70,7 +69,10 @@ func (db *DB) AddUsers(users []models.User) error {
 	return nil
 }
 
-func (db *DB) UpdateWeightToUser(userID string, addedWeight int) (*models.User, error) {
+func (db *DB) UpdateWeightToUser(
+	userID, cacheID string,
+	position, addedWeight int,
+) (*models.User, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -81,12 +83,20 @@ func (db *DB) UpdateWeightToUser(userID string, addedWeight int) (*models.User, 
 
 	filter := bson.M{"userId": userID}
 
+	newClaimedCache := models.ClaimedCache{
+		CacheID:  cacheID,  // Your cache ID
+		Position: position, // Your position value
+	}
+
 	update := bson.M{
 		"$inc": bson.M{
-			"weight": addedWeight,
+			"score": addedWeight,
 		},
 		"$set": bson.M{
 			"updatedAt": time.Now(),
+		},
+		"$push": bson.M{
+			"claimedCache": newClaimedCache,
 		},
 	}
 

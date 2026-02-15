@@ -6,15 +6,15 @@ use crate::{
 };
 
 #[component]
-pub fn UserProfile(user: User, session_id: String) -> Element {
+pub fn UserProfile(user: Signal<User>, session_id: String) -> Element {
     rsx! {
         div { class: "connected-ui",
             UserHeader {
-                user: user.clone(),
+                user: user,
             }
 
             UserBody {
-                user: user.clone(),
+                user: user,
                 session_id: session_id.clone(),
             }
         }

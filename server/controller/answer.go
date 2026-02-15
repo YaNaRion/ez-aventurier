@@ -2,7 +2,6 @@ package controller
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 )
 
@@ -19,37 +18,49 @@ func (c *Controller) claimCache(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	answerID := r.URL.Query().Get("answer_id")
-	if answerID == "" {
-		log.Println("Failed to find answer_id in query param")
-		http.Error(w, "Failed to find query param", http.StatusBadRequest)
-		return
-	}
-
 	userID := r.URL.Query().Get("user_id")
-	if userID == "" {
-		log.Println("Failed to find user_id in query param")
-		http.Error(w, "Failed to find query param", http.StatusBadRequest)
+	answerID := r.URL.Query().Get("answer_id")
+	if userID == "" || answerID == "" {
+		http.Error(w, "Failed to get query param", http.StatusBadRequest)
 		return
 	}
 
-	weight, err := c.db.ModifyAnswer(answerID, userID)
+	user, err := c.db.FindUser(userID)
 	if err != nil {
-		log.Println("Failed to find answer")
-		http.Error(w, "Failed to find answer", http.StatusBadRequest)
+		http.Error(w, "Failed to find user", http.StatusInternalServerError)
 		return
 	}
 
-	updatedUser, err := c.db.UpdateWeightToUser(userID, weight)
+	for _, claimedCache := range user.ClaimedCaches {
+		if claimedCache.CacheID == answerID {
+			http.Error(w, "Vous avez déjà eu cette cache", http.StatusInternalServerError)
+			return
+		}
+	}
+
+	cache, err := c.db.ClaimCaches(userID, answerID)
 	if err != nil {
-		log.Println("Failed to find update user score")
-		http.Error(w, "Failed to find update user score", http.StatusInternalServerError)
+		http.Error(w, "Failed to claim cache", http.StatusInternalServerError)
 		return
 	}
 
-	userJson, err := json.Marshal(updatedUser)
+	mulFactor := 1
+	if cache.Answer_count <= 5 {
+		mulFactor = 2
+	} else if cache.Answer_count <= 10 {
+		mulFactor = 3
+	}
+	userAddedPoint := cache.Weight * mulFactor
+
+	user, err = c.db.UpdateWeightToUser(userID, cache.Answers, cache.Answer_count, userAddedPoint)
 	if err != nil {
-		http.Error(w, "Could not marshal the user", http.StatusInternalServerError)
+		http.Error(w, "Couldnt update player weight", http.StatusInternalServerError)
+		return
+	}
+
+	userJson, err := json.Marshal(user)
+	if err != nil {
+		http.Error(w, "Could not marshal the response", http.StatusForbidden)
 		return
 	}
 

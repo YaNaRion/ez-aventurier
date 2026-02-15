@@ -4,8 +4,11 @@ import (
 	"encoding/json"
 	"io"
 	"log"
+	"main/infra"
+	"main/infra/models"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 func (c *Controller) postCache(w http.ResponseWriter, r *http.Request) {
@@ -17,24 +20,40 @@ func (c *Controller) postCache(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Session not valid", http.StatusBadRequest)
 		return
 	}
-
 	defer r.Body.Close()
 
 	bodyBytes, err := io.ReadAll(r.Body)
 	if err != nil {
+		log.Println("Failed to read the body: %s", err)
 		http.Error(w, "Failed to read body", http.StatusInternalServerError)
 		return
 	}
 
-	var cache_text = string(bodyBytes)
-	log.Println(cache_text)
-	if cache_text == "" {
-		log.Println("Cache_text is empty")
-		http.Error(w, "Cache_text is empty", http.StatusBadRequest)
+	var cache models.Cache
+	err = json.Unmarshal(bodyBytes, &cache)
+	if err != nil {
+		log.Println("Failed to unmashal the body", err)
+		http.Error(w, "Failed to unmarshal body", http.StatusInternalServerError)
 		return
 	}
 
-	err = c.db.AddCache(cache_text)
+	cache.Answers, err = infra.CustomID(8, infra.AlphaNumeric)
+	cache.Answer_count = 0
+	cache.Weight = 14
+	cache.CreatedAt = time.Now()
+	if cache.Name == "" {
+		log.Println("Cache name is empty")
+		http.Error(w, "Cache name is empty", http.StatusBadRequest)
+		return
+	}
+
+	if cache.Description == "" {
+		log.Println("Cache description is empty")
+		http.Error(w, "Cache description is empty", http.StatusBadRequest)
+		return
+	}
+
+	err = c.db.AddCache(cache)
 	if err != nil {
 		http.Error(w, "Failed to add the cache to db", http.StatusBadRequest)
 		return
