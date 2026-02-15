@@ -8,17 +8,17 @@
 //! The [`Navbar`] component will be rendered on all pages of our app since every page is under the layout. The layout defines
 //! a common wrapper around all child routes.
 
-mod home;
-pub use home::Home;
+mod home_view;
+pub use home_view::HomeView;
 
-mod user;
-pub use user::User;
+mod user_view;
+pub use user_view::UserView;
 
-mod admin;
-pub use admin::Admin;
+mod cache_detail_view;
+pub use cache_detail_view::CacheDetailView;
 
-mod cache_detail;
-pub use cache_detail::CacheDetail;
+mod cache_list_view;
+pub use cache_list_view::CacheListView;
 
-mod cache_list;
-pub use cache_list::CacheList;
+mod leaderboard_view;
+pub use leaderboard_view::LeaderBoardView;

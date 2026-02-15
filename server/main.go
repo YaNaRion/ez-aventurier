@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"main/controller"
@@ -9,6 +10,7 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/joho/godotenv"
 	"github.com/rs/cors"
 )
 
@@ -65,6 +67,14 @@ func getEnvAsInt(key string, defaultValue int) int {
 }
 
 func LoadEnvVariable() AppConfig {
+	env := flag.String("env", "prod", "environment to run in")
+
+	flag.Parse()
+
+	if *env == "dev" {
+		godotenv.Load()
+	}
+
 	return AppConfig{
 		DatabaseURL: getEnv("DB_CONNECTION_STRING", "None"),
 		Port:        getEnvAsInt("PORT", 3000),
@@ -80,6 +90,8 @@ func Setup() *Server {
 	db, _ = infra.Setup(appConfig.DatabaseURL)
 	if db == nil {
 		log.Println("DB NOT CONNECTED")
+		log.Println("Shuwdown")
+		return nil
 	} else {
 		log.Println("DB CONNECTED")
 	}
@@ -91,11 +103,26 @@ func Setup() *Server {
 
 	configServer := NewConf(db, control)
 	corsHandler := cors.New(cors.Options{
-		AllowedOrigins: []string{
-			"*",
+		AllowedMethods: []string{
+			"GET",
+			"POST",
+			"PUT",
+			"DELETE",
+			"OPTIONS",
 		},
-		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowedHeaders:   []string{"Content-Type", "Authorization", "X-Requested-With"},
+		AllowedHeaders: []string{
+			"Content-Type",
+			"Authorization",
+			"X-Requested-With",
+			"Accept",
+			"Origin",
+			"Access-Control-Request-Method",
+			"Access-Control-Request-Headers",
+		},
+		ExposedHeaders: []string{
+			"Content-Length",
+			"Access-Control-Allow-Origin",
+		},
 		AllowCredentials: false,
 		Debug:            true,
 	})
@@ -115,10 +142,15 @@ func main() {
 
 	// Setup DB connection
 	server := Setup()
+	if server == nil {
+		return
+	}
 
 	log.Println("Listen on localhost:3000")
 	err := server.httpServer.ListenAndServe()
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	// infra.Add_jeune_to_DB(server.Conf.DB)
 }

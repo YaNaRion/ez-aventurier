@@ -21,6 +21,7 @@ pub fn MessageCard(input_name: String, callback: Callback<String>) -> Element {
                         button {
                             class: "send-button-aligned",
                             r#type: "button",
+                            disabled: text.read().is_empty(), // Disable when empty
                             onclick: move |_| {
                                 callback.call(text());
                                 text.set(String::new()); // Clear input after sending

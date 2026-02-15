@@ -8,16 +8,14 @@ import (
 const ContentTypeJSON = "application/json"
 
 type Controller struct {
-	db    *infra.DB
-	mux   *http.ServeMux
-	tasks []Task
+	db  *infra.DB
+	mux *http.ServeMux
 }
 
 func newController(db *infra.DB, mux *http.ServeMux) *Controller {
 	return &Controller{
-		db:    db,
-		mux:   mux,
-		tasks: GenerateTemplateTask(),
+		db:  db,
+		mux: mux,
 	}
 }
 
@@ -28,13 +26,6 @@ func SetUpController(mux *http.ServeMux, db *infra.DB) *Controller {
 }
 
 func (C *Controller) setUpRouter(mux *http.ServeMux) {
-	// Test et template
-	mux.HandleFunc("GET /tasks/", C.getTasks)
-	mux.HandleFunc("GET /test", C.getTest)
-
-	// Verification de la connection
-	mux.HandleFunc("GET /isSessionValid", C.isSessionValidMiddle)
-
 	// Demande de connection
 	mux.HandleFunc("GET /login", C.connection)
 	mux.HandleFunc("GET /user", C.getUser)
@@ -44,12 +35,15 @@ func (C *Controller) setUpRouter(mux *http.ServeMux) {
 	mux.HandleFunc("GET /cache", C.getCache)
 
 	mux.HandleFunc("POST /cache", C.postCache)
+	mux.HandleFunc("GET /leaderboard", C.getLeaderboard)
+
+	mux.HandleFunc("PUT /claimCache", C.claimCache)
 }
 
 func writeResponseJson(w http.ResponseWriter, data []byte) {
 	w.Header().Set("Contend-Type", ContentTypeJSON)
 	_, err := w.Write(data)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }

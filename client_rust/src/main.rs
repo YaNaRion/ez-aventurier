@@ -1,6 +1,6 @@
 use dioxus::prelude::*;
 use reqwest::Client;
-use views::{CacheDetail, CacheList, Home, User};
+use views::{CacheDetailView, CacheListView, HomeView, LeaderBoardView, UserView};
 
 mod components;
 mod service;
@@ -10,19 +10,23 @@ mod views;
 #[rustfmt::skip]
 enum Route {
     #[route("/")]
-        Home {},
-    #[route("/user?:session_id")]
-        User {
+        HomeView {},
+    #[route("/user?:session_id&:user_id")]
+        UserView {
             session_id: String,
+            user_id: String,
         },
 
     #[route("/cache?:cache_number")]
-        CacheDetail {
+        CacheDetailView {
             cache_number: String,
         },
 
     #[route("/cache_list")]
-        CacheList{},
+        CacheListView{},
+
+    #[route("/leaderboard")]
+        LeaderBoardView{},
 }
 
 const FAVICON: Asset = asset!("/assets/favicon.ico");

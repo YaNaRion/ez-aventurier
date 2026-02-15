@@ -370,9 +370,12 @@ dependencies = [
  "dioxus-logger 0.5.1",
  "dioxus-popup",
  "dioxus-primitives",
+ "js-sys",
  "log",
  "reqwest 0.13.2",
  "serde",
+ "wasm-bindgen",
+ "wasm-bindgen-futures",
  "web-sys",
 ]
 
@@ -4268,6 +4271,7 @@ dependencies = [
  "bytes",
  "encoding_rs",
  "futures-core",
+ "futures-util",
  "h2",
  "http",
  "http-body",
@@ -4278,6 +4282,7 @@ dependencies = [
  "js-sys",
  "log",
  "mime",
+ "mime_guess",
  "percent-encoding",
  "pin-project-lite",
  "quinn",

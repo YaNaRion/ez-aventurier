@@ -5,8 +5,8 @@
 mod connection_form;
 pub use connection_form::ConnectionForm;
 
-mod connected_user;
-pub use connected_user::ConnectedUser;
+mod user_profile;
+pub use user_profile::UserProfile;
 
 mod admin_body;
 pub use admin_body::AdminBody;
@@ -26,7 +26,10 @@ pub use message_card::MessageCard;
 mod create_new_cache;
 pub use create_new_cache::CreateNewCache;
 
-mod cache_list;
-pub use cache_list::CacheListButton;
+mod button;
+pub use button::Button;
 
 pub mod alert_dialog;
+
+mod admin;
+pub use admin::Admin;

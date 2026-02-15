@@ -35,14 +35,6 @@ pub struct Session {
     pub jcreated_on: String, // or use chrono::DateTime
 }
 
-#[derive(serde::Deserialize, serde::Serialize, Default)]
-pub struct CheckSessionValid {
-    #[serde(rename = "session")]
-    pub session: Session,
-    #[serde(rename = "isValid")]
-    pub is_valid: bool,
-}
-
 #[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
 pub struct User {
     #[serde(rename = "userId")]
@@ -56,6 +48,9 @@ pub struct User {
 
     #[serde(rename = "order")]
     pub order: String,
+
+    #[serde(rename = "score")]
+    pub score: i32,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
@@ -63,8 +58,11 @@ pub struct Cache {
     #[serde(rename = "cacheNumber")]
     pub cache_number: i32,
 
-    #[serde(rename = "text")]
-    pub text: String,
+    #[serde(rename = "name")]
+    pub name: String,
+
+    #[serde(rename = "description")]
+    pub description: String,
 
     #[serde(rename = "createdAt")]
     pub jcreated_on: String, // or use chrono::DateTime

@@ -33,7 +33,10 @@ pub fn ConnectionForm() -> Element {
                 // If JSON:
                 let data: Session = resp.json().await.unwrap();
 
-                dioxus_router::router().push(format!("/user?session_id={}", data.session_id));
+                dioxus_router::router().push(format!(
+                    "/user?session_id={}&user_id={}",
+                    data.session_id, data.user_id
+                ));
             }
 
             Ok(resp) => {
@@ -52,7 +55,6 @@ pub fn ConnectionForm() -> Element {
         div { class: "connection-card",
             div { class: "connection-header",
                 h1 { class: "connection-title", "Code secret" }
-                p { class: "connection-subtitle", "Veuillez entrer le code secret" }
             }
             div { class: "connection-body",
                 form {
@@ -79,7 +81,7 @@ pub fn ConnectionForm() -> Element {
                             // your svg icon...
                         }
                         if !error().is_empty() {
-                            div { class: "error-message", "{error}" }
+                            h1 { class: "error-message", "{error}" }
                         }
                     }
 
@@ -90,13 +92,9 @@ pub fn ConnectionForm() -> Element {
                         if is_loading() {
                             span { class: "button-loader", div { class: "spinner" } }
                         } else {
-                            span { class: "button-text", "⏎ Enter the Citadel" }
+                            span { class: "button-text", "Entrer" }
                         }
                     }
-                }
-
-                div { class: "connection-footer",
-                    p { class: "footer-text", "Pour toutes questions, veuillez les poser au ..." }
                 }
             }
         }
