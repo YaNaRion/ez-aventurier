@@ -26,7 +26,7 @@ pub fn HomeView() -> Element {
 
         InfoCard {
             title: "",
-            data: "Ce jeu est réaliser par le 229ème groupe scout Notre-Dame des Neiges",
+            data: "Ce jeu est réalisé par le 229ème groupe scout Notre-Dame des Neiges",
             icon: "⚜️",
         }
     }

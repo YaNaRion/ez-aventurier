@@ -39,6 +39,8 @@ func (db *DB) AddCache(cache models.Cache) error {
 	if err != nil {
 		return fmt.Errorf("failed to insert the session in db: %w", err)
 	}
+
+	db.Cache.ListCache = []models.Cache{}
 	return nil
 }
 

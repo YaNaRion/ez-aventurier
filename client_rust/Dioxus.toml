@@ -3,7 +3,7 @@
 [web.app]
 
 # HTML title tag content
-title = "client_rust"
+title = "Camp Aventurier"
 
 # include `assets` in web platform
 [web.resource]
