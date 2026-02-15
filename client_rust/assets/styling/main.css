@@ -144,6 +144,13 @@ body {
     font-style: italic;
 }
 
+.error-message {
+    color: #d4af37;
+    font-size: 16px;
+    font-style: italic;
+    margin-top: 10px;
+}
+
 .connection-form {
     margin-bottom: 32px;
 }

@@ -55,7 +55,6 @@ pub fn ConnectionForm() -> Element {
         div { class: "connection-card",
             div { class: "connection-header",
                 h1 { class: "connection-title", "Code secret" }
-                p { class: "connection-subtitle", "Veuillez entrer le code secret" }
             }
             div { class: "connection-body",
                 form {
@@ -82,7 +81,7 @@ pub fn ConnectionForm() -> Element {
                             // your svg icon...
                         }
                         if !error().is_empty() {
-                            div { class: "error-message", "{error}" }
+                            h1 { class: "error-message", "{error}" }
                         }
                     }
 
@@ -93,13 +92,9 @@ pub fn ConnectionForm() -> Element {
                         if is_loading() {
                             span { class: "button-loader", div { class: "spinner" } }
                         } else {
-                            span { class: "button-text", "⏎ Enter the Citadel" }
+                            span { class: "button-text", "Entrer" }
                         }
                     }
-                }
-
-                div { class: "connection-footer",
-                    p { class: "footer-text", "Pour toutes questions, veuillez les poser au ..." }
                 }
             }
         }

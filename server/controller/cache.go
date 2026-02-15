@@ -61,7 +61,6 @@ func (c *Controller) postCache(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *Controller) getCaches(w http.ResponseWriter, r *http.Request) {
-	log.Println("DANS GES CACHES")
 	caches, err := c.db.GetCaches()
 	if err != nil {
 		http.Error(w, "Failed to get the caches to db", http.StatusBadRequest)

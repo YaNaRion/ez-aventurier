@@ -65,6 +65,10 @@ func (db *DB) GetCache(cacheNumber int) (*models.Cache, error) {
 }
 
 func (db *DB) GetCaches() ([]models.Cache, error) {
+	if len(db.Cache.ListCache) > 0 {
+		return db.Cache.ListCache, nil
+	}
+
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -83,6 +87,8 @@ func (db *DB) GetCaches() ([]models.Cache, error) {
 	if err = cursor.All(ctx, &caches); err != nil {
 		return nil, fmt.Errorf("failed to decode caches: %w", err)
 	}
+
+	db.Cache.ListCache = caches
 
 	return caches, nil
 }

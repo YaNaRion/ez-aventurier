@@ -35,6 +35,7 @@ func (C *Controller) setUpRouter(mux *http.ServeMux) {
 	mux.HandleFunc("GET /cache", C.getCache)
 
 	mux.HandleFunc("POST /cache", C.postCache)
+	mux.HandleFunc("GET /leaderboard", C.getLeaderboard)
 
 	mux.HandleFunc("PUT /claimCache", C.claimCache)
 }
@@ -43,6 +44,6 @@ func writeResponseJson(w http.ResponseWriter, data []byte) {
 	w.Header().Set("Contend-Type", ContentTypeJSON)
 	_, err := w.Write(data)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }

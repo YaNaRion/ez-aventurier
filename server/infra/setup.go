@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"main/infra/models"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -11,10 +12,17 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+type CacheDB struct {
+	LeaderBoard []models.User
+	ListCache   []models.Cache
+	Users       map[string]*models.User
+}
+
 type DB struct {
 	Ctx         context.Context
 	Client      *mongo.Client
 	IsConnected bool
+	Cache       CacheDB
 }
 
 func Setup(dbConnectionString string) (*DB, error) {
@@ -49,6 +57,11 @@ func Setup(dbConnectionString string) (*DB, error) {
 	db := &DB{
 		Client: client,
 		Ctx:    context.Background(), // Base context without timeout
+		Cache: CacheDB{
+			LeaderBoard: make([]models.User, 0),
+			Users:       make(map[string]*models.User),
+			ListCache:   make([]models.Cache, 0),
+		},
 	}
 
 	log.Println("✅ MongoDB connection established successfully")
