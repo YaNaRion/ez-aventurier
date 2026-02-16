@@ -81,7 +81,7 @@ pub fn UserBody(user: Signal<User>, session_id: String) -> Element {
                 div { class: "user-info",
 
                     InfoCard {
-                        title: "Votre code secrêt".to_string(),
+                        title: "Votre code secret".to_string(),
                         data: user.read().user_id.clone(),
                         icon: "⚔️".to_string(),
                     }

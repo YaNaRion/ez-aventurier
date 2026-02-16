@@ -17,6 +17,7 @@ import (
 type AppConfig struct {
 	Port        int
 	DatabaseURL string
+	IsDev       bool
 }
 
 type Config struct {
@@ -70,14 +71,15 @@ func LoadEnvVariable() AppConfig {
 	env := flag.String("env", "prod", "environment to run in")
 
 	flag.Parse()
-
-	if *env == "dev" {
+	var isDev = *env == "dev"
+	if isDev {
 		godotenv.Load()
 	}
 
 	return AppConfig{
 		DatabaseURL: getEnv("DB_CONNECTION_STRING", "None"),
 		Port:        getEnvAsInt("PORT", 3000),
+		IsDev:       isDev,
 	}
 }
 
@@ -87,7 +89,7 @@ func Setup() *Server {
 
 	appConfig := LoadEnvVariable()
 	log.Println(appConfig)
-	db, _ = infra.Setup(appConfig.DatabaseURL)
+	db, _ = infra.Setup(appConfig.DatabaseURL, appConfig.IsDev)
 	if db == nil {
 		log.Println("DB NOT CONNECTED")
 		log.Println("Shuwdown")

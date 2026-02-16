@@ -1,7 +1,10 @@
 use dioxus::prelude::*;
 use reqwest::Client;
 
-use crate::service::{get_base_url, Cache};
+use crate::{
+    components::cache_detail::CacheDetail,
+    service::{get_base_url, Cache},
+};
 
 const STYLE: Asset = asset!("./cache_detail_view.css");
 
@@ -31,7 +34,7 @@ pub fn CacheDetailView(cache_number: String) -> Element {
                 }
 
                 Ok(_resp) => {
-                    error.set("NOT CONNECTED".to_string());
+                    dioxus_router::router().push("/cache_list");
                 }
 
                 Err(e) => {
@@ -53,27 +56,8 @@ pub fn CacheDetailView(cache_number: String) -> Element {
             } else if !error.read().is_empty() {
                 "Error: {error}"
             } else {
-                div { class: "cache-detail-view-header",
-                    div {
-                        class: "success-icon",
-                        style: "font-size: 48px; margin-bottom: 20px;",
-                        "📜"
-                    }
-
-                    h1 {
-                        class: "cache-detail-view-title",
-                            "Voici les indices pour la cache: {cache.read().cache_number}"
-                        }
-
-                    h2 {
-                        class: "cache-detail-name",
-                        strong { "Nom: {cache.read().name}" }
-                    }
-
-                    p {
-                        class: "cache-detail-description",
-                        strong { "Description: {cache.read().description}" }
-                    }
+                CacheDetail {
+                    cache: cache,
                 }
             }
         }

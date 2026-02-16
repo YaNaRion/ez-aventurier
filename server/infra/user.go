@@ -20,7 +20,7 @@ func (db *DB) FindUser(userID string) (*models.User, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	collection := db.Client.Database("dev1").Collection("users")
+	collection := db.Client.Database(db.CurrentDB).Collection("users")
 	if collection == nil {
 		return nil, fmt.Errorf("failed to get collection")
 	}
@@ -43,7 +43,7 @@ func (db *DB) AddUser(user models.User) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	collection := db.Client.Database("dev1").Collection("users")
+	collection := db.Client.Database(db.CurrentDB).Collection("users")
 	if collection == nil {
 		return fmt.Errorf("failed to get collection")
 	}
@@ -64,7 +64,7 @@ func (db *DB) AddUsers(users []models.User) error {
 		docs = append(docs, user)
 	}
 
-	collection := db.Client.Database("dev1").Collection("users")
+	collection := db.Client.Database(db.CurrentDB).Collection("users")
 	if collection == nil {
 		return fmt.Errorf("failed to get collection")
 	}
@@ -83,7 +83,7 @@ func (db *DB) UpdateWeightToUser(
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	collection := db.Client.Database("dev1").Collection("users")
+	collection := db.Client.Database(db.CurrentDB).Collection("users")
 	if collection == nil {
 		return nil, fmt.Errorf("failed to get collection")
 	}
@@ -133,7 +133,7 @@ func (db *DB) GetAllUserOrderByScoreDes() ([]models.User, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	collection := db.Client.Database("dev1").Collection("users")
+	collection := db.Client.Database(db.CurrentDB).Collection("users")
 	if collection == nil {
 		return nil, fmt.Errorf("failed to get collection")
 	}

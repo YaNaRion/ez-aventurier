@@ -14,7 +14,7 @@ func (db *DB) AddSession(userID string, urlHost string) (*models.Session, error)
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	collection := db.Client.Database("dev1").Collection("session")
+	collection := db.Client.Database(db.CurrentDB).Collection("session")
 	if collection == nil {
 		return nil, fmt.Errorf("failed to get collection")
 	}
@@ -33,7 +33,7 @@ func (db *DB) AddSession(userID string, urlHost string) (*models.Session, error)
 func (db *DB) FindSession(sessionID string) (*models.Session, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-	collection := db.Client.Database("dev1").Collection("session")
+	collection := db.Client.Database(db.CurrentDB).Collection("session")
 
 	if collection == nil {
 		return nil, fmt.Errorf("failed to get collection")

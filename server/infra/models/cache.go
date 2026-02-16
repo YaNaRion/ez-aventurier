@@ -1,6 +1,7 @@
 package models
 
 import (
+	"main/class"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -15,9 +16,20 @@ type Cache struct {
 	Answers      string             `bson:"answer"        json:"answer"`
 	Weight       int                `bson:"weight"        json:"weight"`
 	Answer_count int                `bson:"answer_count"  json:"answer_count"`
+	ReleaseTime  time.Time          `bson:"releaseTime"   json:"releaseTime"`
 }
 
-// CollectionName returns the MongoDB collection name
-func (u *Cache) CollectionName() string {
-	return "caches"
+// GetMontrealReleaseTime returns the release time in Montreal timezone
+func (c *Cache) GetMontrealReleaseTime() time.Time {
+	return class.FromUTC(c.ReleaseTime)
+}
+
+// GetFormattedReleaseTime returns the release time formatted for display
+func (c *Cache) GetFormattedReleaseTime() string {
+	return class.FormatMontrealTime(c.ReleaseTime)
+}
+
+// GetInputFormattedReleaseTime returns the release time formatted for datetime-local input
+func (c *Cache) GetInputFormattedReleaseTime() string {
+	return class.FormatMontrealTimeInput(c.ReleaseTime)
 }

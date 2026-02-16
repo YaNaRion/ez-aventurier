@@ -15,6 +15,9 @@ pub struct NewCacheRequest {
 
     #[serde(rename = "description")]
     pub description: String,
+
+    #[serde(rename = "release_time")]
+    pub release_time: String,
 }
 
 #[component]
@@ -26,6 +29,7 @@ pub fn CreateNewCache(session_id: String) -> Element {
     let session_id_value = session_id.clone();
     let name: Signal<String> = use_signal(|| String::new());
     let description: Signal<String> = use_signal(|| String::new());
+    let release_time: Signal<String> = use_signal(|| String::new());
 
     let handle_submit = Callback::new(move |_| {
         let session_id_value_copy = session_id_value.clone();
@@ -47,6 +51,7 @@ pub fn CreateNewCache(session_id: String) -> Element {
             let body = NewCacheRequest {
                 name: name_clone.read().clone(),
                 description: description_clone.read().clone(),
+                release_time: release_time.read().clone(),
             };
 
             match client
@@ -86,6 +91,7 @@ pub fn CreateNewCache(session_id: String) -> Element {
             description: description,
             on_submit: handle_submit,
             is_loading: is_loading,
+            release_datetime: release_time,
         }
 
         AlertDialogRoot {
@@ -108,6 +114,7 @@ pub fn CreateNewCache(session_id: String) -> Element {
 pub fn FormCard(
     mut name: Signal<String>,
     mut description: Signal<String>,
+    mut release_datetime: Signal<String>,
     on_submit: Callback<()>,
     is_loading: Signal<bool>,
 ) -> Element {
@@ -135,11 +142,23 @@ pub fn FormCard(
                         label { class: "form-label", "Description" }
                         textarea {
                             class: "form-textarea",
-                            placeholder: "Enter la description de la cache",
+                            placeholder: "Entrer la description de la cache",
                             rows: "3",
                             disabled: is_loading(),
                             oninput: move |evt| description.set(evt.value()),
                             "{description}"
+                        }
+                    }
+
+                    // Date and time input (local time)
+                    div { class: "form-group",
+                        label { class: "form-label", "Date et heure de dévoilement" }
+                        input {
+                            class: "form-input",
+                            r#type: "datetime-local",
+                            value: "{release_datetime}",
+                            disabled: is_loading(),
+                            oninput: move |evt| release_datetime.set(evt.value()),
                         }
                     }
 
@@ -148,7 +167,7 @@ pub fn FormCard(
                         button {
                             class: "submit-button",
                             r#type: "button",
-                            disabled: is_loading() || name.read().is_empty() || description.read().is_empty(),
+                            disabled: is_loading() || name.read().is_empty() || description.read().is_empty() || release_datetime.read().is_empty(),
                             onclick: move |_| {
                                 if !is_loading() {
                                     on_submit.call(());
