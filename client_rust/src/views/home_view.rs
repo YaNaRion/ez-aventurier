@@ -7,7 +7,7 @@ pub fn HomeView() -> Element {
     rsx! {
         div { class: "connection-header",
             h1 { class: "connection-title", "Camp Aventurier 2026" }
-            h2 { class: "connection-subtitle", "Pour toutes questions, veuillez les poser à l'adresse courriel suivante : camp.aventurier229@gmail.com" }
+            h2 { class: "connection-subtitle", "Pour toutes questions, veuillez les poser à l'adresse courriel suivante : camp.aventurier.229@gmail.com" }
         }
 
         ConnectionForm {}

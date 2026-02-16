@@ -5,17 +5,18 @@
 - [x] Faire la logique d'envoie et confirmation de id
 - [ ] Ajouter dans la liste les anims qui participent au jeu
 - [ ] Ajouter une page de consigne du jeu sur le home
+- [ ] Faire logique pour que les admin puissent activer une cache pour la rendre visible
 
 ## Nice to have
 - [x] Fix la logique d'accord au féminin pour la page de jeunes
 
 ## Caches (logique)
-- [ ] Cache pour session
+- [x] Cache pour session
 - [ ] Clean db session 1 fois par jours
 
 ## Faire des leaders board
-- [ ] Par jeune
-- [ ] Par Ordre
+- [x] Par jeune
+- [x] Par Ordre
 
 
 # TO FIX
