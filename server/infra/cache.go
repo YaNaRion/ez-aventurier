@@ -58,7 +58,6 @@ func (db *DB) GetCache(cacheNumber int) (*models.Cache, error) {
 
 		for _, cache := range db.Cache.CacheStore.VisibleCaches {
 			if cache.CacheNumber == int64(cacheNumber) {
-				log.Printf("Cache %d found in visible cache", cacheNumber)
 				return &cache, nil
 			}
 		}
@@ -78,6 +77,7 @@ func (db *DB) GetCache(cacheNumber int) (*models.Cache, error) {
 	if collection == nil {
 		return nil, fmt.Errorf("failed to get collection")
 	}
+
 	filter := bson.M{
 		"cacheNumber": cacheNumber,
 		"$or": []bson.M{
@@ -163,9 +163,6 @@ func (db *DB) refreshCacheIfNeeded() {
 
 		// Filter visible caches
 		db.Cache.CacheStore.VisibleCaches = filterVisibleCaches(allCaches, now)
-
-		log.Printf("Cache refreshed: %d total, %d visible",
-			len(allCaches), len(db.Cache.CacheStore.VisibleCaches))
 	}
 }
 

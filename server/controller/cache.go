@@ -133,7 +133,6 @@ func (c *Controller) getCaches(w http.ResponseWriter, r *http.Request) {
 
 func (c *Controller) getCache(w http.ResponseWriter, r *http.Request) {
 	cacheNumber := r.URL.Query().Get("cache_number")
-	log.Println(cacheNumber)
 
 	cacheNumberInt, err := strconv.Atoi(cacheNumber)
 	if err != nil {
