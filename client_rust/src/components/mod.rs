@@ -5,32 +5,18 @@
 mod connection_form;
 pub use connection_form::ConnectionForm;
 
-mod user_profile;
-pub use user_profile::UserProfile;
-
-mod admin_body;
-pub use admin_body::AdminBody;
-
-mod user_header;
-pub use user_header::UserHeader;
-
-mod user_body;
-pub use user_body::UserBody;
-
 mod info_card;
 pub use info_card::InfoCard;
 
 mod message_card;
 pub use message_card::MessageCard;
 
-mod create_new_cache;
-pub use create_new_cache::CreateNewCache;
-
 mod button;
 pub use button::Button;
 
+pub mod admin;
+pub use admin::*;
+
 pub mod alert_dialog;
 pub mod cache_detail;
-
-mod admin;
-pub use admin::Admin;
+pub mod user;

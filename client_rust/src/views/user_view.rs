@@ -3,7 +3,10 @@ use reqwest::Client;
 // use web_sys::console;
 
 use crate::{
-    components::{Admin, UserProfile},
+    components::{
+        admin::Admin,
+        user::{UserHeader, UserProfile},
+    },
     service::{get_base_url, User},
 };
 

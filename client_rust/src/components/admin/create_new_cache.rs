@@ -8,6 +8,8 @@ use serde::{Deserialize, Serialize};
 
 use crate::service::get_base_url;
 
+const STYLE: Asset = asset!("./create_new_cache.css");
+
 #[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
 pub struct NewCacheRequest {
     #[serde(rename = "name")]
@@ -86,14 +88,7 @@ pub fn CreateNewCache(session_id: String) -> Element {
     });
 
     rsx! {
-        FormCard {
-            name: name,
-            description: description,
-            on_submit: handle_submit,
-            is_loading: is_loading,
-            release_datetime: release_time,
-        }
-
+        document::Link { rel: "stylesheet", href: STYLE }
         AlertDialogRoot {
             open: *open.read(),
             on_open_change: move |v| open.set(v),
@@ -106,6 +101,14 @@ pub fn CreateNewCache(session_id: String) -> Element {
                 }
                 AlertDialogAction { "OK" }
             }
+        }
+
+        FormCard {
+            name: name,
+            description: description,
+            on_submit: handle_submit,
+            is_loading: is_loading,
+            release_datetime: release_time,
         }
     }
 }

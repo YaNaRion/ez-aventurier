@@ -92,11 +92,11 @@ pub fn UserBody(user: Signal<User>, session_id: String) -> Element {
                         icon: "🕯️".to_string(),
                     }
 
-                    InfoCard {
-                        title: "Votre ordre".to_string(),
-                        data: user.read().order.clone(),
-                        icon: "🕯️".to_string(),
-                    }
+                    // InfoCard {
+                    //     title: "Votre ordre".to_string(),
+                    //     data: user.read().order.clone(),
+                    //     icon: "🕯️".to_string(),
+                    // }
 
                     InfoCard {
                         title: "Votre score".to_string(),

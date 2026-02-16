@@ -106,7 +106,7 @@ func Add_jeune_to_DB(db *DB) {
 
 	// log.Println(len(users))
 
-	err = db.AddUsers(users)
+	err = db.AddUsers(users, "prod")
 	if err != nil {
 		log.Println(err)
 	}
