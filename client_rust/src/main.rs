@@ -1,6 +1,6 @@
 use dioxus::prelude::*;
 use reqwest::Client;
-use views::{CacheDetailView, CacheListView, HomeView, LeaderBoardView, UserView};
+use views::{CacheDetailView, CacheListView, HomeView, Leaderboard, UserView};
 
 mod components;
 mod service;
@@ -26,7 +26,7 @@ enum Route {
         CacheListView{},
 
     #[route("/leaderboard")]
-        LeaderBoardView{},
+        Leaderboard{},
 }
 
 const FAVICON: Asset = asset!("/assets/favicon.ico");

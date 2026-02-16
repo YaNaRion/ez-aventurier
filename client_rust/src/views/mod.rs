@@ -20,5 +20,5 @@ pub use cache_detail_view::CacheDetailView;
 mod cache_list_view;
 pub use cache_list_view::CacheListView;
 
-mod leaderboard_view;
-pub use leaderboard_view::LeaderBoardView;
+mod leaderboard;
+pub use leaderboard::Leaderboard;

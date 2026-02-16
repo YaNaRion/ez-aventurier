@@ -39,7 +39,7 @@ func (c *Controller) connection(w http.ResponseWriter, r *http.Request) {
 	user_id := r.URL.Query().Get("user_id")
 	if user_id == "" {
 		log.Printf("Connection try from: %s, but was mission user_id in request", r.Host)
-		http.Error(w, "missing user_id", http.StatusBadRequest)
+		http.Error(w, "Ce code secret correspond a personne", http.StatusBadRequest)
 		return
 	}
 

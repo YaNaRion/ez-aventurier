@@ -1,0 +1,452 @@
+/* Form Card - Knight Theme */
+.form-card-aligned {
+	width: 100%;
+	max-width: 600px;
+	margin: 20px auto;
+	position: relative;
+	z-index: 2;
+}
+
+.form-card-content {
+	background: linear-gradient(145deg,
+			rgba(30, 30, 40, 0.95) 0%,
+			rgba(20, 20, 30, 0.98) 100%);
+	border-radius: 12px;
+	box-shadow:
+		0 20px 40px rgba(0, 0, 0, 0.4),
+		0 0 0 1px rgba(139, 69, 19, 0.2),
+		inset 0 1px 0 rgba(255, 255, 255, 0.1);
+	overflow: hidden;
+	padding: 0;
+	border: 1px solid rgba(139, 69, 19, 0.3);
+	position: relative;
+	width: 100%;
+	display: flex;
+}
+
+.form-card-content::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	width: 4px;
+	/* Changed from height to width */
+	background: linear-gradient(180deg,
+			/* Changed from 90deg to 180deg for vertical gradient */
+			#8b4513 0%,
+			#d4af37 50%,
+			#8b4513 100%);
+	z-index: 1;
+}
+
+.form-card-content::after {
+	content: '⚜';
+	position: absolute;
+	bottom: 10px;
+	right: 15px;
+	font-size: 60px;
+	opacity: 0.03;
+	color: #d4af37;
+	font-family: serif;
+	pointer-events: none;
+	z-index: 0;
+}
+
+.form-icon {
+	background: linear-gradient(135deg,
+			#8b4513 0%,
+			#a0522d 50%,
+			#8b4513 100%);
+	color: #fff;
+	padding: 2.5rem 2rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 3.5rem;
+	position: relative;
+	overflow: hidden;
+	min-width: 120px;
+	text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.form-icon::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: -100%;
+	width: 100%;
+	height: 100%;
+	background: linear-gradient(90deg,
+			transparent 0%,
+			rgba(255, 255, 255, 0.1) 50%,
+			transparent 100%);
+	transition: left 0.6s ease;
+}
+
+.form-card-content:hover .form-icon::before {
+	left: 100%;
+}
+
+.form-input-wrapper {
+	padding: 2rem;
+	flex: 1;
+	position: relative;
+	z-index: 1;
+}
+
+.form-input-wrapper h3 {
+	color: #d4af37;
+	font-size: 1.2rem;
+	margin-bottom: 1.5rem;
+	font-family: 'Cinzel Decorative', 'Cinzel', serif;
+	text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+	letter-spacing: 1px;
+	position: relative;
+	padding-bottom: 12px;
+	text-align: center;
+}
+
+.form-input-wrapper h3::after {
+	content: '';
+	position: absolute;
+	bottom: 0;
+	left: 20%;
+	right: 20%;
+	height: 2px;
+	background: linear-gradient(90deg,
+			transparent 0%,
+			#8b4513 20%,
+			#d4af37 50%,
+			#8b4513 80%,
+			transparent 100%);
+}
+
+.form-group {
+	margin-bottom: 1.5rem;
+}
+
+.form-label {
+	display: block;
+	color: #d4af37;
+	font-weight: 600;
+	margin-bottom: 0.5rem;
+	font-size: 0.9rem;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.form-label i {
+	margin-right: 8px;
+}
+
+.form-input {
+	width: 100%;
+	padding: 0.75rem 1rem;
+	background: rgba(10, 14, 23, 0.7);
+	border: 2px solid rgba(139, 69, 19, 0.5);
+	border-radius: 6px;
+	font-size: 1rem;
+	font-family: 'Cinzel', serif;
+	transition: all 0.3s ease;
+	color: #e8e6e3;
+	box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.form-input:focus {
+	outline: none;
+	border-color: #d4af37;
+	background: rgba(10, 14, 23, 0.9);
+	box-shadow:
+		0 0 0 3px rgba(212, 175, 55, 0.1),
+		inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.form-input::placeholder {
+	color: #8b8b8b;
+	font-style: italic;
+}
+
+.form-textarea {
+	width: 100%;
+	padding: 0.75rem 1rem;
+	background: rgba(10, 14, 23, 0.7);
+	border: 2px solid rgba(139, 69, 19, 0.5);
+	border-radius: 6px;
+	font-size: 1rem;
+	font-family: 'Cinzel', serif;
+	transition: all 0.3s ease;
+	color: #e8e6e3;
+	box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+	resize: vertical;
+	min-height: 100px;
+}
+
+.form-textarea:focus {
+	outline: none;
+	border-color: #d4af37;
+	background: rgba(10, 14, 23, 0.9);
+	box-shadow:
+		0 0 0 3px rgba(212, 175, 55, 0.1),
+		inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.form-textarea::placeholder {
+	color: #8b8b8b;
+	font-style: italic;
+}
+
+.file-input-group {
+	display: flex;
+	gap: 0.5rem;
+}
+
+.file-input {
+	flex: 1;
+	padding: 0.5rem;
+	background: rgba(10, 14, 23, 0.7);
+	border: 2px dashed rgba(139, 69, 19, 0.5);
+	border-radius: 6px;
+	color: #b8b8b8;
+	font-family: 'Cinzel', serif;
+	cursor: pointer;
+	transition: all 0.3s ease;
+}
+
+.file-input:hover {
+	border-color: #d4af37;
+	background: rgba(10, 14, 23, 0.9);
+}
+
+.file-input::file-selector-button {
+	background: linear-gradient(135deg, #8b4513 0%, #a0522d 100%);
+	border: none;
+	color: white;
+	padding: 0.5rem 1rem;
+	margin-right: 1rem;
+	border-radius: 4px;
+	font-family: 'Cinzel', serif;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	text-transform: uppercase;
+	font-size: 0.8rem;
+	letter-spacing: 0.5px;
+	border: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+.file-input::file-selector-button:hover {
+	background: linear-gradient(135deg, #a0522d 0%, #d4af37 100%);
+	transform: translateY(-1px);
+	box-shadow: 0 4px 10px rgba(212, 175, 55, 0.3);
+}
+
+.file-clear-button {
+	padding: 0.5rem 1.5rem;
+	background: linear-gradient(135deg, #8b1e1e 0%, #a52a2a 100%);
+	color: white;
+	border: 2px solid rgba(139, 69, 19, 0.5);
+	border-radius: 6px;
+	cursor: pointer;
+	font-family: 'Cinzel', serif;
+	font-size: 0.9rem;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	transition: all 0.3s ease;
+	position: relative;
+	overflow: hidden;
+}
+
+.file-clear-button::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: -100%;
+	width: 100%;
+	height: 100%;
+	background: linear-gradient(90deg,
+			transparent 0%,
+			rgba(255, 255, 255, 0.1) 50%,
+			transparent 100%);
+	transition: left 0.5s ease;
+}
+
+.file-clear-button:hover {
+	background: linear-gradient(135deg, #a52a2a 0%, #c0392b 100%);
+	border-color: #d4af37;
+	transform: translateY(-2px);
+	box-shadow: 0 6px 15px rgba(192, 57, 43, 0.4);
+}
+
+.file-clear-button:hover::before {
+	left: 100%;
+}
+
+.file-clear-button:active {
+	transform: translateY(0);
+}
+
+.file-info {
+	margin-top: 0.75rem;
+	padding: 0.75rem;
+	background: rgba(40, 60, 30, 0.3);
+	border: 1px solid rgba(85, 139, 47, 0.5);
+	border-radius: 6px;
+	font-size: 0.9rem;
+	color: #a5d6a7;
+	font-family: 'Cinzel', serif;
+	position: relative;
+	overflow: hidden;
+}
+
+.file-info::before {
+	content: '⚔';
+	margin-right: 8px;
+	color: #d4af37;
+}
+
+.form-actions {
+	margin-top: 2rem;
+	text-align: right;
+	position: relative;
+}
+
+.submit-button {
+	padding: 0.9rem 2.5rem;
+	background: linear-gradient(135deg,
+			#8b4513 0%,
+			#a0522d 50%,
+			#8b4513 100%);
+	color: #fff;
+	border: none;
+	border-radius: 8px;
+	font-size: 1rem;
+	font-weight: 700;
+	font-family: 'Cinzel', serif;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	position: relative;
+	overflow: hidden;
+	box-shadow:
+		0 4px 15px rgba(139, 69, 19, 0.4),
+		inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.submit-button::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: -100%;
+	width: 100%;
+	height: 100%;
+	background: linear-gradient(90deg,
+			transparent 0%,
+			rgba(255, 255, 255, 0.2) 50%,
+			transparent 100%);
+	transition: left 0.6s ease;
+}
+
+.submit-button:hover {
+	background: linear-gradient(135deg,
+			#a0522d 0%,
+			#d4af37 50%,
+			#a0522d 100%);
+	transform: translateY(-2px);
+	box-shadow:
+		0 8px 25px rgba(212, 175, 55, 0.4),
+		inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.submit-button:hover::before {
+	left: 100%;
+}
+
+.submit-button:active {
+	transform: translateY(0);
+}
+
+.submit-button::after {
+	content: ' →';
+	font-weight: bold;
+	display: inline-block;
+	transition: transform 0.3s ease;
+}
+
+.submit-button:hover::after {
+	transform: translateX(5px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+	.form-card-content {
+		flex-direction: column;
+	}
+
+	.form-icon {
+		padding: 1.5rem;
+		min-width: auto;
+		font-size: 2.5rem;
+	}
+
+	.form-input-wrapper {
+		padding: 1.5rem;
+	}
+
+	.form-input-wrapper h3 {
+		font-size: 1.1rem;
+	}
+}
+
+@media (max-width: 480px) {
+	.form-card-aligned {
+		max-width: 100%;
+		margin: 10px;
+	}
+
+	.form-input-wrapper {
+		padding: 1.25rem;
+	}
+
+	.file-input-group {
+		flex-direction: column;
+	}
+
+	.file-clear-button {
+		width: 100%;
+	}
+
+	.form-actions {
+		text-align: center;
+	}
+
+	.submit-button {
+		width: 100%;
+		padding: 0.9rem 1.5rem;
+	}
+
+	.form-icon {
+		font-size: 2rem;
+		padding: 1rem;
+	}
+}
+
+@media (max-width: 360px) {
+	.form-input-wrapper {
+		padding: 1rem;
+	}
+
+	.form-input-wrapper h3 {
+		font-size: 1rem;
+	}
+
+	.form-label {
+		font-size: 0.8rem;
+	}
+
+	.submit-button {
+		font-size: 0.9rem;
+		padding: 0.8rem 1rem;
+	}
+}

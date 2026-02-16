@@ -55,7 +55,7 @@ func (db *DB) AddUser(user models.User) error {
 	return nil
 }
 
-func (db *DB) AddUsers(users []models.User) error {
+func (db *DB) AddUsers(users []models.User, dbstr string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -64,7 +64,7 @@ func (db *DB) AddUsers(users []models.User) error {
 		docs = append(docs, user)
 	}
 
-	collection := db.Client.Database(db.CurrentDB).Collection("users")
+	collection := db.Client.Database(dbstr).Collection("users")
 	if collection == nil {
 		return fmt.Errorf("failed to get collection")
 	}
