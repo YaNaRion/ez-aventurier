@@ -3,7 +3,7 @@ use dioxus::prelude::*;
 use crate::components::InfoCard;
 
 #[component]
-pub fn Button(path: String, title: String, data: String, icon: String) -> Element {
+pub fn RoutingButton(path: String, title: String, data: String, icon: String) -> Element {
     rsx! {
         div {
             onclick: move|_| {

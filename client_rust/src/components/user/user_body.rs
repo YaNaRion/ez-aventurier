@@ -6,7 +6,7 @@ use dioxus_primitives::alert_dialog::{
 };
 
 use crate::{
-    components::{InfoCard, MessageCard},
+    components::{input::Input, InfoCard},
     service::{get_base_url, User},
 };
 
@@ -104,7 +104,7 @@ pub fn UserBody(user: Signal<User>, session_id: String) -> Element {
                         icon: "🏆".to_string(),
                     }
 
-                    MessageCard {
+                    Input {
                         input_name: "Entrer le code secret pour confirmer votre quête".to_string(),
                         callback: handle_submit,
                     }

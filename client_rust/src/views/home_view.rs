@@ -1,4 +1,4 @@
-use crate::components::{Button, ConnectionForm, InfoCard};
+use crate::components::{button::RoutingButton, ConnectionForm, InfoCard};
 use dioxus::prelude::*;
 
 /// The Home page component that will be rendered when the current route is `[Route::Home]`
@@ -11,13 +11,13 @@ pub fn HomeView() -> Element {
         }
 
         ConnectionForm {}
-        Button {
+        RoutingButton {
             path: "/cache_list".to_string(),
             title: "Voir les caches".to_string(),
             data: "".to_string(),
             icon: "📜".to_string(),
         }
-        Button {
+        RoutingButton {
             path: "/leaderboard".to_string(),
             title: "Voir le classement".to_string(),
             data: "".to_string(),

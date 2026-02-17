@@ -20,7 +20,7 @@ type CreateCacheRequest struct {
 func (c *Controller) postCache(w http.ResponseWriter, r *http.Request) {
 	sessionID := r.URL.Query().Get("session_id")
 
-	_, _, err := c.isSessionValid(sessionID, r.URL.Host)
+	_, _, err := c.isSessionValid(sessionID, r)
 	if err != nil {
 		log.Println("Session not valid")
 		http.Error(w, "Session not valid", http.StatusBadRequest)

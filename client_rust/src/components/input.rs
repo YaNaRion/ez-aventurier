@@ -1,8 +1,7 @@
 use dioxus::prelude::*;
 
-// Il faut ajouter la callback pour le submit
 #[component]
-pub fn MessageCard(input_name: String, callback: Callback<String>) -> Element {
+pub fn Input(input_name: String, callback: Callback<String>) -> Element {
     let mut text = use_signal(String::new);
     rsx! {
         div { class: "message-card-aligned",
