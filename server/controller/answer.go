@@ -21,7 +21,7 @@ func (c *Controller) claimCache(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	isSessionValid, _, err := c.isSessionValid(sessionID, r.URL.Host)
+	isSessionValid, _, err := c.isSessionValid(sessionID, r)
 	if err != nil && !isSessionValid {
 		LOG_ERROR_TO_CONSOLE("Session is not valid anymore", r)
 		http.Error(w, "Session not valid", http.StatusGatewayTimeout)

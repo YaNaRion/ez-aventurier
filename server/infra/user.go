@@ -149,10 +149,7 @@ func (db *DB) GetAllUserOrderByScoreDes() ([]models.User, error) {
 	}
 	defer cursor.Close(ctx)
 
-	// Slice to store the results
 	var users []models.User
-
-	// Iterate through the cursor
 	for cursor.Next(ctx) {
 		var user models.User
 		err := cursor.Decode(&user)

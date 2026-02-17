@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"main/infra/models"
+	"net"
 	"net/http"
 	"time"
 	// "time"
@@ -21,14 +22,19 @@ type IsSessionValidResponse struct {
 
 func (c *Controller) isSessionValid(
 	sessionID string,
-	urlHost string,
+	r *http.Request,
 ) (bool, *models.Session, error) {
+
 	session, err := c.db.FindSession(sessionID)
 	if err != nil {
 		return false, nil, fmt.Errorf("failed to connect session")
 	}
 
-	if session.Host != urlHost {
+	ip, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		return false, nil, fmt.Errorf("wrong host")
+	}
+	if session.Host != ip {
 		return false, nil, fmt.Errorf("failed to connect session")
 	}
 	return !IsSessionExpired(session), session, nil
@@ -49,14 +55,14 @@ func (c *Controller) connection(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Ce code secret correspond a personne", http.StatusBadRequest)
 		return
 	}
-	// FACILITE LA CONNECTION POUR TEST
-	// log.Println("Un client a réussi a se connecter")
-	// response := "true"
-	// w.Write([]byte(response))
-	// return
-	// vérification des informations de connection dans le server
 
-	session, err := c.db.AddSession(user.UserID, r.URL.Host)
+	ip, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		log.Println("Error while creating session")
+		http.Error(w, "Server Error", http.StatusInternalServerError)
+	}
+
+	session, err := c.db.AddSession(user.UserID, ip)
 	if err != nil {
 		log.Println("Error while creating session")
 		http.Error(w, "Server Error", http.StatusInternalServerError)
@@ -92,7 +98,7 @@ func (c *Controller) getUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	isSessionValid, _, err := c.isSessionValid(sessionID, r.URL.Host)
+	isSessionValid, _, err := c.isSessionValid(sessionID, r)
 	if err != nil && !isSessionValid {
 		http.Error(w, "Session not valid", http.StatusBadRequest)
 		return

@@ -1,0 +1,35 @@
+use dioxus::prelude::*;
+
+#[component]
+pub fn Input(input_name: String, callback: Callback<String>) -> Element {
+    let mut text = use_signal(String::new);
+    rsx! {
+        div { class: "message-card-aligned",
+            div { class: "message-card-content",
+                div { class: "message-icon", "📜" }
+                div { class: "message-input-wrapper",
+                    h3 { "{input_name}" }
+                    div { class: "input-button-group",
+                        input {
+                            class: "message-input-aligned",
+                            placeholder: "Écrivez...",
+                            value: "{text.read()}",
+                            r#type: "text",
+                            oninput: move |evt| text.set(evt.value()),
+                        }
+                        button {
+                            class: "send-button-aligned",
+                            r#type: "button",
+                            disabled: text.read().is_empty(), // Disable when empty
+                            onclick: move |_| {
+                                callback.call(text());
+                                text.set(String::new()); // Clear input after sending
+                            },
+                            "Confirmer"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
