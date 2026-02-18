@@ -24,7 +24,6 @@ func (c *Controller) isSessionValid(
 	sessionID string,
 	r *http.Request,
 ) (bool, *models.Session, error) {
-
 	session, err := c.db.FindSession(sessionID)
 	if err != nil {
 		return false, nil, fmt.Errorf("failed to connect session")

@@ -12,9 +12,13 @@ import (
 )
 
 func (db *DB) FindUser(userID string) (*models.User, error) {
-	foundUser := db.Cache.Users[userID]
-	if foundUser != nil {
-		return foundUser, nil
+	// Check cache with expiration
+	db.Cache.Mu.RLock()
+	cached, exists := db.Cache.Users[userID]
+	db.Cache.Mu.RUnlock()
+
+	if exists && time.Since(cached.timestamp) < 10*time.Minute {
+		return cached.user, nil
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
@@ -34,7 +38,12 @@ func (db *DB) FindUser(userID string) (*models.User, error) {
 		return nil, fmt.Errorf("failed to find user: %w", err)
 	}
 
-	db.Cache.Users[userID] = &user
+	db.Cache.Mu.Lock()
+	db.Cache.Users[userID] = CachedUser{
+		user:      &user,
+		timestamp: time.Now(),
+	}
+	db.Cache.Mu.Unlock()
 
 	return &user, nil
 }
@@ -55,6 +64,7 @@ func (db *DB) AddUser(user models.User) error {
 	return nil
 }
 
+// Fonction pour ajouter tous les users dans la db
 func (db *DB) AddUsers(users []models.User, dbstr string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -120,7 +130,13 @@ func (db *DB) UpdateWeightToUser(
 	}
 
 	db.Cache.LeaderBoard = nil
-	db.Cache.Users[updatedUser.UserID] = &updatedUser
+
+	db.Cache.Mu.Lock()
+	db.Cache.Users[userID] = CachedUser{
+		user:      &updatedUser,
+		timestamp: time.Now(),
+	}
+	db.Cache.Mu.Unlock()
 
 	return &updatedUser, nil
 }

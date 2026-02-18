@@ -3,7 +3,6 @@ package infra
 import (
 	"crypto/rand"
 	"encoding/csv"
-	"fmt"
 	"log"
 	"main/infra/models"
 	"math/big"
@@ -60,28 +59,23 @@ func readCSVToStruct(filename string) ([]Person, error) {
 	startIndex := 0
 	if len(records) > 0 {
 		// Optional: check if first row is header
-		startIndex = 1
+		// startIndex = 1
 	}
 
 	for i := startIndex; i < len(records); i++ {
-		if len(records[i]) >= 3 {
+		if len(records[i]) >= 2 {
 			person := Person{
 				Name:  records[i][0],
 				Unity: records[i][1],
-				Ordre: records[i][2],
+				// Ordre: records[i][2],
 			}
 			people = append(people, person)
 		}
 	}
 
-	return people, nil
-}
+	log.Println(people)
 
-func parseInt(s string) int {
-	// Simple conversion - add error handling in production
-	var i int
-	fmt.Sscanf(s, "%d", &i)
-	return i
+	return people, nil
 }
 
 const path = "infra/Liste-Jeune-Aventurier-avec-equipe.xlsx - Sheet1.csv"
@@ -93,6 +87,7 @@ func Add_jeune_to_DB(db *DB) {
 		return
 	}
 
+	log.Println(len(persons))
 	var users []models.User
 	for _, person := range persons {
 		userID, err := CustomID(6, AlphaNumeric)
@@ -100,11 +95,11 @@ func Add_jeune_to_DB(db *DB) {
 			log.Println(err)
 			return
 		}
-		user := models.NewUser(person.Name, userID, person.Unity, person.Ordre)
+		user := models.NewUser(person.Name, userID, person.Unity, "")
 		users = append(users, *user)
 	}
 
-	// log.Println(len(users))
+	log.Println(len(users))
 
 	err = db.AddUsers(users, "prod")
 	if err != nil {

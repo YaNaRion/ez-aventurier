@@ -43,7 +43,7 @@ pub fn UserView(session_id: String, user_id: String) -> Element {
             match client_for_async.get(&req_string).send().await {
                 Ok(resp) if resp.status().is_success() => {
                     user.set(resp.json().await.unwrap());
-                    is_admin.set(user.read().user_id == "admin");
+                    is_admin.set(user.read().user_id == "6pZbUg");
                 }
 
                 Ok(_resp) => {

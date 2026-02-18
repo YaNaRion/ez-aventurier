@@ -4,6 +4,7 @@ use dioxus::prelude::*;
 /// The Home page component that will be rendered when the current route is `[Route::Home]`
 #[component]
 pub fn HomeView() -> Element {
+    let navigator = use_navigator();
     rsx! {
         div { class: "connection-header",
             h1 { class: "connection-title", "Camp Aventurier 2026" }
@@ -24,10 +25,19 @@ pub fn HomeView() -> Element {
             icon: "🏆".to_string(),
         }
 
-        InfoCard {
-            title: "",
-            data: "Ce jeu est réalisé par le 229ème groupe scout Notre-Dame des Neiges",
-            icon: "⚜️",
+        div {
+            onclick: {
+            let navigator = navigator.clone();
+                move |_| {
+                    navigator.push("https://www.facebook.com/229scoutsNDN");
+                }
+            },
+            InfoCard {
+                title: "",
+                data: "Ce jeu est réalisé par le 229ème groupe scout Notre-Dame des Neiges",
+                icon: "⚜️",
+            }
+
         }
     }
 }

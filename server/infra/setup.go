@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"main/infra/models"
+	"sync"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -18,10 +19,16 @@ type CacheStore struct {
 	LastUpdated   time.Time
 }
 
+type CachedUser struct {
+	user      *models.User
+	timestamp time.Time
+}
+
 type CacheDB struct {
 	LeaderBoard []models.User
 	CacheStore  CacheStore
-	Users       map[string]*models.User
+	Users       map[string]CachedUser
+	Mu          sync.RWMutex
 }
 
 type DB struct {
@@ -74,7 +81,7 @@ func Setup(dbConnectionString string, isDev bool) (*DB, error) {
 		Ctx:    context.Background(), // Base context without timeout
 		Cache: CacheDB{
 			LeaderBoard: make([]models.User, 0),
-			Users:       make(map[string]*models.User),
+			Users:       make(map[string]CachedUser),
 			CacheStore: CacheStore{
 				AllCaches:     make([]models.Cache, 0),
 				VisibleCaches: make([]models.Cache, 0),

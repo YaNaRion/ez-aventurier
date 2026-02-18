@@ -66,7 +66,7 @@ pub fn UserBody(user: Signal<User>, session_id: String) -> Element {
                     if error.read().is_empty() {
                         AlertDialogDescription { "La cache a été ajoutée avec succès" }
                     } else {
-                        AlertDialogDescription { "Error: {error}" }
+                        AlertDialogDescription { "{error}" }
                     }
                     AlertDialogAction {
                         class: "AlertDialogAction",
