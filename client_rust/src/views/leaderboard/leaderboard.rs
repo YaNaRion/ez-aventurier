@@ -65,7 +65,7 @@ pub fn Leaderboard() -> Element {
                                 th { class: "rank-col", "Rang" }
                                 th { class: "player-col", "Joueur" }
                                 th { class: "unity-col", "Unité" }  // Unity column
-                                th { class: "ordre-col", "Ordre" }  // Unity column
+                                // th { class: "ordre-col", "Ordre" }  // Unity column
                                 th { class: "score-col", "Points" }
 
                             }
@@ -86,8 +86,8 @@ pub fn Leaderboard() -> Element {
                                     // Unity column - comment to hide
                                     td { class: "unity-col", "{user.unity}" }
 
-                                    // Unity column - comment to hide
-                                    td { class: "order-col", "{user.order}" }
+                                    // Order column - comment to hide
+                                    // td { class: "order-col", "{user.order}" }
 
                                     // Score column - comment to hide
                                     // td { class: "score-col", "{user.score} points" }
