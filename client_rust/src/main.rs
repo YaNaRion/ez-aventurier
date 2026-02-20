@@ -1,3 +1,4 @@
+use components::cache_detail::LettreCamp;
 use dioxus::prelude::*;
 use reqwest::Client;
 use views::{CacheDetailView, CacheListView, HomeView, Leaderboard, UserView};
@@ -27,6 +28,9 @@ enum Route {
 
     #[route("/leaderboard")]
         Leaderboard{},
+
+    #[route("/letter")]
+        LettreCamp{},
 }
 
 const FAVICON: Asset = asset!("/assets/favicon.ico");

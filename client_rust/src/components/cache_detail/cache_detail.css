@@ -134,6 +134,8 @@
 
 .cache-detail-name .value {
 	color: #b8b8b8;
+	white-space: pre-line;
+	text-align: justify;
 	font-weight: 600;
 	font-size: 22px;
 	display: block;
