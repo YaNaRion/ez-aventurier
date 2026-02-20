@@ -1,0 +1,104 @@
+{
+  "cli_version": "0.7.3 (was built without git repository)",
+  "rust_version": "rustc 1.93.0 (254b59607 2026-01-19)",
+  "assets": {
+    "assets": {
+      "/home/yann/.cargo/git/checkouts/components-c3e2707fcc33b190/70433b0/primitives/src/js/focus-trap.js": [
+        {
+          "absolute_source_path": "/home/yann/.cargo/git/checkouts/components-c3e2707fcc33b190/70433b0/primitives/src/js/focus-trap.js",
+          "bundled_path": "focus-trap-dxhaa2b90c682e41736.js",
+          "options": {
+            "add_hash": true,
+            "variant": "Unknown"
+          }
+        }
+      ],
+      "/home/yann/Projet/ez-aventurier/client_rust/assets/favicon.ico": [
+        {
+          "absolute_source_path": "/home/yann/Projet/ez-aventurier/client_rust/assets/favicon.ico",
+          "bundled_path": "favicon-dxhc8a92c2c29a2fa3.ico",
+          "options": {
+            "add_hash": true,
+            "variant": "Unknown"
+          }
+        }
+      ],
+      "/home/yann/Projet/ez-aventurier/client_rust/assets/styling/main.css": [
+        {
+          "absolute_source_path": "/home/yann/Projet/ez-aventurier/client_rust/assets/styling/main.css",
+          "bundled_path": "main-dxhbf395b42ee3b41.css",
+          "options": {
+            "add_hash": true,
+            "variant": "Unknown"
+          }
+        }
+      ],
+      "/home/yann/Projet/ez-aventurier/client_rust/src/components/admin/create_new_cache.css": [
+        {
+          "absolute_source_path": "/home/yann/Projet/ez-aventurier/client_rust/src/components/admin/create_new_cache.css",
+          "bundled_path": "create_new_cache-dxh764ab73fa4547618.css",
+          "options": {
+            "add_hash": true,
+            "variant": "Unknown"
+          }
+        }
+      ],
+      "/home/yann/Projet/ez-aventurier/client_rust/src/components/cache_detail/cache_detail.css": [
+        {
+          "absolute_source_path": "/home/yann/Projet/ez-aventurier/client_rust/src/components/cache_detail/cache_detail.css",
+          "bundled_path": "cache_detail-dxh20654637a7bfeca5.css",
+          "options": {
+            "add_hash": true,
+            "variant": "Unknown"
+          }
+        }
+      ],
+      "/home/yann/Projet/ez-aventurier/client_rust/src/views/cache_detail_view/cache_detail_view.css": [
+        {
+          "absolute_source_path": "/home/yann/Projet/ez-aventurier/client_rust/src/views/cache_detail_view/cache_detail_view.css",
+          "bundled_path": "cache_detail_view-dxhbd2944ec86ba1612.css",
+          "options": {
+            "add_hash": true,
+            "variant": "Unknown"
+          }
+        }
+      ],
+      "/home/yann/Projet/ez-aventurier/client_rust/src/views/leaderboard/leaderboard.css": [
+        {
+          "absolute_source_path": "/home/yann/Projet/ez-aventurier/client_rust/src/views/leaderboard/leaderboard.css",
+          "bundled_path": "leaderboard-dxh21bf79b6276ba72c.css",
+          "options": {
+            "add_hash": true,
+            "variant": "Unknown"
+          }
+        }
+      ],
+      "/home/yann/Projet/ez-aventurier/client_rust/target/dx/client_rust/release/web/public/wasm/client_rust.js": [
+        {
+          "absolute_source_path": "/home/yann/Projet/ez-aventurier/client_rust/target/dx/client_rust/release/web/public/wasm/client_rust.js",
+          "bundled_path": "client_rust-dxha342113ea163c4ca.js",
+          "options": {
+            "add_hash": true,
+            "variant": {
+              "Js": {
+                "minify": true,
+                "preload": true,
+                "static_head": false
+              }
+            }
+          }
+        }
+      ],
+      "/home/yann/Projet/ez-aventurier/client_rust/target/dx/client_rust/release/web/public/wasm/client_rust_bg.wasm": [
+        {
+          "absolute_source_path": "/home/yann/Projet/ez-aventurier/client_rust/target/dx/client_rust/release/web/public/wasm/client_rust_bg.wasm",
+          "bundled_path": "client_rust_bg-dxh38efde6bf15b6159.wasm",
+          "options": {
+            "add_hash": true,
+            "variant": "Unknown"
+          }
+        }
+      ]
+    }
+  }
+}
