@@ -129,8 +129,7 @@ func (db *DB) UpdateWeightToUser(
 		return nil, fmt.Errorf("failed to update user weight: %w", err)
 	}
 
-	db.Cache.LeaderBoard = nil
-
+	db.Cache.LeaderBoard.user = make([]models.User, 0)
 	db.Cache.Mu.Lock()
 	db.Cache.Users[userID] = CachedUser{
 		user:      &updatedUser,
@@ -142,8 +141,9 @@ func (db *DB) UpdateWeightToUser(
 }
 
 func (db *DB) GetAllUserOrderByScoreDes() ([]models.User, error) {
-	if len(db.Cache.LeaderBoard) > 0 {
-		return db.Cache.LeaderBoard, nil
+	if len(db.Cache.LeaderBoard.user) > 0 &&
+		time.Since(db.Cache.LeaderBoard.timestamp) < 1*time.Minute {
+		return db.Cache.LeaderBoard.user, nil
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
@@ -179,7 +179,13 @@ func (db *DB) GetAllUserOrderByScoreDes() ([]models.User, error) {
 	if err := cursor.Err(); err != nil {
 		return nil, fmt.Errorf("cursor error: %v", err)
 	}
-	db.Cache.LeaderBoard = users
+
+	db.Cache.Mu.Lock()
+	db.Cache.LeaderBoard = CacheLeaderBoard{
+		user:      users,
+		timestamp: time.Now(),
+	}
+	db.Cache.Mu.Unlock()
 
 	return users, nil
 }
