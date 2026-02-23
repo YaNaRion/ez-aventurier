@@ -100,9 +100,11 @@ func (db *DB) UpdateWeightToUser(
 
 	filter := bson.M{"userId": userID}
 
+	claimedTime := time.Now().UTC()
 	newClaimedCache := models.ClaimedCache{
-		CacheID:  cacheID,  // Your cache ID
-		Position: position, // Your position value
+		CacheID:     cacheID,
+		Position:    position,
+		ClaimedTime: &claimedTime,
 	}
 
 	update := bson.M{

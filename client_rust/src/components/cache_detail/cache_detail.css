@@ -145,6 +145,7 @@
 
 .cache-detail-description {
 	color: #b8b8b8;
+	user-select: none;
 	font-size: 18px;
 	line-height: 1.8;
 	margin: 20px auto 0;

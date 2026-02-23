@@ -7,8 +7,9 @@ import (
 )
 
 type ClaimedCache struct {
-	CacheID  string `bson:"cache_id" json:"cache_id"`
-	Position int    `bson:"position" json:"position"`
+	CacheID     string     `bson:"cache_id"     json:"cache_id"`
+	Position    int        `bson:"position"     json:"position"`
+	ClaimedTime *time.Time `bson:"claimed_time" json:"claimed_time"`
 }
 
 type User struct {
@@ -33,8 +34,8 @@ func NewUser(name, userID, unity, order string) *User {
 		UserID:        userID,
 		Unity:         unity,
 		Ordre:         order,
-		CreatedAt:     time.Now(),
-		UpdatedAt:     time.Now(),
+		CreatedAt:     time.Now().UTC(),
+		UpdatedAt:     time.Now().UTC(),
 		ClaimedCaches: []ClaimedCache{},
 	}
 }

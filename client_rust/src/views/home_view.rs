@@ -7,10 +7,18 @@ pub fn HomeView() -> Element {
     let navigator = use_navigator();
     rsx! {
 
+
         div { class: "connection-header",
             h1 { class: "connection-title", "Camp Aventurier 2026" }
             h2 { class: "connection-subtitle", "Pour toutes questions, veuillez les poser à l'adresse courriel suivante : camp.aventurier.229@gmail.com" }
         }
+
+        div { class: "info-card",
+            div { class: "info-content",
+                p { "SVP: Ne pas partager le code d'une cache avec des participants qui n'ont pas fait le déplacement!!! On vous fait confiance" }
+            }
+        }
+
         ConnectionForm {}
 
         RoutingButton {
