@@ -24,8 +24,13 @@ type CachedUser struct {
 	timestamp time.Time
 }
 
+type CacheLeaderBoard struct {
+	user      []models.User
+	timestamp time.Time
+}
+
 type CacheDB struct {
-	LeaderBoard []models.User
+	LeaderBoard CacheLeaderBoard
 	CacheStore  CacheStore
 	Users       map[string]CachedUser
 	Mu          sync.RWMutex
@@ -80,8 +85,11 @@ func Setup(dbConnectionString string, isDev bool) (*DB, error) {
 		Client: client,
 		Ctx:    context.Background(), // Base context without timeout
 		Cache: CacheDB{
-			LeaderBoard: make([]models.User, 0),
-			Users:       make(map[string]CachedUser),
+			LeaderBoard: CacheLeaderBoard{
+				user:      make([]models.User, 0),
+				timestamp: time.Time{},
+			},
+			Users: make(map[string]CachedUser),
 			CacheStore: CacheStore{
 				AllCaches:     make([]models.Cache, 0),
 				VisibleCaches: make([]models.Cache, 0),

@@ -35,14 +35,6 @@ pub struct Session {
     pub jcreated_on: String, // or use chrono::DateTime
 }
 
-#[derive(serde::Deserialize, serde::Serialize, Default)]
-pub struct CheckSessionValid {
-    #[serde(rename = "session")]
-    pub session: Session,
-    #[serde(rename = "isValid")]
-    pub is_valid: bool,
-}
-
 #[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
 pub struct User {
     #[serde(rename = "userId")]

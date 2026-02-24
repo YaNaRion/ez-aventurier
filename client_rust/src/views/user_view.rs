@@ -1,16 +1,10 @@
 use dioxus::prelude::*;
 use reqwest::Client;
-// use web_sys::console;
 
 use crate::{
-    components::{
-        admin::Admin,
-        user::{UserHeader, UserProfile},
-    },
+    components::{admin::Admin, user::UserProfile},
     service::{get_base_url, User},
 };
-
-// const HEADER_SVG: Asset = asset!("/assets/header.svg");
 
 #[component]
 pub fn UserView(session_id: String, user_id: String) -> Element {

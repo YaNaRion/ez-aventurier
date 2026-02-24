@@ -57,8 +57,6 @@ func (c *Controller) claimCache(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Println(cache.Answer_count)
-	log.Println()
 	mulFactor := 1
 	if cache.Answer_count <= 10 {
 		mulFactor = 2

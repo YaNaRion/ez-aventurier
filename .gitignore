@@ -21,7 +21,7 @@ server/.env.dev
 !.env.prod
 
 # Frontend build
-client_rust/target/
+#client_rust/target/
 client_rust/dist/
 
 # Docker volumes
