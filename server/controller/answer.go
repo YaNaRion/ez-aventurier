@@ -53,15 +53,15 @@ func (c *Controller) claimCache(w http.ResponseWriter, r *http.Request) {
 	cache, err := c.db.ClaimCaches(userID, answerID)
 	if err != nil {
 		LOG_ERROR_TO_CONSOLE(fmt.Sprintf("Could not claim cache: %s ", err), r)
-		http.Error(w, ERROR_CONTACT_TECH_SUPPORT, http.StatusInternalServerError)
+		http.Error(w, "Ce code correspond à aucune cache", http.StatusNotFound)
 		return
 	}
 
 	mulFactor := 1
-	if cache.Answer_count <= 10 {
-		mulFactor = 2
-	} else if cache.Answer_count <= 5 {
+	if cache.Answer_count <= 5 {
 		mulFactor = 3
+	} else if cache.Answer_count <= 10 {
+		mulFactor = 2
 	}
 	userAddedPoint := cache.Weight * mulFactor
 

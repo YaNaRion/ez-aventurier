@@ -105,7 +105,7 @@ pub fn UserBody(user: Signal<User>, session_id: String) -> Element {
                     }
 
                     Input {
-                        input_name: "Entrer le code secret pour confirmer votre quête".to_string(),
+                        input_name: "Entrer le code de la cache pour la confirmer".to_string(),
                         callback: handle_submit,
                     }
 

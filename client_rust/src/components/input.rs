@@ -17,6 +17,7 @@ pub fn Input(input_name: String, callback: Callback<String>) -> Element {
                             r#type: "text",
                             oninput: move |evt| text.set(evt.value()),
                         }
+
                         button {
                             class: "send-button-aligned",
                             r#type: "button",
