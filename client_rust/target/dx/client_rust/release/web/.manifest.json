@@ -46,7 +46,7 @@
       "/home/yann/Projet/ez-aventurier/client_rust/src/components/cache_detail/cache_detail.css": [
         {
           "absolute_source_path": "/home/yann/Projet/ez-aventurier/client_rust/src/components/cache_detail/cache_detail.css",
-          "bundled_path": "cache_detail-dxh20654637a7bfeca5.css",
+          "bundled_path": "cache_detail-dxh8dd363ad981e7984.css",
           "options": {
             "add_hash": true,
             "variant": "Unknown"
@@ -76,7 +76,7 @@
       "/home/yann/Projet/ez-aventurier/client_rust/target/dx/client_rust/release/web/public/wasm/client_rust.js": [
         {
           "absolute_source_path": "/home/yann/Projet/ez-aventurier/client_rust/target/dx/client_rust/release/web/public/wasm/client_rust.js",
-          "bundled_path": "client_rust-dxha342113ea163c4ca.js",
+          "bundled_path": "client_rust-dxh6e2038fa32e4b26.js",
           "options": {
             "add_hash": true,
             "variant": {
@@ -92,7 +92,7 @@
       "/home/yann/Projet/ez-aventurier/client_rust/target/dx/client_rust/release/web/public/wasm/client_rust_bg.wasm": [
         {
           "absolute_source_path": "/home/yann/Projet/ez-aventurier/client_rust/target/dx/client_rust/release/web/public/wasm/client_rust_bg.wasm",
-          "bundled_path": "client_rust_bg-dxh38efde6bf15b6159.wasm",
+          "bundled_path": "client_rust_bg-dxh96cb38e1ebdf622.wasm",
           "options": {
             "add_hash": true,
             "variant": "Unknown"
