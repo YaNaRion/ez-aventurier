@@ -225,7 +225,13 @@ func (db *DB) ClaimCaches(user_id, answer_id string) (*models.Cache, error) {
 	err := collection.FindOneAndUpdate(
 		ctx,
 		bson.M{"answer": answer_id},
-		bson.M{"$inc": bson.M{"answer_count": 1}},
+		bson.M{
+			"$inc": bson.M{"answer_count": 1},
+			"$push": bson.M{"claimed_by": models.Claim{
+				UserID:      user_id,
+				ClaimedTime: time.Now().UTC(),
+			}},
+		},
 		options.FindOneAndUpdate().SetReturnDocument(options.After), // Returns the updated document
 	).Decode(&cache)
 

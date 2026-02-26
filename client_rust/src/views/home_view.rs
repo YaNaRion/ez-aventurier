@@ -15,7 +15,7 @@ pub fn HomeView() -> Element {
 
         div { class: "info-card",
             div { class: "info-content",
-                p { "SVP: Ne pas partager le code d'une cache avec des participants qui n'ont pas fait le déplacement!!! On vous fait confiance" }
+                p { "SVP: Ne pas partager le code d'une cache avec des participants qui ne sont pas allés à la cache!"}
             }
         }
 

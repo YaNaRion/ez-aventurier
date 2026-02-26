@@ -7,6 +7,11 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+type Claim struct {
+	UserID      string    `bson:"user_id"      json:"user_id"`
+	ClaimedTime time.Time `bson:"claimed_time" json:"claimed_time"`
+}
+
 type Cache struct {
 	ID           primitive.ObjectID `bson:"_id,omitempty" json:"-"`
 	Name         string             `bson:"name"          json:"name"`
@@ -17,6 +22,7 @@ type Cache struct {
 	Weight       int                `bson:"weight"        json:"weight"`
 	Answer_count int                `bson:"answer_count"  json:"answer_count"`
 	ReleaseTime  time.Time          `bson:"releaseTime"   json:"releaseTime"`
+	ClaimBy      Claim              `bson:"claim_by"      json:"claim_by"`
 }
 
 // GetMontrealReleaseTime returns the release time in Montreal timezone
