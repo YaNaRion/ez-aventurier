@@ -115,6 +115,13 @@ func (c *Controller) postCache(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+type CacheResponse struct {
+	Name        string    `bson:"name"        json:"name"`
+	Description string    `bson:"description" json:"description"`
+	CacheNumber int64     `bson:"cacheNumber" json:"cacheNumber"`
+	CreatedAt   time.Time `bson:"createdAt"   json:"createdAt"`
+}
+
 func (c *Controller) getCaches(w http.ResponseWriter, r *http.Request) {
 	caches, err := c.db.GetVisibleCaches()
 	if err != nil {
@@ -122,7 +129,17 @@ func (c *Controller) getCaches(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cachesJson, err := json.Marshal(caches)
+	var sendCache []CacheResponse
+	for _, cache := range caches {
+		sendCache = append(sendCache, CacheResponse{
+			Name:        cache.Name,
+			Description: cache.Description,
+			CacheNumber: cache.CacheNumber,
+			CreatedAt:   cache.CreatedAt,
+		})
+	}
+
+	cachesJson, err := json.Marshal(sendCache)
 	if err != nil {
 		http.Error(w, "Could not marshal the response", http.StatusForbidden)
 		return
@@ -140,13 +157,20 @@ func (c *Controller) getCache(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	caches, err := c.db.GetCache(cacheNumberInt)
+	cache, err := c.db.GetCache(cacheNumberInt)
 	if err != nil {
 		http.Error(w, "Failed to get the caches to db", http.StatusBadRequest)
 		return
 	}
 
-	cachesJson, err := json.Marshal(caches)
+	sendCache := CacheResponse{
+		Name:        cache.Name,
+		Description: cache.Description,
+		CacheNumber: cache.CacheNumber,
+		CreatedAt:   cache.CreatedAt,
+	}
+
+	cachesJson, err := json.Marshal(sendCache)
 	if err != nil {
 		http.Error(w, "Could not marshal the response", http.StatusForbidden)
 		return
