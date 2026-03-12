@@ -76,7 +76,7 @@
       "/home/yann/Projet/ez-aventurier/client_rust/target/dx/client_rust/release/web/public/wasm/client_rust.js": [
         {
           "absolute_source_path": "/home/yann/Projet/ez-aventurier/client_rust/target/dx/client_rust/release/web/public/wasm/client_rust.js",
-          "bundled_path": "client_rust-dxhded5af49847de26.js",
+          "bundled_path": "client_rust-dxh59beaba78e9b9e84.js",
           "options": {
             "add_hash": true,
             "variant": {
@@ -92,7 +92,7 @@
       "/home/yann/Projet/ez-aventurier/client_rust/target/dx/client_rust/release/web/public/wasm/client_rust_bg.wasm": [
         {
           "absolute_source_path": "/home/yann/Projet/ez-aventurier/client_rust/target/dx/client_rust/release/web/public/wasm/client_rust_bg.wasm",
-          "bundled_path": "client_rust_bg-dxh6b9d558fe155e9d2.wasm",
+          "bundled_path": "client_rust_bg-dxhb2fcfaca9feecd2.wasm",
           "options": {
             "add_hash": true,
             "variant": "Unknown"
