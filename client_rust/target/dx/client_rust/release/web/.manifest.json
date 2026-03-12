@@ -1,82 +1,82 @@
 {
-  "cli_version": "0.7.3 (22b06ba)",
+  "cli_version": "0.7.3 (was built without git repository)",
   "rust_version": "rustc 1.93.0 (254b59607 2026-01-19)",
   "assets": {
     "assets": {
-      "/home/yanarion/.cargo/git/checkouts/components-c3e2707fcc33b190/70433b0/primitives/src/js/focus-trap.js": [
+      "/home/yann/.cargo/git/checkouts/components-c3e2707fcc33b190/70433b0/primitives/src/js/focus-trap.js": [
         {
-          "absolute_source_path": "/home/yanarion/.cargo/git/checkouts/components-c3e2707fcc33b190/70433b0/primitives/src/js/focus-trap.js",
-          "bundled_path": "focus-trap-dxhb0f8e68e347ebba5.js",
+          "absolute_source_path": "/home/yann/.cargo/git/checkouts/components-c3e2707fcc33b190/70433b0/primitives/src/js/focus-trap.js",
+          "bundled_path": "focus-trap-dxhaa2b90c682e41736.js",
           "options": {
             "add_hash": true,
             "variant": "Unknown"
           }
         }
       ],
-      "/home/yanarion/ProjetPerso/ez-aventurier/client_rust/assets/favicon.ico": [
+      "/home/yann/Projet/ez-aventurier/client_rust/assets/favicon.ico": [
         {
-          "absolute_source_path": "/home/yanarion/ProjetPerso/ez-aventurier/client_rust/assets/favicon.ico",
-          "bundled_path": "favicon-dxh627534bf038108f.ico",
+          "absolute_source_path": "/home/yann/Projet/ez-aventurier/client_rust/assets/favicon.ico",
+          "bundled_path": "favicon-dxhc8a92c2c29a2fa3.ico",
           "options": {
             "add_hash": true,
             "variant": "Unknown"
           }
         }
       ],
-      "/home/yanarion/ProjetPerso/ez-aventurier/client_rust/assets/styling/main.css": [
+      "/home/yann/Projet/ez-aventurier/client_rust/assets/styling/main.css": [
         {
-          "absolute_source_path": "/home/yanarion/ProjetPerso/ez-aventurier/client_rust/assets/styling/main.css",
-          "bundled_path": "main-dxhfd795274626766c4.css",
+          "absolute_source_path": "/home/yann/Projet/ez-aventurier/client_rust/assets/styling/main.css",
+          "bundled_path": "main-dxhbf395b42ee3b41.css",
           "options": {
             "add_hash": true,
             "variant": "Unknown"
           }
         }
       ],
-      "/home/yanarion/ProjetPerso/ez-aventurier/client_rust/src/components/admin/create_new_cache.css": [
+      "/home/yann/Projet/ez-aventurier/client_rust/src/components/admin/create_new_cache.css": [
         {
-          "absolute_source_path": "/home/yanarion/ProjetPerso/ez-aventurier/client_rust/src/components/admin/create_new_cache.css",
-          "bundled_path": "create_new_cache-dxh11e74e13f7baa658.css",
+          "absolute_source_path": "/home/yann/Projet/ez-aventurier/client_rust/src/components/admin/create_new_cache.css",
+          "bundled_path": "create_new_cache-dxh764ab73fa4547618.css",
           "options": {
             "add_hash": true,
             "variant": "Unknown"
           }
         }
       ],
-      "/home/yanarion/ProjetPerso/ez-aventurier/client_rust/src/components/cache_detail/cache_detail.css": [
+      "/home/yann/Projet/ez-aventurier/client_rust/src/components/cache_detail/cache_detail.css": [
         {
-          "absolute_source_path": "/home/yanarion/ProjetPerso/ez-aventurier/client_rust/src/components/cache_detail/cache_detail.css",
-          "bundled_path": "cache_detail-dxhd132f047863d11bf.css",
+          "absolute_source_path": "/home/yann/Projet/ez-aventurier/client_rust/src/components/cache_detail/cache_detail.css",
+          "bundled_path": "cache_detail-dxh8dd363ad981e7984.css",
           "options": {
             "add_hash": true,
             "variant": "Unknown"
           }
         }
       ],
-      "/home/yanarion/ProjetPerso/ez-aventurier/client_rust/src/views/cache_detail_view/cache_detail_view.css": [
+      "/home/yann/Projet/ez-aventurier/client_rust/src/views/cache_detail_view/cache_detail_view.css": [
         {
-          "absolute_source_path": "/home/yanarion/ProjetPerso/ez-aventurier/client_rust/src/views/cache_detail_view/cache_detail_view.css",
-          "bundled_path": "cache_detail_view-dxh2f5a874f46c727b.css",
+          "absolute_source_path": "/home/yann/Projet/ez-aventurier/client_rust/src/views/cache_detail_view/cache_detail_view.css",
+          "bundled_path": "cache_detail_view-dxhbd2944ec86ba1612.css",
           "options": {
             "add_hash": true,
             "variant": "Unknown"
           }
         }
       ],
-      "/home/yanarion/ProjetPerso/ez-aventurier/client_rust/src/views/leaderboard/leaderboard.css": [
+      "/home/yann/Projet/ez-aventurier/client_rust/src/views/leaderboard/leaderboard.css": [
         {
-          "absolute_source_path": "/home/yanarion/ProjetPerso/ez-aventurier/client_rust/src/views/leaderboard/leaderboard.css",
-          "bundled_path": "leaderboard-dxh2e82ba4c1b8163.css",
+          "absolute_source_path": "/home/yann/Projet/ez-aventurier/client_rust/src/views/leaderboard/leaderboard.css",
+          "bundled_path": "leaderboard-dxh21bf79b6276ba72c.css",
           "options": {
             "add_hash": true,
             "variant": "Unknown"
           }
         }
       ],
-      "/home/yanarion/ProjetPerso/ez-aventurier/client_rust/target/dx/client_rust/release/web/public/wasm/client_rust.js": [
+      "/home/yann/Projet/ez-aventurier/client_rust/target/dx/client_rust/release/web/public/wasm/client_rust.js": [
         {
-          "absolute_source_path": "/home/yanarion/ProjetPerso/ez-aventurier/client_rust/target/dx/client_rust/release/web/public/wasm/client_rust.js",
-          "bundled_path": "client_rust-dxha7eef7ad5b6a4b1f.js",
+          "absolute_source_path": "/home/yann/Projet/ez-aventurier/client_rust/target/dx/client_rust/release/web/public/wasm/client_rust.js",
+          "bundled_path": "client_rust-dxhded5af49847de26.js",
           "options": {
             "add_hash": true,
             "variant": {
@@ -89,10 +89,10 @@
           }
         }
       ],
-      "/home/yanarion/ProjetPerso/ez-aventurier/client_rust/target/dx/client_rust/release/web/public/wasm/client_rust_bg.wasm": [
+      "/home/yann/Projet/ez-aventurier/client_rust/target/dx/client_rust/release/web/public/wasm/client_rust_bg.wasm": [
         {
-          "absolute_source_path": "/home/yanarion/ProjetPerso/ez-aventurier/client_rust/target/dx/client_rust/release/web/public/wasm/client_rust_bg.wasm",
-          "bundled_path": "client_rust_bg-dxhad2b2b31e9a1d780.wasm",
+          "absolute_source_path": "/home/yann/Projet/ez-aventurier/client_rust/target/dx/client_rust/release/web/public/wasm/client_rust_bg.wasm",
+          "bundled_path": "client_rust_bg-dxh6b9d558fe155e9d2.wasm",
           "options": {
             "add_hash": true,
             "variant": "Unknown"
