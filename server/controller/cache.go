@@ -28,7 +28,6 @@ func (c *Controller) postCache(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	// Decode request
 	var req CreateCacheRequest
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
@@ -37,10 +36,8 @@ func (c *Controller) postCache(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Log received Montreal time
 	log.Printf("Received Montreal release time: %s", req.ReleaseTime)
 
-	// Parse the release time as Montreal time
 	montrealTime, err := class.ParseMontrealTime(req.ReleaseTime)
 	if err != nil {
 		log.Printf("Failed to parse Montreal release time '%s': %v", req.ReleaseTime, err)
@@ -52,16 +49,13 @@ func (c *Controller) postCache(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Log parsed Montreal time
 	if !montrealTime.IsZero() {
 		log.Printf("Parsed Montreal time: %s", montrealTime.Format("2006-01-02 15:04:05 MST"))
 
-		// Convert to UTC for storage
 		utcTime := class.ToUTC(montrealTime)
 		log.Printf("Converted to UTC for storage: %s", utcTime.Format("2006-01-02 15:04:05 MST"))
 	}
 
-	// Generate answer
 	answer, err := infra.CustomID(8, infra.AlphaNumeric)
 	if err != nil {
 		log.Println("Failed to generate answer", err)
@@ -69,7 +63,6 @@ func (c *Controller) postCache(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Create cache object with UTC time
 	cache := models.Cache{
 		Name:         req.Name,
 		Description:  req.Description,
@@ -102,17 +95,26 @@ func (c *Controller) postCache(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Success response with Montreal time for display
-	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(map[string]interface{}{
-		"message": "Cache created successfully",
-		"cache": map[string]interface{}{
-			"name":         cache.Name,
-			"description":  cache.Description,
-			"cache_number": cache.CacheNumber,
-			"release_time": cache.GetFormattedReleaseTime(),      // Formatted for display
-			"input_time":   cache.GetInputFormattedReleaseTime(), // For datetime-local input
-		},
-	})
+	// w.WriteHeader(http.StatusCreated)
+	// json.NewEncoder(w).Encode(map[string]interface{}{
+	// 	"message": "Cache created successfully",
+	// 	"cache": map[string]interface{}{
+	// 		"name":         cache.Name,
+	// 		"description":  cache.Description,
+	// 		"cache_number": cache.CacheNumber,
+	// 		"release_time": cache.GetFormattedReleaseTime(),      // Formatted for display
+	// 		"input_time":   cache.GetInputFormattedReleaseTime(), // For datetime-local input
+	// 	},
+	// })
+
+	log.Println(cache)
+	cacheJson, err := json.Marshal(cache)
+	if err != nil {
+		http.Error(w, "Could not marshal the response", http.StatusForbidden)
+		return
+	}
+
+	writeResponseJson(w, cacheJson)
 }
 
 type CacheResponse struct {
