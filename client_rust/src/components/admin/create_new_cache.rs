@@ -6,7 +6,7 @@ use dioxus_primitives::alert_dialog::{
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
 
-use crate::service::get_base_url;
+use crate::service::{get_base_url, NewCache};
 
 const STYLE: Asset = asset!("./create_new_cache.css");
 
@@ -27,6 +27,7 @@ pub fn CreateNewCache(session_id: String) -> Element {
     let mut open = use_signal(|| false);
     let error = use_signal(|| String::new());
     let is_loading = use_signal(|| false);
+    let mut created_cache = use_signal(|| NewCache::default());
 
     let session_id_value = session_id.clone();
     let name: Signal<String> = use_signal(|| String::new());
@@ -64,15 +65,25 @@ pub fn CreateNewCache(session_id: String) -> Element {
                 .await
             {
                 Ok(resp) if resp.status().is_success() => {
-                    open_clone.set(true);
                     error_clone.set(String::new());
-                    // Clear form fields
                     name_clone.set(String::new());
                     description_clone.set(String::new());
+
+                    match resp.json::<NewCache>().await {
+                        Ok(cache) => {
+                            created_cache.set(cache);
+                            open_clone.set(true);
+                        }
+                        Err(e) => {
+                            open_clone.set(true);
+                            error_clone.set(format!("Request failed: {}", e));
+                        }
+                    }
                 }
 
                 Ok(resp) => {
                     let status = resp.status();
+
                     let error_text = resp
                         .text()
                         .await
@@ -89,13 +100,14 @@ pub fn CreateNewCache(session_id: String) -> Element {
 
     rsx! {
         document::Link { rel: "stylesheet", href: STYLE }
+
         AlertDialogRoot {
             open: *open.read(),
             on_open_change: move |v| open.set(v),
             AlertDialogContent {
                 AlertDialogTitle { "Creation Status" }
                 if error.read().is_empty() {
-                    AlertDialogDescription { "La cache a été ajoutée avec succès" }
+                    AlertDialogDescription { "La cache a été ajoutée avec succès. Le code de la cache est {created_cache.read().anwser}" }
                 } else {
                     AlertDialogDescription { "Error: {error}" }
                 }
